@@ -1,0 +1,179 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Стартовый экран: вход клиента по умолчанию. -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VetAuthMaui.MainPage"
+             BackgroundColor="#F3FBFF"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*">
+        <Grid Padding="20,28,20,0" ColumnDefinitions="*,44">
+            <VerticalStackLayout Spacing="2">
+                <Label
+                    Text="Ветеринарный кабинет"
+                    TextColor="#413F3F"
+                    FontSize="32"
+                    FontAttributes="Bold" />
+
+                <Label
+                    Text="Мобильный кабинет клиента"
+                    TextColor="#646464"
+                    FontSize="15" />
+            </VerticalStackLayout>
+
+            <Button
+                Grid.Column="1"
+                Text="A"
+                BackgroundColor="Transparent"
+                BorderColor="#D7EDF7"
+                BorderWidth="1"
+                TextColor="#646464"
+                FontAttributes="Bold"
+                CornerRadius="22"
+                WidthRequest="44"
+                HeightRequest="44"
+                Clicked="Admin_Click" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="24,22,24,30" Spacing="18">
+                <Image
+                    Source="dog_logo.png"
+                    HeightRequest="220"
+                    Aspect="AspectFill"
+                    HorizontalOptions="Fill" />
+
+                <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="18">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="8" />
+                    </Border.StrokeShape>
+
+                    <VerticalStackLayout Spacing="14">
+                        <Label
+                            Text="Вход клиента"
+                            TextColor="#413F3F"
+                            FontSize="22"
+                            FontAttributes="Bold" />
+
+                        <Entry
+                            x:Name="PhoneEntry"
+                            Placeholder="Телефон"
+                            Keyboard="Telephone"
+                            BackgroundColor="White"
+                            TextColor="#222222"
+                            PlaceholderColor="#9A9A9A" />
+
+                        <Entry
+                            x:Name="PasswordEntry"
+                            Placeholder="Пароль"
+                            IsPassword="True"
+                            BackgroundColor="White"
+                            TextColor="#222222"
+                            PlaceholderColor="#9A9A9A" />
+
+                        <Button
+                            Text="Войти"
+                            BackgroundColor="#009EDB"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="24"
+                            HeightRequest="54"
+                            Clicked="Login_Click" />
+
+                        <Button
+                            Text="Зарегистрироваться"
+                            BackgroundColor="Transparent"
+                            BorderColor="#009EDB"
+                            BorderWidth="1"
+                            TextColor="#009EDB"
+                            FontAttributes="Bold"
+                            CornerRadius="24"
+                            HeightRequest="52"
+                            Clicked="Register_Click" />
+
+                        <Button
+                            Text="О приложении"
+                            BackgroundColor="Transparent"
+                            TextColor="#646464"
+                            FontAttributes="Bold"
+                            HeightRequest="44"
+                            Clicked="About_Click" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <VerticalStackLayout Spacing="12">
+                    <Label
+                        Text="Советы по уходу"
+                        TextColor="#413F3F"
+                        FontSize="20"
+                        FontAttributes="Bold" />
+
+                    <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="12">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="8" />
+                        </Border.StrokeShape>
+
+                        <Grid ColumnDefinitions="96,*" ColumnSpacing="14">
+                            <Image
+                                Source="tip_vaccine.png"
+                                HeightRequest="74"
+                                WidthRequest="96"
+                                Aspect="AspectFill" />
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                <Label Text="Проверяйте прививки" TextColor="#413F3F" FontSize="16" FontAttributes="Bold" />
+                                <Label Text="Следите, чтобы у питомца были актуальные прививки." TextColor="#646464" FontSize="13" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="12">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="8" />
+                        </Border.StrokeShape>
+
+                        <Grid ColumnDefinitions="96,*" ColumnSpacing="14">
+                            <Image
+                                Source="tip_food.png"
+                                HeightRequest="74"
+                                WidthRequest="96"
+                                Aspect="AspectFill" />
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                <Label Text="Следите за питанием" TextColor="#413F3F" FontSize="16" FontAttributes="Bold" />
+                                <Label Text="Не давайте еду со стола без совета врача." TextColor="#646464" FontSize="13" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+
+                    <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="12">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="8" />
+                        </Border.StrokeShape>
+
+                        <Grid ColumnDefinitions="96,*" ColumnSpacing="14">
+                            <Image
+                                Source="tip_check.png"
+                                HeightRequest="74"
+                                WidthRequest="96"
+                                Aspect="AspectFill" />
+
+                            <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
+                                <Label Text="Не тяните с осмотром" TextColor="#413F3F" FontSize="16" FontAttributes="Bold" />
+                                <Label Text="Если питомец вялый или плохо ест, лучше записаться." TextColor="#646464" FontSize="13" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </Border>
+                </VerticalStackLayout>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
+
+
+
+
+
+
+
+

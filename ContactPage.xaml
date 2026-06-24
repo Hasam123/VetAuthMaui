@@ -1,0 +1,58 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Страница с контактной информацией ветеринарной клиники. -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VetAuthMaui.ContactPage"
+             Title="Контакты"
+             BackgroundColor="#F3FBFF">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="14">
+            <Label
+                Text="Контакты"
+                TextColor="#413F3F"
+                FontSize="26"
+                FontAttributes="Bold" />
+
+            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="г. Бендеры" TextColor="#413F3F" FontSize="18" FontAttributes="Bold" />
+                    <Label Text="ул. Коммунальная, д.188" TextColor="#646464" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="г. Тирасполь" TextColor="#413F3F" FontSize="18" FontAttributes="Bold" />
+                    <Label Text="ул. Советская, д.52" TextColor="#646464" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="г. Григориополь" TextColor="#413F3F" FontSize="18" FontAttributes="Bold" />
+                    <Label Text="ул. Ленина, д.10" TextColor="#646464" />
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+
+
+
+
+
+
+

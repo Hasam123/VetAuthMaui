@@ -1,0 +1,371 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="VetAuthMaui.AdminLogin">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Class Name="VetAuthMaui.AdminLogin.LoginData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>AdminLogin.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.AdminLogin.LoginResult" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>AdminLogin.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAgAgAAAAAAAAAAAA=</HashCode>
+      <FileName>AdminLogin.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VetAuthMaui.AdminPage">
+    <Position X="2.25" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Class Name="VetAuthMaui.AdminPage.StatisticResult" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>AdminPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.AdminPage.Statistic" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>AdminPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAgQAAAAAAAgAAAAAAACCEgAAAAAAAAAAAA=</HashCode>
+      <FileName>AdminPage.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VetAuthMaui.AdminTimePage">
+    <Position X="4" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Class Name="VetAuthMaui.AdminTimePage.TimeResult" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>AdminTimePage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.AdminTimePage.Day" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>AdminTimePage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.AdminTimePage.Time" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>AdminTimePage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.AdminTimePage.RequestResult" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>AdminTimePage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.AdminTimePage.Request" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>AdminTimePage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.AdminTimePage.Slot" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>AdminTimePage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAgAgQAAAQAAAAAAAAAAAAAAgEEAAAAEAAAAA=</HashCode>
+      <FileName>AdminTimePage.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VetAuthMaui.Api">
+    <Position X="15.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAA=</HashCode>
+      <FileName>ApiSettings.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VetAuthMaui.AppShell">
+    <Position X="13.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>AppShell.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VetAuthMaui.LoginResult">
+    <Position X="7.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAIAAAAAQ=</HashCode>
+      <FileName>ClientAuthResponse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VetAuthMaui.Client">
+    <Position X="5.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>ClientAuthResponse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VetAuthMaui.ClientLogin">
+    <Position X="9.25" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Class Name="VetAuthMaui.ClientLogin.LoginData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ClientLogin.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAAAAAgAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>ClientLogin.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VetAuthMaui.ClientPage">
+    <Position X="11" Y="0.5" Width="1.5" />
+    <NestedTypes>
+      <Class Name="VetAuthMaui.ClientPage.ClientResult" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ClientPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.ClientPage.Client" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ClientPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.ClientPage.CancelData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ClientPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.ClientPage.ApiResult" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ClientPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.ClientPage.Request" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ClientPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAQAAAAgQAAAAAABAAAAAAAAAAAggEAAAAAAAAAA=</HashCode>
+      <FileName>ClientPage.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VetAuthMaui.ClientRegister">
+    <Position X="13.75" Y="2" Width="1.5" />
+    <NestedTypes>
+      <Class Name="VetAuthMaui.ClientRegister.RegisterData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ClientRegister.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>ClientRegister.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VetAuthMaui.ContactPage">
+    <Position X="15.5" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>ContactPage.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VetAuthMaui.EditPage">
+    <Position X="0.5" Y="3" Width="1.5" />
+    <NestedTypes>
+      <Class Name="VetAuthMaui.EditPage.Category" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>EditPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.EditPage.ServiceData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>EditPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.EditPage.ApiResult" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>EditPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAgAAmAAAAgAAAAAAAAAAAAABAAAAAgAAAAEAAAAAgA=</HashCode>
+      <FileName>EditPage.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VetAuthMaui.HomePage">
+    <Position X="2.25" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAgAAAAAAAAgCAAAAACAAECAAAAAAAAAAAA=</HashCode>
+      <FileName>HomePage.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VetAuthMaui.MainPage">
+    <Position X="4" Y="4.25" Width="1.5" />
+    <NestedTypes>
+      <Class Name="VetAuthMaui.MainPage.LoginData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>MainPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAgAAAAgAAAAAAAAAAAAAAgAAAAgAAAAAAAAAIAA=</HashCode>
+      <FileName>MainPage.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VetAuthMaui.MedicalRecordPage">
+    <Position X="5.75" Y="4.25" Width="1.5" />
+    <NestedTypes>
+      <Class Name="VetAuthMaui.MedicalRecordPage.RecordData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>MedicalRecordPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.MedicalRecordPage.ApiResult" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>MedicalRecordPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAABBgAAAAAAAAAAAAABAAAAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>MedicalRecordPage.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VetAuthMaui.Record">
+    <Position X="11" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAIICAAAAAAAAQAABAAAAAAAEEAAAAAQAAAAAAAAAA=</HashCode>
+      <FileName>MedicalRecordDraft.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VetAuthMaui.RecordPage">
+    <Position X="9.25" Y="3.5" Width="1.5" />
+    <NestedTypes>
+      <Class Name="VetAuthMaui.RecordPage.FeedbackData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>RecordPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.RecordPage.ServiceResult" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>RecordPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.RecordPage.Service" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>RecordPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.RecordPage.TimeResult" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>RecordPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.RecordPage.Day" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>RecordPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.RecordPage.Time" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>RecordPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.RecordPage.ApiResult" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>RecordPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAAgQAAAAAAAAAAAAAAAAAAgEEAAAAMBAACA=</HashCode>
+      <FileName>RecordPage.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VetAuthMaui.RequestPage">
+    <Position X="7.5" Y="2.25" Width="1.5" />
+    <NestedTypes>
+      <Class Name="VetAuthMaui.RequestPage.FilterItem" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>RequestPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.RequestPage.RequestData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>RequestPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.RequestPage.StatusData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>RequestPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.RequestPage.CommentData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>RequestPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.RequestPage.RequestResult" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>RequestPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.RequestPage.ApiResult" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>RequestPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.RequestPage.Request" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>RequestPage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQQAAAAgAwQAAAAAAEIAAQAIBAAAAgAECIAAIAAACA=</HashCode>
+      <FileName>RequestPage.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="VetAuthMaui.ServicePage">
+    <Position X="13.75" Y="4.25" Width="1.5" />
+    <NestedTypes>
+      <Class Name="VetAuthMaui.ServicePage.Category" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ServicePage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.ServicePage.ServiceData" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ServicePage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.ServicePage.ServiceResult" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ServicePage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.ServicePage.Service" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ServicePage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+      <Class Name="VetAuthMaui.ServicePage.ApiResult" Collapsed="true">
+        <TypeIdentifier>
+          <NewMemberFileName>ServicePage.xaml.cs</NewMemberFileName>
+        </TypeIdentifier>
+      </Class>
+    </NestedTypes>
+    <TypeIdentifier>
+      <HashCode>AAQAAgAAgggAAACAAAAAAAAAABAAQAoAAACABIAAAAA=</HashCode>
+      <FileName>ServicePage.xaml.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

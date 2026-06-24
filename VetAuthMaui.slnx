@@ -1,0 +1,12 @@
+﻿<Solution>
+  <Project Path="VetAuthMaui.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
+</Solution>
+
+
+
+
+
+
+

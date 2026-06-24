@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Панель администратора со статистикой и переходами к заявкам и услугам. -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VetAuthMaui.AdminPage"
+             Title="Админ"
+             BackgroundColor="#F3FBFF"
+             Shell.NavBarIsVisible="False">
+
+    <Grid RowDefinitions="Auto,*">
+        <Border BackgroundColor="#009EDB" StrokeThickness="0" Padding="24,36,24,28">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="0,0,34,34" />
+            </Border.StrokeShape>
+
+            <VerticalStackLayout Spacing="8">
+                <Label Text="Панель администратора" TextColor="White" FontSize="28" FontAttributes="Bold" />
+                <Label Text="Управление заявками, статусами и услугами" TextColor="#EAF8FE" FontSize="15" />
+            </VerticalStackLayout>
+        </Border>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="24,28,24,30" Spacing="12">
+                <Button
+                    Text="Обновить статистику"
+                    BackgroundColor="#009EDB"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="24"
+                    HeightRequest="48"
+                    Clicked="Refresh_Click" />
+
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="10">
+                    <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                        <VerticalStackLayout Spacing="4">
+                            <Label x:Name="TotalRequestsLabel" Text="0" TextColor="#413F3F" FontSize="24" FontAttributes="Bold" />
+                            <Label Text="Все заявки" TextColor="#646464" FontSize="13" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Column="1" BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                        <VerticalStackLayout Spacing="4">
+                            <Label x:Name="NewRequestsLabel" Text="0" TextColor="#009EDB" FontSize="24" FontAttributes="Bold" />
+                            <Label Text="Новые" TextColor="#646464" FontSize="13" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="1" BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                        <VerticalStackLayout Spacing="4">
+                            <Label x:Name="AcceptedRequestsLabel" Text="0" TextColor="#F39C12" FontSize="24" FontAttributes="Bold" />
+                            <Label Text="Принятые" TextColor="#646464" FontSize="13" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="1" Grid.Column="1" BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                        <VerticalStackLayout Spacing="4">
+                            <Label x:Name="DoneRequestsLabel" Text="0" TextColor="#27AE60" FontSize="24" FontAttributes="Bold" />
+                            <Label Text="Выполненные" TextColor="#646464" FontSize="13" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="2" BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                        <VerticalStackLayout Spacing="4">
+                            <Label x:Name="CancelledRequestsLabel" Text="0" TextColor="#8E8E8E" FontSize="24" FontAttributes="Bold" />
+                            <Label Text="Отмененные" TextColor="#646464" FontSize="13" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="2" Grid.Column="1" BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                        <VerticalStackLayout Spacing="4">
+                            <Label x:Name="ServicesTotalLabel" Text="0" TextColor="#EA5927" FontSize="24" FontAttributes="Bold" />
+                            <Label Text="Услуги" TextColor="#646464" FontSize="13" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <Label x:Name="StatsStatusLabel" Text="" TextColor="#646464" FontSize="13" />
+
+                <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Заявки на прием" TextColor="#413F3F" FontSize="19" FontAttributes="Bold" />
+                        <Label Text="Просмотр клиентов, питомцев и изменение статусов." TextColor="#646464" FontSize="14" />
+                        <Button Text="Открыть заявки" BackgroundColor="#EA5927" TextColor="White" FontAttributes="Bold" CornerRadius="22" HeightRequest="48" Clicked="Requests_Click" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Расписание" TextColor="#413F3F" FontSize="19" FontAttributes="Bold" />
+                        <Label Text="Свободные и занятые окна записи по дням." TextColor="#646464" FontSize="14" />
+                        <Button Text="Открыть расписание" BackgroundColor="#27AE60" TextColor="White" FontAttributes="Bold" CornerRadius="22" HeightRequest="48" Clicked="Schedule_Click" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Услуги и цены" TextColor="#413F3F" FontSize="19" FontAttributes="Bold" />
+                        <Label Text="Добавление, редактирование и удаление услуг сайта." TextColor="#646464" FontSize="14" />
+                        <Button Text="Открыть услуги" BackgroundColor="#009EDB" TextColor="White" FontAttributes="Bold" CornerRadius="22" HeightRequest="48" Clicked="Services_Click" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Button Text="Выйти" BackgroundColor="Transparent" BorderColor="#EA5927" BorderWidth="1" TextColor="#EA5927" FontAttributes="Bold" CornerRadius="24" HeightRequest="52" Clicked="Logout_Click" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>
+
+
+
+
+
+
+
+

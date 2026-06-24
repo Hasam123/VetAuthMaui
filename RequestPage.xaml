@@ -1,0 +1,120 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Список заявок для администратора: просмотр, статус и удаление. -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VetAuthMaui.RequestPage"
+             Title="Заявки"
+             BackgroundColor="#F3FBFF">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="14">
+            <Label Text="Заявки на прием"
+                   TextColor="#413F3F"
+                   FontSize="26"
+                   FontAttributes="Bold" />
+
+            <Button Text="Обновить"
+                    BackgroundColor="#009EDB"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="24"
+                    HeightRequest="48"
+                    Clicked="Refresh_Click" />
+
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                <Picker
+                    x:Name="DateFilterPicker"
+                    Title="Дата"
+                    BackgroundColor="White"
+                    TextColor="#222222"
+                    TitleColor="#9A9A9A"
+                    SelectedIndexChanged="Filter_Changed" />
+
+                <Picker
+                    x:Name="StatusFilterPicker"
+                    Grid.Column="1"
+                    Title="Статус"
+                    BackgroundColor="White"
+                    TextColor="#222222"
+                    TitleColor="#9A9A9A"
+                    SelectedIndexChanged="Filter_Changed" />
+            </Grid>
+
+            <Label x:Name="StatusLabel"
+                   Text="Загрузка заявок..."
+                   TextColor="#646464"
+                   FontSize="14" />
+
+            <CollectionView x:Name="RequestsCollectionView">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16" Margin="0,0,0,12">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="8" />
+                            </Border.StrokeShape>
+
+                            <VerticalStackLayout Spacing="8">
+                                <Label Text="{Binding Name}" TextColor="#413F3F" FontSize="18" FontAttributes="Bold" />
+                                <Label Text="{Binding Phone}" TextColor="#009EDB" FontSize="15" />
+                                <Label Text="{Binding PetInfo}" TextColor="#413F3F" FontSize="15" FontAttributes="Bold" />
+                                <Label Text="{Binding ServiceInfo}" TextColor="#413F3F" FontSize="15" />
+                                <Label Text="{Binding TimeText}" TextColor="#EA5927" FontSize="15" FontAttributes="Bold" />
+                                <Label Text="{Binding Comment}" TextColor="#646464" FontSize="14" />
+                                <Label Text="{Binding AdminText}" TextColor="#009EDB" FontSize="14" FontAttributes="Bold" />
+                                <Label Text="{Binding MedText}" TextColor="#413F3F" FontSize="14" />
+
+                                <Border BackgroundColor="{Binding Color}" StrokeThickness="0" Padding="10,6" HorizontalOptions="Start">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="8" />
+                                    </Border.StrokeShape>
+                                    <Label Text="{Binding StatusText}" TextColor="White" FontSize="14" FontAttributes="Bold" />
+                                </Border>
+
+                                <Label Text="{Binding CreatedText}" TextColor="#9A9A9A" FontSize="13" />
+
+                                <Button Text="Изменить статус"
+                                        BackgroundColor="#009EDB"
+                                        TextColor="White"
+                                        FontAttributes="Bold"
+                                        CornerRadius="20"
+                                        HeightRequest="42"
+                                        Clicked="Status_Click" />
+
+                                <Button Text="Комментарий администратора"
+                                        BackgroundColor="#27AE60"
+                                        TextColor="White"
+                                        FontAttributes="Bold"
+                                        CornerRadius="20"
+                                        HeightRequest="42"
+                                        Clicked="Comment_Click" />
+
+                                <Button Text="Обследование и лечение"
+                                        BackgroundColor="#8A5A44"
+                                        TextColor="White"
+                                        FontAttributes="Bold"
+                                        CornerRadius="20"
+                                        HeightRequest="42"
+                                        Clicked="Med_Click" />
+
+                                <Button Text="Удалить"
+                                        BackgroundColor="#EA5927"
+                                        TextColor="White"
+                                        FontAttributes="Bold"
+                                        CornerRadius="20"
+                                        HeightRequest="42"
+                                        Clicked="Delete_Click" />
+                            </VerticalStackLayout>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+
+
+
+
+
+
+

@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Разметка страницы с описанием возможностей приложения. -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VetAuthMaui.About"
+             Title="О приложении"
+             BackgroundColor="#F3FBFF">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="14">
+            <Label
+                Text="О приложении"
+                TextColor="#413F3F"
+                FontSize="26"
+                FontAttributes="Bold" />
+
+            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Veterenar" TextColor="#413F3F" FontSize="21" FontAttributes="Bold" />
+                    <Label Text="Мобильный кабинет ветеринарной клиники для клиентов и администратора." TextColor="#646464" FontSize="15" LineBreakMode="WordWrap" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Для клиента" TextColor="#009EDB" FontSize="18" FontAttributes="Bold" />
+                    <Label Text="Можно посмотреть услуги, оставить заявку на прием, указать данные питомца и проверить статус заявки по номеру телефона." TextColor="#646464" FontSize="15" LineBreakMode="WordWrap" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Для администратора" TextColor="#EA5927" FontSize="18" FontAttributes="Bold" />
+                    <Label Text="Администратор может просматривать заявки, менять статусы, удалять заявки, а также добавлять, редактировать и удалять услуги." TextColor="#646464" FontSize="15" LineBreakMode="WordWrap" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="8">
+                    <Label Text="Версия" TextColor="#413F3F" FontSize="18" FontAttributes="Bold" />
+                    <Label Text="1.0" TextColor="#646464" FontSize="15" />
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+
+
+
+
+
+
+

@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VetAuthMaui.ClientLogin"
+             Title="Вход клиента"
+             BackgroundColor="#F3FBFF">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24,32,24,30" Spacing="16">
+            <Label Text="Вход клиента"
+                   TextColor="#413F3F"
+                   FontSize="28"
+                   FontAttributes="Bold" />
+
+            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="18">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="12">
+                    <Entry x:Name="PhoneEntry"
+                           Placeholder="Телефон"
+                           Keyboard="Telephone"
+                           BackgroundColor="White"
+                           TextColor="#222222"
+                           PlaceholderColor="#9A9A9A" />
+
+                    <Entry x:Name="PasswordEntry"
+                           Placeholder="Пароль"
+                           IsPassword="True"
+                           BackgroundColor="White"
+                           TextColor="#222222"
+                           PlaceholderColor="#9A9A9A" />
+
+                    <Button Text="Войти"
+                            BackgroundColor="#009EDB"
+                            TextColor="White"
+                            FontAttributes="Bold"
+                            CornerRadius="24"
+                            HeightRequest="52"
+                            Clicked="Login_Click" />
+
+                    <Button Text="Зарегистрироваться"
+                            BackgroundColor="Transparent"
+                            BorderColor="#009EDB"
+                            BorderWidth="1"
+                            TextColor="#009EDB"
+                            FontAttributes="Bold"
+                            CornerRadius="24"
+                            HeightRequest="52"
+                            Clicked="Register_Click" />
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+
+
+
+
+
+
+

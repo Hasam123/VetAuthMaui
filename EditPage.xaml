@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Форма администратора для изменения выбранной услуги. -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VetAuthMaui.EditPage"
+             Title="Редактировать услугу"
+             BackgroundColor="#F3FBFF">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="14">
+            <Label
+                Text="Редактировать услугу"
+                TextColor="#413F3F"
+                FontSize="26"
+                FontAttributes="Bold" />
+
+            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="14">
+                    <Entry
+                        x:Name="TitleEntry"
+                        Placeholder="Название услуги"
+                        BackgroundColor="White"
+                        TextColor="#222222"
+                        PlaceholderColor="#9A9A9A"
+                        ClearButtonVisibility="WhileEditing" />
+
+                    <Editor
+                        x:Name="DescriptionEditor"
+                        Placeholder="Описание"
+                        BackgroundColor="White"
+                        TextColor="#222222"
+                        PlaceholderColor="#9A9A9A"
+                        HeightRequest="110" />
+
+                    <Entry
+                        x:Name="PriceEntry"
+                        Placeholder="Цена"
+                        Keyboard="Numeric"
+                        BackgroundColor="White"
+                        TextColor="#222222"
+                        PlaceholderColor="#9A9A9A"
+                        ClearButtonVisibility="WhileEditing" />
+
+                    <Picker
+                        x:Name="CategoryPicker"
+                        Title="Категория"
+                        BackgroundColor="White"
+                        TextColor="#222222"
+                        TitleColor="#9A9A9A" />
+
+                    <Button
+                        Text="Сохранить изменения"
+                        BackgroundColor="#EA5927"
+                        TextColor="White"
+                        FontAttributes="Bold"
+                        CornerRadius="24"
+                        HeightRequest="52"
+                        Clicked="Save_Click" />
+                </VerticalStackLayout>
+            </Border>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+
+
+
+
+
+
+

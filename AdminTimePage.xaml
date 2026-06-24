@@ -1,0 +1,75 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Расписание администратора: свободные и занятые окна записи. -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VetAuthMaui.AdminTimePage"
+             Title="Расписание"
+             BackgroundColor="#F3FBFF">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="14">
+            <Label Text="Расписание"
+                   TextColor="#413F3F"
+                   FontSize="26"
+                   FontAttributes="Bold" />
+
+            <Button Text="Обновить"
+                    BackgroundColor="#009EDB"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="24"
+                    HeightRequest="48"
+                    Clicked="Refresh_Click" />
+
+            <Picker
+                x:Name="DatePicker"
+                Title="День"
+                BackgroundColor="White"
+                TextColor="#222222"
+                TitleColor="#9A9A9A"
+                SelectedIndexChanged="Date_Changed" />
+
+            <Label x:Name="StatusLabel"
+                   Text="Загрузка расписания..."
+                   TextColor="#646464"
+                   FontSize="14" />
+
+            <CollectionView x:Name="ScheduleCollectionView">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BackgroundColor="White" Stroke="{Binding BorderColor}" StrokeThickness="1" Padding="14" Margin="0,0,0,10">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="8" />
+                            </Border.StrokeShape>
+
+                            <Grid ColumnDefinitions="74,*" ColumnSpacing="12">
+                                <Border BackgroundColor="{Binding BadgeColor}" StrokeThickness="0" Padding="10,8" VerticalOptions="Start">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="8" />
+                                    </Border.StrokeShape>
+                                    <Label Text="{Binding TimeLabel}" TextColor="White" FontSize="15" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                                </Border>
+
+                                <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                    <Label Text="{Binding StateText}" TextColor="{Binding TextColor}" FontSize="16" FontAttributes="Bold" />
+                                    <Label Text="{Binding ClientInfo}" TextColor="#413F3F" FontSize="14" />
+                                    <Label Text="{Binding PetInfo}" TextColor="#646464" FontSize="13" />
+                                    <Label Text="{Binding ServiceInfo}" TextColor="#646464" FontSize="13" />
+                                    <Label Text="{Binding StatusText}" TextColor="#9A9A9A" FontSize="13" />
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+
+
+
+
+
+
+
+
