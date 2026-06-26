@@ -20,6 +20,18 @@
                 </Border.StrokeShape>
 
                 <VerticalStackLayout Spacing="8">
+                    <Label Text="Ветеринарная клиника" TextColor="#413F3F" FontSize="18" FontAttributes="Bold" />
+                    <Label Text="Телефон: 0 (778) 99887" TextColor="#646464" />
+                    <Label Text="Время работы: 8:30 - 18:00" TextColor="#646464" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="8" />
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="8">
                     <Label Text="г. Бендеры" TextColor="#413F3F" FontSize="18" FontAttributes="Bold" />
                     <Label Text="ул. Коммунальная, д.188" TextColor="#646464" />
                 </VerticalStackLayout>
@@ -49,6 +61,7 @@
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
+
 
 
 
