@@ -12,6 +12,7 @@ public partial class RecordPage : ContentPage
 	private HttpClient httpClient = new HttpClient();
 	private List<Service> services = new List<Service>();
 	private List<Day> days = new List<Day>();
+	// Коллекции привязаны к плиткам даты и времени на экране записи.
 	private ObservableCollection<DayItem> showDays = new ObservableCollection<DayItem>();
 	private ObservableCollection<TimeItem> showTimes = new ObservableCollection<TimeItem>();
 	private Day selectedDay;
@@ -41,6 +42,7 @@ public partial class RecordPage : ContentPage
 		PhoneEntry.Text = State.ClientPhone;
 	}
 
+	// Загружает услуги и свободные интервалы времени из API.
 	private async Task LoadData()
 	{
 		try
@@ -80,6 +82,7 @@ public partial class RecordPage : ContentPage
 		}
 	}
 
+	// Формирует плитки ближайших дней для выбора даты приема.
 	private void BuildDays()
 	{
 		showDays.Clear();
@@ -88,6 +91,7 @@ public partial class RecordPage : ContentPage
 			showDays.Add(new DayItem(day, day == selectedDay));
 	}
 
+	// Формирует список времени для выбранного дня и автоматически выбирает первый свободный слот.
 	private void BuildTimes()
 	{
 		showTimes.Clear();
@@ -107,6 +111,7 @@ public partial class RecordPage : ContentPage
 		}
 	}
 
+	// Обрабатывает нажатие на дату и обновляет доступное время.
 	private void Date_Tapped(object sender, TappedEventArgs e)
 	{
 		var view = (BindableObject)sender;
@@ -126,6 +131,7 @@ public partial class RecordPage : ContentPage
 		BuildTimes();
 	}
 
+	// Обрабатывает выбор времени; занятые интервалы выбрать нельзя.
 	private void Time_Tapped(object sender, TappedEventArgs e)
 	{
 		var view = (BindableObject)sender;
@@ -145,6 +151,7 @@ public partial class RecordPage : ContentPage
 		selectedTime = item;
 	}
 
+	// Проверяет форму и отправляет заявку на прием в базу через API.
 	private async void Send_Click(object sender, EventArgs e)
 	{
 		var name = NameEntry.Text?.Trim() ?? "";
@@ -212,6 +219,7 @@ public partial class RecordPage : ContentPage
 		}
 	}
 
+	// Модель плитки даты: хранит текст и цвета выбранного/обычного состояния.
 	private class DayItem : SelectableItem
 	{
 		public Day Day { get; }
@@ -257,6 +265,7 @@ public partial class RecordPage : ContentPage
 		}
 	}
 
+	// Модель плитки времени: отвечает за цвета свободного, занятого и выбранного слота.
 	private class TimeItem : SelectableItem
 	{
 		public Time Time { get; }
@@ -365,5 +374,13 @@ public partial class RecordPage : ContentPage
 		[JsonPropertyName("message")] public string Message { get; set; } = "";
 	}
 }
+
+
+
+
+
+
+
+
 
 

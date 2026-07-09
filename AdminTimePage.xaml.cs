@@ -11,6 +11,7 @@ public partial class AdminTimePage : ContentPage
 	private HttpClient httpClient = new HttpClient();
 	private List<Day> days = new List<Day>();
 	private List<Request> requests = new List<Request>();
+	// Коллекция слотов отображается в расписании администратора.
 	private ObservableCollection<Slot> slots = new ObservableCollection<Slot>();
 
 	public AdminTimePage()
@@ -36,6 +37,7 @@ public partial class AdminTimePage : ContentPage
 		ShowDay();
 	}
 
+	// Загружает интервалы времени и заявки, чтобы собрать расписание администратора.
 	private async Task LoadData()
 	{
 		try
@@ -71,6 +73,7 @@ public partial class AdminTimePage : ContentPage
 		}
 	}
 
+	// Показывает выбранный день и сопоставляет каждый временной слот с заявкой.
 	private void ShowDay()
 	{
 		var day = DatePicker.SelectedItem as Day;
@@ -175,6 +178,7 @@ public partial class AdminTimePage : ContentPage
 			}
 		}
 
+		// Цвет карточки помогает быстро отличить свободные, занятые и отмененные записи.
 		public string CardColor
 		{
 			get
@@ -204,6 +208,7 @@ public partial class AdminTimePage : ContentPage
 				return "#FFFFFF";
 			}
 		}
+		// Цвет бейджа времени зависит от состояния слота или статуса заявки.
 		public string BadgeColor
 		{
 			get
@@ -261,6 +266,7 @@ public partial class AdminTimePage : ContentPage
 			}
 		}
 
+		// Данные клиента выводятся только у занятого слота.
 		public string ClientInfo
 		{
 			get
@@ -324,6 +330,13 @@ public partial class AdminTimePage : ContentPage
 		}
 	}
 }
+
+
+
+
+
+
+
 
 
 

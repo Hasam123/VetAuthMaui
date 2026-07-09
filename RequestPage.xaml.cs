@@ -54,6 +54,7 @@ public partial class RequestPage : ContentPage
 		ApplyInitialStatus();
 	}
 
+	// Применяет статус, переданный из панели администратора через навигацию.
 	private void ApplyInitialStatus()
 	{
 		if (StatusFilterPicker == null)
@@ -81,6 +82,7 @@ public partial class RequestPage : ContentPage
 		Filter();
 	}
 
+	// Открывает меню смены статуса заявки.
 	private async void Status_Click(object sender, EventArgs e)
 	{
 		// выбранная заявка
@@ -131,7 +133,7 @@ public partial class RequestPage : ContentPage
 			}
 
 			ApplyInitialStatus();
-		await LoadData();
+			await LoadData();
 		}
 		catch (Exception ex)
 		{
@@ -139,6 +141,7 @@ public partial class RequestPage : ContentPage
 		}
 	}
 
+	// Позволяет администратору добавить комментарий, который увидит клиент.
 	private async void Comment_Click(object sender, EventArgs e)
 	{
 		Button button = (Button)sender;
@@ -175,7 +178,7 @@ public partial class RequestPage : ContentPage
 			}
 
 			ApplyInitialStatus();
-		await LoadData();
+			await LoadData();
 		}
 		catch (Exception ex)
 		{
@@ -183,6 +186,7 @@ public partial class RequestPage : ContentPage
 		}
 	}
 
+	// Передает данные заявки на экран обследования и лечения.
 	private async void Med_Click(object sender, EventArgs e)
 	{
 		Button button = (Button)sender;
@@ -206,6 +210,7 @@ public partial class RequestPage : ContentPage
 		await Shell.Current.GoToAsync("MedicalRecordPage");
 	}
 
+	// Удаляет заявку после подтверждения администратора.
 	private async void Delete_Click(object sender, EventArgs e)
 	{
 		// удаление заявки
@@ -274,6 +279,7 @@ public partial class RequestPage : ContentPage
 			StatusLabel.Text = $"Показано: {requests.Count} из {allRequests.Count}";
 	}
 
+	// Фильтрует заявки по выбранной дате и статусу.
 	private void Filter()
 	{
 		// фильтр заявок
@@ -507,6 +513,7 @@ public partial class RequestPage : ContentPage
 			}
 		}
 
+		// Цвет бейджа отражает текущий статус заявки.
 		public string Color
 		{
 			get
@@ -542,6 +549,16 @@ public partial class RequestPage : ContentPage
 		}
 	}
 }
+
+
+
+
+
+
+
+
+
+
 
 
 
