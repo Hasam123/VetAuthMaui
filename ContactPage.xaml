@@ -4,63 +4,69 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="VetAuthMaui.ContactPage"
              Title="Контакты"
-             BackgroundColor="#F3FBFF">
+             BackgroundColor="#F6FAFF">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="14">
-            <Label
-                Text="Контакты"
-                TextColor="#413F3F"
-                FontSize="26"
-                FontAttributes="Bold" />
+            <VerticalStackLayout Spacing="4">
+                <Label Text="Контакты"
+                       TextColor="#17213A"
+                       FontSize="26"
+                       FontAttributes="Bold" />
+                <Label Text="Адреса и время работы ветеринарной клиники"
+                       TextColor="#657084"
+                       FontSize="14" />
+            </VerticalStackLayout>
 
-            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+            <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="8" />
+                    <RoundRectangle CornerRadius="22" />
                 </Border.StrokeShape>
 
                 <VerticalStackLayout Spacing="8">
-                    <Label Text="Ветеринарная клиника" TextColor="#413F3F" FontSize="18" FontAttributes="Bold" />
-                    <Label Text="Телефон: 0 (778) 99887" TextColor="#646464" />
-                    <Label Text="Время работы: 8:30 - 18:00" TextColor="#646464" />
+                    <Label Text="Ветеринарная клиника" TextColor="#17213A" FontSize="18" FontAttributes="Bold" />
+                    <Label Text="Телефон: 0 (778) 99887" TextColor="#657084" />
+                    <Label Text="Время работы: 8:30 - 18:00" TextColor="#657084" />
                 </VerticalStackLayout>
             </Border>
 
-            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+            <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="8" />
+                    <RoundRectangle CornerRadius="22" />
                 </Border.StrokeShape>
 
                 <VerticalStackLayout Spacing="8">
-                    <Label Text="г. Бендеры" TextColor="#413F3F" FontSize="18" FontAttributes="Bold" />
-                    <Label Text="ул. Коммунальная, д.188" TextColor="#646464" />
+                    <Label Text="г. Бендеры" TextColor="#17213A" FontSize="18" FontAttributes="Bold" />
+                    <Label Text="ул. Коммунальная, д.188" TextColor="#657084" />
                 </VerticalStackLayout>
             </Border>
 
-            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+            <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="8" />
+                    <RoundRectangle CornerRadius="22" />
                 </Border.StrokeShape>
 
                 <VerticalStackLayout Spacing="8">
-                    <Label Text="г. Тирасполь" TextColor="#413F3F" FontSize="18" FontAttributes="Bold" />
-                    <Label Text="ул. Советская, д.52" TextColor="#646464" />
+                    <Label Text="г. Тирасполь" TextColor="#17213A" FontSize="18" FontAttributes="Bold" />
+                    <Label Text="ул. Советская, д.52" TextColor="#657084" />
                 </VerticalStackLayout>
             </Border>
 
-            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+            <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="8" />
+                    <RoundRectangle CornerRadius="22" />
                 </Border.StrokeShape>
 
                 <VerticalStackLayout Spacing="8">
-                    <Label Text="г. Григориополь" TextColor="#413F3F" FontSize="18" FontAttributes="Bold" />
-                    <Label Text="ул. Ленина, д.10" TextColor="#646464" />
+                    <Label Text="г. Григориополь" TextColor="#17213A" FontSize="18" FontAttributes="Bold" />
+                    <Label Text="ул. Ленина, д.10" TextColor="#657084" />
                 </VerticalStackLayout>
             </Border>
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
+
+
 
 
 

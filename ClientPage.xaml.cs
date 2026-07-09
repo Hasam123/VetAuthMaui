@@ -329,15 +329,15 @@ public partial class ClientPage : ContentPage
 			get
 			{
 				if (Status == "new")
-					return "#009EDB";
+					return "#4AA3D8";
 				if (Status == "accepted")
-					return "#F39C12";
+					return "#FF8A5B";
 				if (Status == "done")
-					return "#27AE60";
+					return "#30B878";
 				if (Status == "cancelled")
-					return "#8E8E8E";
+					return "#D9534F";
 
-				return "#646464";
+				return "#657084";
 			}
 		}
 
@@ -350,6 +350,8 @@ public partial class ClientPage : ContentPage
 		}
 	}
 }
+
+
 
 
 

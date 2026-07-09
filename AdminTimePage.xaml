@@ -4,20 +4,20 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="VetAuthMaui.AdminTimePage"
              Title="Расписание"
-             BackgroundColor="#F3FBFF">
+             BackgroundColor="#F6FAFF">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="14">
             <Label Text="Расписание"
-                   TextColor="#413F3F"
+                   TextColor="#17213A"
                    FontSize="26"
                    FontAttributes="Bold" />
 
             <Button Text="Обновить"
-                    BackgroundColor="#009EDB"
+                    BackgroundColor="#12A7A7"
                     TextColor="White"
                     FontAttributes="Bold"
-                    CornerRadius="24"
+                    CornerRadius="26"
                     HeightRequest="48"
                     Clicked="Refresh_Click" />
 
@@ -26,36 +26,39 @@
                 Title="День"
                 BackgroundColor="White"
                 TextColor="#222222"
-                TitleColor="#9A9A9A"
+                TitleColor="#9AA8B8"
                 SelectedIndexChanged="Date_Changed" />
 
             <Label x:Name="StatusLabel"
                    Text="Загрузка расписания..."
-                   TextColor="#646464"
+                   TextColor="#657084"
                    FontSize="14" />
 
             <CollectionView x:Name="ScheduleCollectionView">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Border BackgroundColor="White" Stroke="{Binding BorderColor}" StrokeThickness="1" Padding="14" Margin="0,0,0,10">
+                        <Border BackgroundColor="{Binding CardColor}" Stroke="{Binding BorderColor}" StrokeThickness="1" Padding="14" Margin="0,0,0,10">
                             <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="8" />
+                                <RoundRectangle CornerRadius="22" />
                             </Border.StrokeShape>
 
-                            <Grid ColumnDefinitions="74,*" ColumnSpacing="12">
-                                <Border BackgroundColor="{Binding BadgeColor}" StrokeThickness="0" Padding="10,8" VerticalOptions="Start">
+                            <Grid ColumnDefinitions="82,*" ColumnSpacing="12" VerticalOptions="Center">
+                                <Border BackgroundColor="{Binding BadgeColor}" Stroke="{Binding BorderColor}" StrokeThickness="1" Padding="10,8" VerticalOptions="Center" HeightRequest="42">
                                     <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="8" />
+                                        <RoundRectangle CornerRadius="22" />
                                     </Border.StrokeShape>
-                                    <Label Text="{Binding TimeLabel}" TextColor="White" FontSize="15" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                                    <HorizontalStackLayout Spacing="4" HorizontalOptions="Center" VerticalOptions="Center">
+                                        <Label Text="◷" TextColor="{Binding BadgeTextColor}" FontSize="14" FontAttributes="Bold" VerticalTextAlignment="Center" />
+                                        <Label Text="{Binding TimeLabel}" TextColor="{Binding BadgeTextColor}" FontSize="15" FontAttributes="Bold" VerticalTextAlignment="Center" />
+                                    </HorizontalStackLayout>
                                 </Border>
 
-                                <VerticalStackLayout Grid.Column="1" Spacing="4">
-                                    <Label Text="{Binding StateText}" TextColor="{Binding TextColor}" FontSize="16" FontAttributes="Bold" />
-                                    <Label Text="{Binding ClientInfo}" TextColor="#413F3F" FontSize="14" />
-                                    <Label Text="{Binding PetInfo}" TextColor="#646464" FontSize="13" />
-                                    <Label Text="{Binding ServiceInfo}" TextColor="#646464" FontSize="13" />
-                                    <Label Text="{Binding StatusText}" TextColor="#9A9A9A" FontSize="13" />
+                                <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center" HorizontalOptions="Fill">
+                                    <Label Text="{Binding StateText}" TextColor="{Binding TextColor}" FontSize="16" FontAttributes="Bold" HorizontalTextAlignment="Center" />
+                                    <Label Text="{Binding ClientInfo}" TextColor="#17213A" FontSize="14" HorizontalTextAlignment="Center" IsVisible="{Binding IsBusy}" />
+                                    <Label Text="{Binding PetInfo}" TextColor="#657084" FontSize="13" HorizontalTextAlignment="Center" IsVisible="{Binding IsBusy}" />
+                                    <Label Text="{Binding ServiceInfo}" TextColor="#657084" FontSize="13" HorizontalTextAlignment="Center" IsVisible="{Binding IsBusy}" />
+                                    <Label Text="{Binding StatusText}" TextColor="{Binding TextColor}" FontSize="13" FontAttributes="Bold" HorizontalTextAlignment="Center" IsVisible="{Binding IsBusy}" />
                                 </VerticalStackLayout>
                             </Grid>
                         </Border>
@@ -65,6 +68,13 @@
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
+
+
+
+
+
+
+
 
 
 

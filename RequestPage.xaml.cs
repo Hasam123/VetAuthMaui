@@ -5,12 +5,15 @@ using System.Globalization;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 
+[QueryProperty(nameof(InitialStatus), "status")]
+
 // список заявок
 public partial class RequestPage : ContentPage
 {
 	private HttpClient httpClient = new HttpClient();
 	private List<Request> allRequests = new List<Request>();
 	private ObservableCollection<Request> requests = new ObservableCollection<Request>();
+	private string initialStatus = "";
 	private List<FilterItem> dates = new List<FilterItem>()
 	{
 		new FilterItem("Все даты", "all"),
@@ -28,6 +31,15 @@ public partial class RequestPage : ContentPage
 		new FilterItem("Отмененные", "cancelled")
 	};
 
+	public string InitialStatus
+	{
+		get => initialStatus;
+		set
+		{
+			initialStatus = value ?? "";
+			ApplyInitialStatus();
+		}
+	}
 	public RequestPage()
 	{
 		InitializeComponent();
@@ -39,16 +51,28 @@ public partial class RequestPage : ContentPage
 		StatusFilterPicker.ItemDisplayBinding = new Binding("Name");
 		StatusFilterPicker.SelectedIndex = 0;
 		RequestsCollectionView.ItemsSource = requests;
+		ApplyInitialStatus();
 	}
 
+	private void ApplyInitialStatus()
+	{
+		if (StatusFilterPicker == null)
+			return;
+
+		var index = statuses.FindIndex(item => item.Value == initialStatus);
+		if (index >= 0 && StatusFilterPicker.SelectedIndex != index)
+			StatusFilterPicker.SelectedIndex = index;
+	}
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
+		ApplyInitialStatus();
 		await LoadData();
 	}
 
 	private async void Refresh_Click(object sender, EventArgs e)
 	{
+		ApplyInitialStatus();
 		await LoadData();
 	}
 
@@ -106,7 +130,8 @@ public partial class RequestPage : ContentPage
 				return;
 			}
 
-			await LoadData();
+			ApplyInitialStatus();
+		await LoadData();
 		}
 		catch (Exception ex)
 		{
@@ -149,7 +174,8 @@ public partial class RequestPage : ContentPage
 				return;
 			}
 
-			await LoadData();
+			ApplyInitialStatus();
+		await LoadData();
 		}
 		catch (Exception ex)
 		{
@@ -486,15 +512,15 @@ public partial class RequestPage : ContentPage
 			get
 			{
 				if (Status == "new")
-					return "#009EDB";
+					return "#4AA3D8";
 				if (Status == "accepted")
-					return "#F39C12";
+					return "#FF8A5B";
 				if (Status == "done")
-					return "#27AE60";
+					return "#30B878";
 				if (Status == "cancelled")
-					return "#8E8E8E";
+					return "#D9534F";
 
-				return "#646464";
+				return "#657084";
 			}
 		}
 
@@ -516,6 +542,10 @@ public partial class RequestPage : ContentPage
 		}
 	}
 }
+
+
+
+
 
 
 

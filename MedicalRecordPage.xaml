@@ -4,97 +4,97 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="VetAuthMaui.MedicalRecordPage"
              Title="Медкарта"
-             BackgroundColor="#F3FBFF">
+             BackgroundColor="#F6FAFF">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="14">
             <Label Text="Обследование и лечение"
-                   TextColor="#413F3F"
+                   TextColor="#17213A"
                    FontSize="26"
                    FontAttributes="Bold" />
 
-            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+            <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="8" />
+                    <RoundRectangle CornerRadius="22" />
                 </Border.StrokeShape>
 
                 <VerticalStackLayout Spacing="12">
-                    <Label x:Name="PatientLabel" TextColor="#413F3F" FontSize="16" FontAttributes="Bold" />
-                    <Label x:Name="AppointmentLabel" TextColor="#EA5927" FontSize="15" />
+                    <Label x:Name="PatientLabel" TextColor="#17213A" FontSize="16" FontAttributes="Bold" />
+                    <Label x:Name="AppointmentLabel" TextColor="#FF8A5B" FontSize="15" />
                 </VerticalStackLayout>
             </Border>
 
-            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+            <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="8" />
+                    <RoundRectangle CornerRadius="22" />
                 </Border.StrokeShape>
 
                 <VerticalStackLayout Spacing="12">
-                    <Label Text="Обследование" TextColor="#413F3F" FontSize="20" FontAttributes="Bold" />
+                    <Label Text="Обследование" TextColor="#17213A" FontSize="20" FontAttributes="Bold" />
 
-                    <Label Text="Жалоба клиента" TextColor="#646464" FontSize="14" FontAttributes="Bold" />
+                    <Label Text="Жалоба клиента" TextColor="#657084" FontSize="14" FontAttributes="Bold" />
                     <Editor x:Name="JalobaEditor"
                             Placeholder="Например: питомец плохо ест, болит лапа, рвота"
                             AutoSize="TextChanges"
                             HeightRequest="90"
                             BackgroundColor="White"
                             TextColor="#222222"
-                            PlaceholderColor="#9A9A9A" />
+                            PlaceholderColor="#9AA8B8" />
 
-                    <Label Text="Диагноз" TextColor="#646464" FontSize="14" FontAttributes="Bold" />
+                    <Label Text="Диагноз" TextColor="#657084" FontSize="14" FontAttributes="Bold" />
                     <Editor x:Name="DiagnozEditor"
                             Placeholder="Например: воспаление десны, дерматит, отит"
                             AutoSize="TextChanges"
                             HeightRequest="90"
                             BackgroundColor="White"
                             TextColor="#222222"
-                            PlaceholderColor="#9A9A9A" />
+                            PlaceholderColor="#9AA8B8" />
 
-                    <Label Text="Результат обследования" TextColor="#646464" FontSize="14" FontAttributes="Bold" />
+                    <Label Text="Результат обследования" TextColor="#657084" FontSize="14" FontAttributes="Bold" />
                     <Editor x:Name="ObsledResultEditor"
                             Placeholder="Опишите осмотр, анализы, состояние питомца"
                             AutoSize="TextChanges"
                             HeightRequest="100"
                             BackgroundColor="White"
                             TextColor="#222222"
-                            PlaceholderColor="#9A9A9A" />
+                            PlaceholderColor="#9AA8B8" />
                 </VerticalStackLayout>
             </Border>
 
-            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+            <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="8" />
+                    <RoundRectangle CornerRadius="22" />
                 </Border.StrokeShape>
 
                 <VerticalStackLayout Spacing="12">
-                    <Label Text="Лечение" TextColor="#413F3F" FontSize="20" FontAttributes="Bold" />
+                    <Label Text="Лечение" TextColor="#17213A" FontSize="20" FontAttributes="Bold" />
 
-                    <Label Text="Назначенное лечение" TextColor="#646464" FontSize="14" FontAttributes="Bold" />
+                    <Label Text="Назначенное лечение" TextColor="#657084" FontSize="14" FontAttributes="Bold" />
                     <Editor x:Name="NazLechEditor"
                             Placeholder="Например: препарат, дозировка, курс лечения"
                             AutoSize="TextChanges"
                             HeightRequest="100"
                             BackgroundColor="White"
                             TextColor="#222222"
-                            PlaceholderColor="#9A9A9A" />
+                            PlaceholderColor="#9AA8B8" />
 
-                    <Label Text="Выполненная процедура" TextColor="#646464" FontSize="14" FontAttributes="Bold" />
+                    <Label Text="Выполненная процедура" TextColor="#657084" FontSize="14" FontAttributes="Bold" />
                     <Editor x:Name="ProcedureDoneEditor"
                             Placeholder="Например: инъекция, обработка раны, удаление зуба"
                             AutoSize="TextChanges"
                             HeightRequest="100"
                             BackgroundColor="White"
                             TextColor="#222222"
-                            PlaceholderColor="#9A9A9A" />
+                            PlaceholderColor="#9AA8B8" />
 
-                    <Label Text="Заметки врача" TextColor="#646464" FontSize="14" FontAttributes="Bold" />
+                    <Label Text="Заметки врача" TextColor="#657084" FontSize="14" FontAttributes="Bold" />
                     <Editor x:Name="TreatmentNotesEditor"
                             Placeholder="Дополнительные рекомендации, повторный прием"
                             AutoSize="TextChanges"
                             HeightRequest="100"
                             BackgroundColor="White"
                             TextColor="#222222"
-                            PlaceholderColor="#9A9A9A" />
+                            PlaceholderColor="#9AA8B8" />
                 </VerticalStackLayout>
             </Border>
 
@@ -102,12 +102,13 @@
                     BackgroundColor="#8A5A44"
                     TextColor="White"
                     FontAttributes="Bold"
-                    CornerRadius="24"
+                    CornerRadius="26"
                     HeightRequest="52"
                     Clicked="Save_Click" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
+
 
 
 

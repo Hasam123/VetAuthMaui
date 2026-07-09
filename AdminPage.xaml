@@ -4,18 +4,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="VetAuthMaui.AdminPage"
              Title="Админ"
-             BackgroundColor="#F3FBFF"
+             BackgroundColor="#F6FAFF"
              Shell.NavBarIsVisible="False">
 
     <Grid RowDefinitions="Auto,*">
-        <Border BackgroundColor="#009EDB" StrokeThickness="0" Padding="24,36,24,28">
+        <Border BackgroundColor="#12A7A7" StrokeThickness="0" Padding="24,36,24,28">
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="0,0,34,34" />
             </Border.StrokeShape>
 
             <VerticalStackLayout Spacing="8">
                 <Label Text="Панель администратора" TextColor="White" FontSize="28" FontAttributes="Bold" />
-                <Label Text="Управление заявками, статусами и услугами" TextColor="#EAF8FE" FontSize="15" />
+                <Label Text="Нажмите на карточку, чтобы открыть нужный раздел" TextColor="#EAF7F8" FontSize="15" />
             </VerticalStackLayout>
         </Border>
 
@@ -23,102 +23,124 @@
             <VerticalStackLayout Padding="24,28,24,30" Spacing="12">
                 <Button
                     Text="Обновить статистику"
-                    BackgroundColor="#009EDB"
+                    BackgroundColor="#12A7A7"
                     TextColor="White"
                     FontAttributes="Bold"
-                    CornerRadius="24"
+                    CornerRadius="26"
                     HeightRequest="48"
                     Clicked="Refresh_Click" />
 
                 <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="10">
-                    <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="14">
-                        <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                    <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="14">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="AllRequests_Tapped" />
+                        </Border.GestureRecognizers>
+                        <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="4">
-                            <Label x:Name="TotalRequestsLabel" Text="0" TextColor="#413F3F" FontSize="24" FontAttributes="Bold" />
-                            <Label Text="Все заявки" TextColor="#646464" FontSize="13" />
+                            <Label x:Name="TotalRequestsLabel" Text="0" TextColor="#17213A" FontSize="24" FontAttributes="Bold" />
+                            <Label Text="Все заявки" TextColor="#657084" FontSize="13" />
+                            <Label Text="Открыть" TextColor="#12A7A7" FontSize="12" FontAttributes="Bold" />
                         </VerticalStackLayout>
                     </Border>
 
-                    <Border Grid.Column="1" BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="14">
-                        <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                    <Border Grid.Column="1" BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="14">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="NewRequests_Tapped" />
+                        </Border.GestureRecognizers>
+                        <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="4">
-                            <Label x:Name="NewRequestsLabel" Text="0" TextColor="#009EDB" FontSize="24" FontAttributes="Bold" />
-                            <Label Text="Новые" TextColor="#646464" FontSize="13" />
+                            <Label x:Name="NewRequestsLabel" Text="0" TextColor="#12A7A7" FontSize="24" FontAttributes="Bold" />
+                            <Label Text="Новые" TextColor="#657084" FontSize="13" />
+                            <Label Text="Открыть" TextColor="#12A7A7" FontSize="12" FontAttributes="Bold" />
                         </VerticalStackLayout>
                     </Border>
 
-                    <Border Grid.Row="1" BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="14">
-                        <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                    <Border Grid.Row="1" BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="14">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="AcceptedRequests_Tapped" />
+                        </Border.GestureRecognizers>
+                        <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="4">
                             <Label x:Name="AcceptedRequestsLabel" Text="0" TextColor="#F39C12" FontSize="24" FontAttributes="Bold" />
-                            <Label Text="Принятые" TextColor="#646464" FontSize="13" />
+                            <Label Text="Принятые" TextColor="#657084" FontSize="13" />
+                            <Label Text="Открыть" TextColor="#F39C12" FontSize="12" FontAttributes="Bold" />
                         </VerticalStackLayout>
                     </Border>
 
-                    <Border Grid.Row="1" Grid.Column="1" BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="14">
-                        <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                    <Border Grid.Row="1" Grid.Column="1" BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="14">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="DoneRequests_Tapped" />
+                        </Border.GestureRecognizers>
+                        <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="4">
-                            <Label x:Name="DoneRequestsLabel" Text="0" TextColor="#27AE60" FontSize="24" FontAttributes="Bold" />
-                            <Label Text="Выполненные" TextColor="#646464" FontSize="13" />
+                            <Label x:Name="DoneRequestsLabel" Text="0" TextColor="#30B878" FontSize="24" FontAttributes="Bold" />
+                            <Label Text="Выполненные" TextColor="#657084" FontSize="13" />
+                            <Label Text="Открыть" TextColor="#30B878" FontSize="12" FontAttributes="Bold" />
                         </VerticalStackLayout>
                     </Border>
 
-                    <Border Grid.Row="2" BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="14">
-                        <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                    <Border Grid.Row="2" BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="14">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="CancelledRequests_Tapped" />
+                        </Border.GestureRecognizers>
+                        <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="4">
                             <Label x:Name="CancelledRequestsLabel" Text="0" TextColor="#8E8E8E" FontSize="24" FontAttributes="Bold" />
-                            <Label Text="Отмененные" TextColor="#646464" FontSize="13" />
+                            <Label Text="Отмененные" TextColor="#657084" FontSize="13" />
+                            <Label Text="Открыть" TextColor="#657084" FontSize="12" FontAttributes="Bold" />
                         </VerticalStackLayout>
                     </Border>
 
-                    <Border Grid.Row="2" Grid.Column="1" BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="14">
-                        <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                    <Border Grid.Row="2" Grid.Column="1" BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="14">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="ServicesSummary_Tapped" />
+                        </Border.GestureRecognizers>
+                        <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="4">
-                            <Label x:Name="ServicesTotalLabel" Text="0" TextColor="#EA5927" FontSize="24" FontAttributes="Bold" />
-                            <Label Text="Услуги" TextColor="#646464" FontSize="13" />
+                            <Label x:Name="ServicesTotalLabel" Text="0" TextColor="#FF8A5B" FontSize="24" FontAttributes="Bold" />
+                            <Label Text="Услуги" TextColor="#657084" FontSize="13" />
+                            <Label Text="Открыть" TextColor="#FF8A5B" FontSize="12" FontAttributes="Bold" />
                         </VerticalStackLayout>
                     </Border>
                 </Grid>
 
-                <Label x:Name="StatsStatusLabel" Text="" TextColor="#646464" FontSize="13" />
+                <Label x:Name="StatsStatusLabel" Text="" TextColor="#657084" FontSize="13" />
+                <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
+                    <Grid ColumnDefinitions="54,*" ColumnSpacing="14">
+                        <Border BackgroundColor="#EAF7F8" StrokeThickness="0" WidthRequest="54" HeightRequest="54" VerticalOptions="Start">
+                            <Border.StrokeShape><RoundRectangle CornerRadius="18" /></Border.StrokeShape>
+                            <Label Text="◷" TextColor="#12A7A7" FontSize="27" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                        </Border>
 
-                <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
-                    <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
-                    <VerticalStackLayout Spacing="8">
-                        <Label Text="Заявки на прием" TextColor="#413F3F" FontSize="19" FontAttributes="Bold" />
-                        <Label Text="Просмотр клиентов, питомцев и изменение статусов." TextColor="#646464" FontSize="14" />
-                        <Button Text="Открыть заявки" BackgroundColor="#EA5927" TextColor="White" FontAttributes="Bold" CornerRadius="22" HeightRequest="48" Clicked="Requests_Click" />
-                    </VerticalStackLayout>
+                        <VerticalStackLayout Grid.Column="1" Spacing="8">
+                            <Label Text="Расписание" TextColor="#17213A" FontSize="19" FontAttributes="Bold" />
+                            <Label Text="Свободные и занятые окна записи по дням." TextColor="#657084" FontSize="14" />
+                            <Button Text="Открыть расписание" BackgroundColor="#12A7A7" TextColor="White" FontAttributes="Bold" CornerRadius="22" HeightRequest="46" Clicked="Schedule_Click" />
+                        </VerticalStackLayout>
+                    </Grid>
                 </Border>
 
-                <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
-                    <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
-                    <VerticalStackLayout Spacing="8">
-                        <Label Text="Расписание" TextColor="#413F3F" FontSize="19" FontAttributes="Bold" />
-                        <Label Text="Свободные и занятые окна записи по дням." TextColor="#646464" FontSize="14" />
-                        <Button Text="Открыть расписание" BackgroundColor="#27AE60" TextColor="White" FontAttributes="Bold" CornerRadius="22" HeightRequest="48" Clicked="Schedule_Click" />
-                    </VerticalStackLayout>
+                <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
+                    <Grid ColumnDefinitions="54,*" ColumnSpacing="14">
+                        <Border BackgroundColor="#FFF4EC" StrokeThickness="0" WidthRequest="54" HeightRequest="54" VerticalOptions="Start">
+                            <Border.StrokeShape><RoundRectangle CornerRadius="18" /></Border.StrokeShape>
+                            <Label Text="₽" TextColor="#FF8A5B" FontSize="26" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="8">
+                            <Label Text="Услуги и цены" TextColor="#17213A" FontSize="19" FontAttributes="Bold" />
+                            <Label Text="Добавление, редактирование и удаление услуг сайта." TextColor="#657084" FontSize="14" />
+                            <Button Text="Открыть услуги" BackgroundColor="#12A7A7" TextColor="White" FontAttributes="Bold" CornerRadius="22" HeightRequest="46" Clicked="Services_Click" />
+                        </VerticalStackLayout>
+                    </Grid>
                 </Border>
 
-                <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
-                    <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
-                    <VerticalStackLayout Spacing="8">
-                        <Label Text="Услуги и цены" TextColor="#413F3F" FontSize="19" FontAttributes="Bold" />
-                        <Label Text="Добавление, редактирование и удаление услуг сайта." TextColor="#646464" FontSize="14" />
-                        <Button Text="Открыть услуги" BackgroundColor="#009EDB" TextColor="White" FontAttributes="Bold" CornerRadius="22" HeightRequest="48" Clicked="Services_Click" />
-                    </VerticalStackLayout>
-                </Border>
-
-                <Button Text="Выйти" BackgroundColor="Transparent" BorderColor="#EA5927" BorderWidth="1" TextColor="#EA5927" FontAttributes="Bold" CornerRadius="24" HeightRequest="52" Clicked="Logout_Click" />
+                <Button Text="Выйти" BackgroundColor="Transparent" BorderColor="#FF8A5B" BorderWidth="1" TextColor="#FF8A5B" FontAttributes="Bold" CornerRadius="26" HeightRequest="52" Clicked="Logout_Click" />
             </VerticalStackLayout>
         </ScrollView>
     </Grid>
 </ContentPage>
-
-
-
-
-
-
 
 

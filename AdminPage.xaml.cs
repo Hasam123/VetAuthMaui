@@ -53,12 +53,45 @@ public partial class AdminPage : ContentPage
 		}
 	}
 
-	private async void Requests_Click(object sender, EventArgs e)
+	private async Task OpenRequests(string status = "")
 	{
-		await Shell.Current.GoToAsync("RequestPage");
+		if (string.IsNullOrWhiteSpace(status))
+			await Shell.Current.GoToAsync("RequestPage");
+		else
+			await Shell.Current.GoToAsync($"RequestPage?status={Uri.EscapeDataString(status)}");
 	}
 
-	private async void Schedule_Click(object sender, EventArgs e)
+	private async void AllRequests_Tapped(object sender, TappedEventArgs e)
+	{
+		await OpenRequests();
+	}
+
+	private async void NewRequests_Tapped(object sender, TappedEventArgs e)
+	{
+		await OpenRequests("new");
+	}
+
+	private async void AcceptedRequests_Tapped(object sender, TappedEventArgs e)
+	{
+		await OpenRequests("accepted");
+	}
+
+	private async void DoneRequests_Tapped(object sender, TappedEventArgs e)
+	{
+		await OpenRequests("done");
+	}
+
+	private async void CancelledRequests_Tapped(object sender, TappedEventArgs e)
+	{
+		await OpenRequests("cancelled");
+	}
+
+	private async void ServicesSummary_Tapped(object sender, TappedEventArgs e)
+	{
+		State.IsAdminMode = true;
+		await Shell.Current.GoToAsync("ServicePage");
+	}
+private async void Schedule_Click(object sender, EventArgs e)
 	{
 		await Shell.Current.GoToAsync("AdminTimePage");
 	}
@@ -94,6 +127,9 @@ public partial class AdminPage : ContentPage
 		[JsonPropertyName("services_total")] public int ServicesTotal { get; set; }
 	}
 }
+
+
+
 
 
 

@@ -1,6 +1,9 @@
 ﻿namespace VetAuthMaui;
 
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
 
 // запись на прием
@@ -9,24 +12,28 @@ public partial class RecordPage : ContentPage
 	private HttpClient httpClient = new HttpClient();
 	private List<Service> services = new List<Service>();
 	private List<Day> days = new List<Day>();
+	private ObservableCollection<DayItem> showDays = new ObservableCollection<DayItem>();
+	private ObservableCollection<TimeItem> showTimes = new ObservableCollection<TimeItem>();
+	private Day selectedDay;
+	private TimeItem selectedTime;
 
 	public RecordPage()
 	{
 		InitializeComponent();
 		httpClient.Timeout = TimeSpan.FromSeconds(10);
+		DateCollectionView.ItemsSource = showDays;
+		TimeCollectionView.ItemsSource = showTimes;
 	}
 
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
-		// заполнение клиента
 		FillClient();
 		await LoadData();
 	}
 
 	private void FillClient()
 	{
-		// проверка входа
 		if (!State.IsClientLoggedIn)
 			return;
 
@@ -38,14 +45,12 @@ public partial class RecordPage : ContentPage
 	{
 		try
 		{
-			// проверка входа
-		if (!State.IsClientLoggedIn)
+			if (!State.IsClientLoggedIn)
 			{
 				await Shell.Current.GoToAsync("ClientLogin");
 				return;
 			}
 
-			// загрузка услуг и времени
 			var task1 = httpClient.GetFromJsonAsync<ServiceResult>($"{Api.BaseUrl}services/list.php");
 			var task2 = httpClient.GetFromJsonAsync<TimeResult>($"{Api.BaseUrl}schedule/free_slots.php");
 			var res = await task1;
@@ -58,26 +63,16 @@ public partial class RecordPage : ContentPage
 
 			days.Clear();
 			days.AddRange(res2?.Days ?? new List<Day>());
-			DatePicker.ItemsSource = days;
-			DatePicker.ItemDisplayBinding = new Binding("Label");
 
-			// выбор первого значения
 			if (ServicePicker.SelectedIndex < 0 && services.Count > 0)
 				ServicePicker.SelectedIndex = 0;
 
 			if (PetTypePicker.SelectedIndex < 0)
 				PetTypePicker.SelectedIndex = 0;
 
-			if (DatePicker.SelectedIndex < 0 && days.Count > 0)
-			{
-				var id = days.FindIndex(day => day.Slots.Any(slot => slot.IsAvailable));
-								if (id >= 0)
-					DatePicker.SelectedIndex = id;
-				else
-					DatePicker.SelectedIndex = 0;
-			}
-
-			UpdateTimePicker();
+			selectedDay = days.FirstOrDefault(day => day.Slots.Any(slot => slot.IsAvailable)) ?? days.FirstOrDefault();
+			BuildDays();
+			BuildTimes();
 		}
 		catch (Exception ex)
 		{
@@ -85,30 +80,73 @@ public partial class RecordPage : ContentPage
 		}
 	}
 
-	private void Date_Changed(object sender, EventArgs e)
+	private void BuildDays()
 	{
-		UpdateTimePicker();
+		showDays.Clear();
+
+		foreach (var day in days)
+			showDays.Add(new DayItem(day, day == selectedDay));
 	}
 
-	private void UpdateTimePicker()
+	private void BuildTimes()
 	{
-		// список свободного времени
-		var day = DatePicker.SelectedItem as Day;
-		var list2 = day?.Slots
-			.Where(slot => slot.IsAvailable)
-			.ToList() ?? new List<Time>();
+		showTimes.Clear();
+		selectedTime = null;
 
-		TimePicker.ItemsSource = list2;
-		TimePicker.ItemDisplayBinding = new Binding("Label");
-				if (list2.Count > 0)
-			TimePicker.SelectedIndex = 0;
-		else
-			TimePicker.SelectedIndex = -1;
+		foreach (var slot in selectedDay?.Slots ?? new List<Time>())
+		{
+			var item = new TimeItem(slot, false);
+			showTimes.Add(item);
+
+			if (selectedTime == null && slot.IsAvailable)
+			{
+				selectedTime = item;
+				item.IsSelected = true;
+				item.RefreshStyle();
+			}
+		}
+	}
+
+	private void Date_Tapped(object sender, TappedEventArgs e)
+	{
+		var view = (BindableObject)sender;
+		var item = view.BindingContext as DayItem;
+
+		if (item == null)
+			return;
+
+		selectedDay = item.Day;
+
+		foreach (var day in showDays)
+		{
+			day.IsSelected = day.Day == selectedDay;
+			day.RefreshStyle();
+		}
+
+		BuildTimes();
+	}
+
+	private void Time_Tapped(object sender, TappedEventArgs e)
+	{
+		var view = (BindableObject)sender;
+		var item = view.BindingContext as TimeItem;
+
+		if (item == null || !item.Time.IsAvailable)
+			return;
+
+		foreach (var time in showTimes)
+		{
+			time.IsSelected = false;
+			time.RefreshStyle();
+		}
+
+		item.IsSelected = true;
+		item.RefreshStyle();
+		selectedTime = item;
 	}
 
 	private async void Send_Click(object sender, EventArgs e)
 	{
-		// данные из формы
 		var name = NameEntry.Text?.Trim() ?? "";
 		var phone = PhoneEntry.Text?.Trim() ?? "";
 		var petName = PetNameEntry.Text?.Trim() ?? "";
@@ -116,7 +154,7 @@ public partial class RecordPage : ContentPage
 		var petAge = PetAgeEntry.Text?.Trim() ?? "";
 		var comment = CommentEditor.Text?.Trim() ?? "";
 		var service = ServicePicker.SelectedItem as Service;
-		var time = TimePicker.SelectedItem as Time;
+		var time = selectedTime?.Time;
 
 		if (name == "" || phone == "" || petName == "" || petType == "" || service == null || time == null || comment == "")
 		{
@@ -126,7 +164,6 @@ public partial class RecordPage : ContentPage
 
 		try
 		{
-			// отправка заявки
 			var data = new FeedbackData(name, phone, petName, petType, petAge, service.Id, time.Value, comment);
 			var response = await httpClient.PostAsJsonAsync($"{Api.BaseUrl}appointments/create.php", data);
 			var result = await response.Content.ReadFromJsonAsync<ApiResult>();
@@ -138,7 +175,7 @@ public partial class RecordPage : ContentPage
 			}
 
 			Clear();
-			await DisplayAlertAsync("Готово", result.Message, "ОК");
+			await DisplayAlertAsync("Заявка отправлена", "Администратор проверит запись и изменит статус.", "ОК");
 			await LoadData();
 		}
 		catch (Exception ex)
@@ -149,24 +186,121 @@ public partial class RecordPage : ContentPage
 
 	private void Clear()
 	{
-		// заполнение клиента
 		FillClient();
 		PetNameEntry.Text = "";
 		PetTypePicker.SelectedIndex = 0;
 		PetAgeEntry.Text = "";
-				if (services.Count > 0)
+		CommentEditor.Text = "";
+
+		if (services.Count > 0)
 			ServicePicker.SelectedIndex = 0;
 		else
 			ServicePicker.SelectedIndex = -1;
-				if (days.Count > 0)
-			DatePicker.SelectedIndex = 0;
-		else
-			DatePicker.SelectedIndex = -1;
-		UpdateTimePicker();
-		CommentEditor.Text = "";
+
+		selectedDay = days.FirstOrDefault(day => day.Slots.Any(slot => slot.IsAvailable)) ?? days.FirstOrDefault();
+		BuildDays();
+		BuildTimes();
 	}
 
-	// данные записи
+	private class SelectableItem : INotifyPropertyChanged
+	{
+		public event PropertyChangedEventHandler PropertyChanged;
+
+		protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+		{
+			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+		}
+	}
+
+	private class DayItem : SelectableItem
+	{
+		public Day Day { get; }
+		public bool IsSelected { get; set; }
+		public string DayName { get; }
+		public string DayNumber { get; }
+		public Color BackgroundColor { get; private set; } = Color.FromArgb("#FFFFFF");
+		public Color StrokeColor { get; private set; } = Color.FromArgb("#DDEBF3");
+		public Color TextColor { get; private set; } = Color.FromArgb("#657084");
+
+		public DayItem(Day day, bool isSelected)
+		{
+			Day = day;
+			IsSelected = isSelected;
+
+			var label = day.Label ?? "";
+			var parts = label.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+			DayName = parts.Length > 0 ? parts[0] : label;
+			DayNumber = parts.Length > 1 ? parts[1] : "";
+
+			RefreshStyle();
+		}
+
+		public void RefreshStyle()
+		{
+			if (IsSelected)
+			{
+				BackgroundColor = Color.FromArgb("#12A7A7");
+				StrokeColor = Color.FromArgb("#12A7A7");
+				TextColor = Color.FromArgb("#FFFFFF");
+			}
+			else
+			{
+				BackgroundColor = Color.FromArgb("#FFFFFF");
+				StrokeColor = Color.FromArgb("#DDEBF3");
+				TextColor = Color.FromArgb("#657084");
+			}
+
+			OnPropertyChanged(nameof(BackgroundColor));
+			OnPropertyChanged(nameof(StrokeColor));
+			OnPropertyChanged(nameof(TextColor));
+			OnPropertyChanged(nameof(IsSelected));
+		}
+	}
+
+	private class TimeItem : SelectableItem
+	{
+		public Time Time { get; }
+		public bool IsSelected { get; set; }
+		public string Label => Time.Label;
+		public Color BackgroundColor { get; private set; } = Color.FromArgb("#FFFFFF");
+		public Color StrokeColor { get; private set; } = Color.FromArgb("#DDEBF3");
+		public Color TextColor { get; private set; } = Color.FromArgb("#17213A");
+
+		public TimeItem(Time time, bool isSelected)
+		{
+			Time = time;
+			IsSelected = isSelected;
+			RefreshStyle();
+		}
+
+		public void RefreshStyle()
+		{
+			if (!Time.IsAvailable)
+			{
+				BackgroundColor = Color.FromArgb("#EEF3F7");
+				StrokeColor = Color.FromArgb("#EEF3F7");
+				TextColor = Color.FromArgb("#9AA8B8");
+			}
+			else if (IsSelected)
+			{
+				BackgroundColor = Color.FromArgb("#12A7A7");
+				StrokeColor = Color.FromArgb("#12A7A7");
+				TextColor = Color.FromArgb("#FFFFFF");
+			}
+			else
+			{
+				BackgroundColor = Color.FromArgb("#FFFFFF");
+				StrokeColor = Color.FromArgb("#DDEBF3");
+				TextColor = Color.FromArgb("#17213A");
+			}
+
+			OnPropertyChanged(nameof(BackgroundColor));
+			OnPropertyChanged(nameof(StrokeColor));
+			OnPropertyChanged(nameof(TextColor));
+			OnPropertyChanged(nameof(IsSelected));
+		}
+	}
+
 	private class FeedbackData
 	{
 		[JsonPropertyName("name")] public string Name { get; set; }
@@ -191,33 +325,26 @@ public partial class RecordPage : ContentPage
 		}
 	}
 
-	// результат услуг
-	// услуга
 	private class ServiceResult
 	{
 		[JsonPropertyName("services")]
 		public List<Service> Services { get; set; } = new List<Service>();
 	}
 
-	// услуга
 	private class Service
 	{
 		[JsonPropertyName("id")] public int Id { get; set; }
 		[JsonPropertyName("title")] public string Title { get; set; } = "";
 		[JsonPropertyName("price")] public int Price { get; set; }
-
 		public string Text => $"{Title} - {Price} руб.";
 	}
 
-	// результат времени
-	// время
 	private class TimeResult
 	{
 		[JsonPropertyName("days")]
 		public List<Day> Days { get; set; } = new List<Day>();
 	}
 
-	// день
 	private class Day
 	{
 		[JsonPropertyName("date")] public string Date { get; set; } = "";
@@ -225,7 +352,6 @@ public partial class RecordPage : ContentPage
 		[JsonPropertyName("slots")] public List<Time> Slots { get; set; } = new List<Time>();
 	}
 
-	// время
 	private class Time
 	{
 		[JsonPropertyName("time")] public string Value { get; set; } = "";
@@ -233,39 +359,11 @@ public partial class RecordPage : ContentPage
 		[JsonPropertyName("is_available")] public bool IsAvailable { get; set; }
 	}
 
-	// ответ API
 	private class ApiResult
 	{
 		[JsonPropertyName("success")] public bool Success { get; set; }
 		[JsonPropertyName("message")] public string Message { get; set; } = "";
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 

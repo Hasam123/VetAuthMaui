@@ -3,18 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="VetAuthMaui.ClientLogin"
              Title="Вход клиента"
-             BackgroundColor="#F3FBFF">
+             BackgroundColor="#F6FAFF">
 
     <ScrollView>
         <VerticalStackLayout Padding="24,32,24,30" Spacing="16">
             <Label Text="Вход клиента"
-                   TextColor="#413F3F"
+                   TextColor="#17213A"
                    FontSize="28"
                    FontAttributes="Bold" />
 
-            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="18">
+            <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="8" />
+                    <RoundRectangle CornerRadius="22" />
                 </Border.StrokeShape>
 
                 <VerticalStackLayout Spacing="12">
@@ -23,30 +23,30 @@
                            Keyboard="Telephone"
                            BackgroundColor="White"
                            TextColor="#222222"
-                           PlaceholderColor="#9A9A9A" />
+                           PlaceholderColor="#9AA8B8" />
 
                     <Entry x:Name="PasswordEntry"
                            Placeholder="Пароль"
                            IsPassword="True"
                            BackgroundColor="White"
                            TextColor="#222222"
-                           PlaceholderColor="#9A9A9A" />
+                           PlaceholderColor="#9AA8B8" />
 
                     <Button Text="Войти"
-                            BackgroundColor="#009EDB"
+                            BackgroundColor="#12A7A7"
                             TextColor="White"
                             FontAttributes="Bold"
-                            CornerRadius="24"
+                            CornerRadius="26"
                             HeightRequest="52"
                             Clicked="Login_Click" />
 
                     <Button Text="Зарегистрироваться"
                             BackgroundColor="Transparent"
-                            BorderColor="#009EDB"
+                            BorderColor="#12A7A7"
                             BorderWidth="1"
-                            TextColor="#009EDB"
+                            TextColor="#12A7A7"
                             FontAttributes="Bold"
-                            CornerRadius="24"
+                            CornerRadius="26"
                             HeightRequest="52"
                             Clicked="Register_Click" />
                 </VerticalStackLayout>
@@ -54,6 +54,7 @@
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
+
 
 
 

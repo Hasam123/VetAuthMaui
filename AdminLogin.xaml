@@ -4,34 +4,34 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="VetAuthMaui.AdminLogin"
              Title="Вход администратора"
-             BackgroundColor="#F3FBFF">
+             BackgroundColor="#F6FAFF">
 
     <ScrollView>
         <VerticalStackLayout Padding="24,28,24,30" Spacing="18">
             <Label
                 Text="Вход администратора"
-                TextColor="#413F3F"
+                TextColor="#17213A"
                 FontSize="26"
                 FontAttributes="Bold" />
 
             <Label
                 Text="Введите логин и пароль для управления заявками и услугами."
-                TextColor="#646464"
+                TextColor="#657084"
                 FontSize="15"
                 LineBreakMode="WordWrap" />
 
             <Border
                 BackgroundColor="White"
-                Stroke="#D7EDF7"
+                Stroke="#DDEBF3"
                 StrokeThickness="1"
                 Padding="16"
                 Margin="0,8,0,0">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="8" />
+                    <RoundRectangle CornerRadius="22" />
                 </Border.StrokeShape>
 
                 <VerticalStackLayout Spacing="14">
-                    <Label Text="Логин" TextColor="#413F3F" FontAttributes="Bold" />
+                    <Label Text="Логин" TextColor="#17213A" FontAttributes="Bold" />
 
                     <Entry
                         x:Name="LoginEntry"
@@ -39,9 +39,9 @@
                         Keyboard="Email"
                         ClearButtonVisibility="WhileEditing"
                         TextColor="#222222"
-                        PlaceholderColor="#9A9A9A" />
+                        PlaceholderColor="#9AA8B8" />
 
-                    <Label Text="Пароль" TextColor="#413F3F" FontAttributes="Bold" />
+                    <Label Text="Пароль" TextColor="#17213A" FontAttributes="Bold" />
 
                     <Entry
                         x:Name="PasswordEntry"
@@ -49,27 +49,27 @@
                         IsPassword="True"
                         ClearButtonVisibility="WhileEditing"
                         TextColor="#222222"
-                        PlaceholderColor="#9A9A9A" />
+                        PlaceholderColor="#9AA8B8" />
 
                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
                         <CheckBox
                             x:Name="ShowPasswordCheckBox"
-                            Color="#009EDB"
+                            Color="#12A7A7"
                             CheckedChanged="ShowPassword_Changed" />
 
                         <Label
                             Grid.Column="1"
                             Text="Показать пароль"
-                            TextColor="#413F3F"
+                            TextColor="#17213A"
                             VerticalTextAlignment="Center" />
                     </Grid>
 
                     <Button
                         Text="Войти"
-                        BackgroundColor="#EA5927"
+                        BackgroundColor="#FF8A5B"
                         TextColor="White"
                         FontAttributes="Bold"
-                        CornerRadius="24"
+                        CornerRadius="26"
                         HeightRequest="52"
                         Clicked="Login_Click" />
                 </VerticalStackLayout>
@@ -78,12 +78,13 @@
             <Label
                 x:Name="MessageLabel"
                 Text=""
-                TextColor="#27AE60"
+                TextColor="#30B878"
                 FontSize="14"
                 LineBreakMode="WordWrap" />
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
+
 
 
 

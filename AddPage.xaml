@@ -4,19 +4,19 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="VetAuthMaui.AddPage"
              Title="Добавить услугу"
-             BackgroundColor="#F3FBFF">
+             BackgroundColor="#F6FAFF">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="14">
             <Label
                 Text="Добавить услугу"
-                TextColor="#413F3F"
+                TextColor="#17213A"
                 FontSize="26"
                 FontAttributes="Bold" />
 
-            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+            <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="8" />
+                    <RoundRectangle CornerRadius="22" />
                 </Border.StrokeShape>
 
                 <VerticalStackLayout Spacing="14">
@@ -25,7 +25,7 @@
                         Placeholder="Название услуги"
                         BackgroundColor="White"
                         TextColor="#222222"
-                        PlaceholderColor="#9A9A9A"
+                        PlaceholderColor="#9AA8B8"
                         ClearButtonVisibility="WhileEditing" />
 
                     <Editor
@@ -33,7 +33,7 @@
                         Placeholder="Описание"
                         BackgroundColor="White"
                         TextColor="#222222"
-                        PlaceholderColor="#9A9A9A"
+                        PlaceholderColor="#9AA8B8"
                         HeightRequest="110" />
 
                     <Entry
@@ -42,7 +42,7 @@
                         Keyboard="Numeric"
                         BackgroundColor="White"
                         TextColor="#222222"
-                        PlaceholderColor="#9A9A9A"
+                        PlaceholderColor="#9AA8B8"
                         ClearButtonVisibility="WhileEditing" />
 
                     <Picker
@@ -50,14 +50,14 @@
                         Title="Категория"
                         BackgroundColor="White"
                         TextColor="#222222"
-                        TitleColor="#9A9A9A" />
+                        TitleColor="#9AA8B8" />
 
                     <Button
                         Text="Сохранить"
-                        BackgroundColor="#EA5927"
+                        BackgroundColor="#FF8A5B"
                         TextColor="White"
                         FontAttributes="Bold"
-                        CornerRadius="24"
+                        CornerRadius="26"
                         HeightRequest="52"
                         Clicked="Save_Click" />
                 </VerticalStackLayout>
@@ -65,6 +65,7 @@
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
+
 
 
 

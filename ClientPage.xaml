@@ -4,15 +4,15 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="VetAuthMaui.ClientPage"
              Title="Личный кабинет"
-             BackgroundColor="#F3FBFF">
+             BackgroundColor="#F6FAFF">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="14">
-            <Label Text="Личный кабинет" TextColor="#413F3F" FontSize="26" FontAttributes="Bold" />
+            <Label Text="Личный кабинет" TextColor="#17213A" FontSize="26" FontAttributes="Bold" />
 
-            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+            <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="8" />
+                    <RoundRectangle CornerRadius="22" />
                 </Border.StrokeShape>
 
                 <VerticalStackLayout Spacing="12">
@@ -22,63 +22,63 @@
                         Keyboard="Telephone"
                         BackgroundColor="White"
                         TextColor="#222222"
-                        PlaceholderColor="#9A9A9A"
+                        PlaceholderColor="#9AA8B8"
                         ClearButtonVisibility="WhileEditing" />
 
                     <Button
                         Text="Показать мои заявки"
-                        BackgroundColor="#009EDB"
+                        BackgroundColor="#12A7A7"
                         TextColor="White"
                         FontAttributes="Bold"
-                        CornerRadius="24"
+                        CornerRadius="26"
                         HeightRequest="50"
                         Clicked="Load_Click" />
                 </VerticalStackLayout>
             </Border>
 
-            <Border x:Name="ClientCard" IsVisible="False" BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
+            <Border x:Name="ClientCard" IsVisible="False" BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="8" />
+                    <RoundRectangle CornerRadius="22" />
                 </Border.StrokeShape>
 
                 <VerticalStackLayout Spacing="6">
-                    <Label Text="Карточка клиента" TextColor="#413F3F" FontSize="18" FontAttributes="Bold" />
-                    <Label x:Name="ClientNameLabel" TextColor="#413F3F" FontSize="16" />
-                    <Label x:Name="ClientPhoneLabel" TextColor="#009EDB" FontSize="15" />
-                    <Label x:Name="LastStatusLabel" TextColor="#EA5927" FontSize="15" FontAttributes="Bold" />
+                    <Label Text="Карточка клиента" TextColor="#17213A" FontSize="18" FontAttributes="Bold" />
+                    <Label x:Name="ClientNameLabel" TextColor="#17213A" FontSize="16" />
+                    <Label x:Name="ClientPhoneLabel" TextColor="#12A7A7" FontSize="15" />
+                    <Label x:Name="LastStatusLabel" TextColor="#FF8A5B" FontSize="15" FontAttributes="Bold" />
                 </VerticalStackLayout>
             </Border>
 
-            <Label x:Name="StatusLabel" Text="" TextColor="#646464" FontSize="14" />
+            <Label x:Name="StatusLabel" Text="" TextColor="#657084" FontSize="14" />
 
             <CollectionView x:Name="RequestsCollectionView">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16" Margin="0,0,0,12">
+                        <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18" Margin="0,0,0,12">
                             <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="8" />
+                                <RoundRectangle CornerRadius="22" />
                             </Border.StrokeShape>
 
                             <VerticalStackLayout Spacing="5">
-                                <Label Text="{Binding Comment}" TextColor="#413F3F" FontSize="16" FontAttributes="Bold" />
-                                <Label Text="{Binding PetInfo}" TextColor="#413F3F" FontSize="15" />
-                                <Label Text="{Binding ServiceInfo}" TextColor="#413F3F" FontSize="15" />
-                                <Label Text="{Binding TimeText}" TextColor="#EA5927" FontSize="15" FontAttributes="Bold" />
-                                <Label Text="{Binding AdminText}" TextColor="#009EDB" FontSize="14" FontAttributes="Bold" />
-                                <Label Text="{Binding MedText}" TextColor="#413F3F" FontSize="14" />
+                                <Label Text="{Binding Comment}" TextColor="#17213A" FontSize="16" FontAttributes="Bold" />
+                                <Label Text="{Binding PetInfo}" TextColor="#17213A" FontSize="15" />
+                                <Label Text="{Binding ServiceInfo}" TextColor="#17213A" FontSize="15" />
+                                <Label Text="{Binding TimeText}" TextColor="#FF8A5B" FontSize="15" FontAttributes="Bold" />
+                                <Label Text="{Binding AdminText}" TextColor="#12A7A7" FontSize="14" FontAttributes="Bold" />
+                                <Label Text="{Binding MedText}" TextColor="#17213A" FontSize="14" />
                                 <Border BackgroundColor="{Binding Color}" StrokeThickness="0" Padding="10,6" HorizontalOptions="Start">
                                     <Border.StrokeShape>
-                                        <RoundRectangle CornerRadius="8" />
+                                        <RoundRectangle CornerRadius="22" />
                                     </Border.StrokeShape>
                                     <Label Text="{Binding StatusText}" TextColor="White" FontSize="14" FontAttributes="Bold" />
                                 </Border>
-                                <Label Text="{Binding CreatedText}" TextColor="#9A9A9A" FontSize="13" />
+                                <Label Text="{Binding CreatedText}" TextColor="#9AA8B8" FontSize="13" />
                                 <Button Text="Отменить запись"
                                         IsVisible="{Binding CanCancel}"
-                                        BackgroundColor="#EA5927"
+                                        BackgroundColor="#FF8A5B"
                                         TextColor="White"
                                         FontAttributes="Bold"
-                                        CornerRadius="20"
+                                        CornerRadius="22"
                                         HeightRequest="42"
                                         Clicked="Cancel_Click" />
                             </VerticalStackLayout>
@@ -89,6 +89,7 @@
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
+
 
 
 

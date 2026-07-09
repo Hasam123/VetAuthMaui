@@ -4,98 +4,129 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="VetAuthMaui.HomePage"
              Title="Клиент"
-             BackgroundColor="#F3FBFF"
+             BackgroundColor="#F6FAFF"
              Shell.NavBarIsVisible="False">
 
     <Grid RowDefinitions="Auto,*">
-        <Border BackgroundColor="#009EDB" StrokeThickness="0" Padding="24,36,24,28">
+        <Border BackgroundColor="#12A7A7" StrokeThickness="0" Padding="24,36,24,28">
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="0,0,34,34" />
             </Border.StrokeShape>
 
             <VerticalStackLayout Spacing="8">
                 <Label Text="Меню клиента" TextColor="White" FontSize="28" FontAttributes="Bold" />
-                <Label x:Name="ClientNameLabel" Text="Все нужное для записи и контроля заявок" TextColor="#EAF8FE" FontSize="15" />
+                <Label x:Name="ClientNameLabel" Text="Все нужное для записи и контроля заявок" TextColor="#EAF7F8" FontSize="15" />
             </VerticalStackLayout>
         </Border>
 
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="24,28,24,30" Spacing="12">
-                <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
-                    <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
-                    <VerticalStackLayout Spacing="8">
-                        <Label Text="Личный кабинет" TextColor="#413F3F" FontSize="19" FontAttributes="Bold" />
-                        <Label Text="Проверьте статус своих заявок по телефону." TextColor="#646464" FontSize="14" />
-                        <Button Text="Открыть кабинет" BackgroundColor="#009EDB" TextColor="White" FontAttributes="Bold" CornerRadius="22" HeightRequest="48" Clicked="Profile_Click" />
-                    </VerticalStackLayout>
+                <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
+                    <Grid ColumnDefinitions="54,*" ColumnSpacing="14">
+                        <Border BackgroundColor="#EAF7F8" StrokeThickness="0" WidthRequest="54" HeightRequest="54" VerticalOptions="Start">
+                            <Border.StrokeShape><RoundRectangle CornerRadius="18" /></Border.StrokeShape>
+                            <Label Text="◎" TextColor="#12A7A7" FontSize="26" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="8">
+                            <Label Text="Личный кабинет" TextColor="#17213A" FontSize="19" FontAttributes="Bold" />
+                            <Label Text="Проверьте статус своих заявок по телефону." TextColor="#657084" FontSize="14" />
+                            <Button Text="Открыть кабинет" BackgroundColor="#12A7A7" TextColor="White" FontAttributes="Bold" CornerRadius="22" HeightRequest="46" Clicked="Profile_Click" />
+                        </VerticalStackLayout>
+                    </Grid>
                 </Border>
 
-                <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
-                    <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
-                    <VerticalStackLayout Spacing="8">
-                        <Label Text="Услуги и цены" TextColor="#413F3F" FontSize="19" FontAttributes="Bold" />
-                        <Label Text="Посмотрите направления лечения, описание и стоимость." TextColor="#646464" FontSize="14" />
-                        <Button Text="Смотреть услуги" BackgroundColor="#3498DB" TextColor="White" FontAttributes="Bold" CornerRadius="22" HeightRequest="48" Clicked="Services_Click" />
-                    </VerticalStackLayout>
+                <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
+                    <Grid ColumnDefinitions="54,*" ColumnSpacing="14">
+                        <Border BackgroundColor="#F3F6FA" StrokeThickness="0" WidthRequest="54" HeightRequest="54" VerticalOptions="Start">
+                            <Border.StrokeShape><RoundRectangle CornerRadius="18" /></Border.StrokeShape>
+                            <Label Text="☰" TextColor="#657084" FontSize="25" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="8">
+                            <Label Text="Услуги и цены" TextColor="#17213A" FontSize="19" FontAttributes="Bold" />
+                            <Label Text="Посмотрите направления лечения, описание и стоимость." TextColor="#657084" FontSize="14" />
+                            <Button Text="Смотреть услуги" BackgroundColor="#12A7A7" TextColor="White" FontAttributes="Bold" CornerRadius="22" HeightRequest="46" Clicked="Services_Click" />
+                        </VerticalStackLayout>
+                    </Grid>
                 </Border>
 
-                <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16">
-                    <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
-                    <VerticalStackLayout Spacing="8">
-                        <Label Text="Запись на прием" TextColor="#413F3F" FontSize="19" FontAttributes="Bold" />
-                        <Label Text="Оставьте заявку и сразу укажите данные питомца." TextColor="#646464" FontSize="14" />
-                        <Button Text="Записаться" BackgroundColor="#EA5927" TextColor="White" FontAttributes="Bold" CornerRadius="22" HeightRequest="48" Clicked="Appointment_Click" />
-                    </VerticalStackLayout>
+                <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
+                    <Grid ColumnDefinitions="54,*" ColumnSpacing="14">
+                        <Border BackgroundColor="#FFF4EC" StrokeThickness="0" WidthRequest="54" HeightRequest="54" VerticalOptions="Start">
+                            <Border.StrokeShape><RoundRectangle CornerRadius="18" /></Border.StrokeShape>
+                            <Label Text="✚" TextColor="#FF8A5B" FontSize="25" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="8">
+                            <Label Text="Запись на прием" TextColor="#17213A" FontSize="19" FontAttributes="Bold" />
+                            <Label Text="Оставьте заявку и сразу укажите данные питомца." TextColor="#657084" FontSize="14" />
+                            <Button Text="Записаться" BackgroundColor="#FF8A5B" TextColor="White" FontAttributes="Bold" CornerRadius="22" HeightRequest="46" Clicked="Appointment_Click" />
+                        </VerticalStackLayout>
+                    </Grid>
                 </Border>
 
                 <VerticalStackLayout Spacing="12" Margin="0,8,0,4">
-                    <Label Text="Полезные советы" TextColor="#413F3F" FontSize="20" FontAttributes="Bold" />
+                    <Label Text="Полезные советы" TextColor="#17213A" FontSize="20" FontAttributes="Bold" />
 
-                    <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="12">
-                        <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                    <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
                         <Grid ColumnDefinitions="92,*" ColumnSpacing="14">
                             <Image Source="tip_check.png" HeightRequest="70" WidthRequest="92" Aspect="AspectFill" />
                             <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
-                                <Label Text="Следите за поведением" TextColor="#413F3F" FontSize="16" FontAttributes="Bold" />
-                                <Label Text="Если питомец стал вялым, лучше записаться на осмотр." TextColor="#646464" FontSize="13" />
+                                <Label Text="Следите за поведением" TextColor="#17213A" FontSize="16" FontAttributes="Bold" />
+                                <Label Text="Если питомец стал вялым, лучше записаться на осмотр." TextColor="#657084" FontSize="13" />
                             </VerticalStackLayout>
                         </Grid>
                     </Border>
 
-                    <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="12">
-                        <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                    <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
                         <Grid ColumnDefinitions="92,*" ColumnSpacing="14">
                             <Image Source="tip_food.png" HeightRequest="70" WidthRequest="92" Aspect="AspectFill" />
                             <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
-                                <Label Text="Вода всегда рядом" TextColor="#413F3F" FontSize="16" FontAttributes="Bold" />
-                                <Label Text="У питомца всегда должна быть чистая питьевая вода." TextColor="#646464" FontSize="13" />
+                                <Label Text="Вода всегда рядом" TextColor="#17213A" FontSize="16" FontAttributes="Bold" />
+                                <Label Text="У питомца всегда должна быть чистая питьевая вода." TextColor="#657084" FontSize="13" />
                             </VerticalStackLayout>
                         </Grid>
                     </Border>
 
-                    <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="12">
-                        <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                    <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
                         <Grid ColumnDefinitions="92,*" ColumnSpacing="14">
                             <Image Source="tip_vaccine.png" HeightRequest="70" WidthRequest="92" Aspect="AspectFill" />
                             <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
-                                <Label Text="Не забывайте профилактику" TextColor="#413F3F" FontSize="16" FontAttributes="Bold" />
-                                <Label Text="Плановый осмотр помогает заметить проблему раньше." TextColor="#646464" FontSize="13" />
+                                <Label Text="Не забывайте профилактику" TextColor="#17213A" FontSize="16" FontAttributes="Bold" />
+                                <Label Text="Плановый осмотр помогает заметить проблему раньше." TextColor="#657084" FontSize="13" />
                             </VerticalStackLayout>
                         </Grid>
                     </Border>
                 </VerticalStackLayout>
 
-                <Button Text="Контакты" BackgroundColor="#27AE60" TextColor="White" FontAttributes="Bold" CornerRadius="24" HeightRequest="52" Clicked="Contacts_Click" />
-                <Button Text="Выйти" BackgroundColor="Transparent" BorderColor="#EA5927" BorderWidth="1" TextColor="#EA5927" FontAttributes="Bold" CornerRadius="24" HeightRequest="52" Clicked="Logout_Click" />
+                <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18" Margin="0,4,0,0">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
+                    <Grid ColumnDefinitions="54,*" ColumnSpacing="14">
+                        <Border BackgroundColor="#EAF7F8" StrokeThickness="0" WidthRequest="54" HeightRequest="54" VerticalOptions="Start">
+                            <Border.StrokeShape><RoundRectangle CornerRadius="18" /></Border.StrokeShape>
+                            <Label Text="⌂" TextColor="#12A7A7" FontSize="26" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="6">
+                            <Label Text="О клинике" TextColor="#17213A" FontSize="19" FontAttributes="Bold" />
+                            <Label Text="Ветеринарная помощь, осмотры, вакцинация и лечение питомцев." TextColor="#657084" FontSize="14" />
+                            <Label Text="8:30 - 18:00" TextColor="#FF8A5B" FontSize="14" FontAttributes="Bold" />
+                            <Label Text="Бендеры, Тирасполь, Григориополь" TextColor="#657084" FontSize="13" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+
+                <Button Text="Контакты" BackgroundColor="#12A7A7" TextColor="White" FontAttributes="Bold" CornerRadius="26" HeightRequest="52" Clicked="Contacts_Click" />
+                <Button Text="Выйти" BackgroundColor="Transparent" BorderColor="#FF8A5B" BorderWidth="1" TextColor="#FF8A5B" FontAttributes="Bold" CornerRadius="26" HeightRequest="52" Clicked="Logout_Click" />
             </VerticalStackLayout>
         </ScrollView>
     </Grid>
 </ContentPage>
-
-
-
-
-
-
-
 

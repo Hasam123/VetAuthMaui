@@ -4,40 +4,40 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="VetAuthMaui.ServicePage"
              Title="Услуги"
-             BackgroundColor="#F3FBFF">
+             BackgroundColor="#F6FAFF">
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="14">
             <Label Text="Услуги и цены"
-                   TextColor="#413F3F"
+                   TextColor="#17213A"
                    FontSize="26"
                    FontAttributes="Bold" />
 
             <Button Text="Обновить"
-                    BackgroundColor="#009EDB"
+                    BackgroundColor="#12A7A7"
                     TextColor="White"
                     FontAttributes="Bold"
-                    CornerRadius="24"
+                    CornerRadius="26"
                     HeightRequest="48"
                     Clicked="Refresh_Click" />
 
             <Button x:Name="AddServiceButton"
                     Text="Добавить услугу"
-                    BackgroundColor="#EA5927"
+                    BackgroundColor="#FF8A5B"
                     TextColor="White"
                     FontAttributes="Bold"
-                    CornerRadius="24"
+                    CornerRadius="26"
                     HeightRequest="48"
                     Clicked="Add_Click" />
 
             <Label x:Name="StatusLabel"
                    Text="Загрузка услуг..."
-                   TextColor="#646464"
+                   TextColor="#657084"
                    FontSize="14" />
 
-            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="12">
+            <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="14">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="8" />
+                    <RoundRectangle CornerRadius="22" />
                 </Border.StrokeShape>
 
                 <VerticalStackLayout Spacing="10">
@@ -45,7 +45,7 @@
                            Placeholder="Поиск услуги"
                            BackgroundColor="White"
                            TextColor="#222222"
-                           PlaceholderColor="#9A9A9A"
+                           PlaceholderColor="#9AA8B8"
                            ClearButtonVisibility="WhileEditing"
                            TextChanged="Search_Changed" />
 
@@ -53,7 +53,7 @@
                             Title="Все категории"
                             BackgroundColor="White"
                             TextColor="#222222"
-                            TitleColor="#9A9A9A"
+                            TitleColor="#9AA8B8"
                             SelectedIndexChanged="Category_Changed" />
                 </VerticalStackLayout>
             </Border>
@@ -61,45 +61,65 @@
             <CollectionView x:Name="ServicesCollectionView">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
-                        <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="16" Margin="0,0,0,12">
+                        <Border BackgroundColor="White"
+                                Stroke="#DDEBF3"
+                                StrokeThickness="1"
+                                Padding="18"
+                                Margin="0,0,0,12">
+
                             <Border.StrokeShape>
-                                <RoundRectangle CornerRadius="8" />
+                                <RoundRectangle CornerRadius="22" />
                             </Border.StrokeShape>
 
-                            <VerticalStackLayout Spacing="10">
-                                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
-                                    <VerticalStackLayout Spacing="5">
-                                        <Label Text="{Binding Title}" TextColor="#413F3F" FontSize="18" FontAttributes="Bold" />
-                                        <Label Text="{Binding Category}" TextColor="#646464" FontSize="14" />
-                                        <Label Text="{Binding Description}" TextColor="#646464" FontSize="14" />
-                                    </VerticalStackLayout>
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                                <VerticalStackLayout Spacing="7">
+                                    <Label Text="{Binding Title}"
+                                           TextColor="#17213A"
+                                           FontSize="18"
+                                           FontAttributes="Bold" />
 
-                                    <Label Grid.Column="1"
-                                           Text="{Binding PriceText}"
-                                           TextColor="#EA5927"
+                                    <Label Text="{Binding Category}"
+                                           TextColor="#657084"
+                                           FontSize="14" />
+
+                                    <Label Text="{Binding Description}"
+                                           TextColor="#657084"
+                                           FontSize="14" />
+
+                                    <Label Text="{Binding PriceText}"
+                                           TextColor="#FF8A5B"
                                            FontSize="16"
-                                           FontAttributes="Bold"
-                                           VerticalTextAlignment="Center" />
-                                </Grid>
+                                           FontAttributes="Bold" />
+                                </VerticalStackLayout>
 
-                                <Button Text="Редактировать"
-                                        BackgroundColor="#009EDB"
-                                        TextColor="White"
-                                        FontAttributes="Bold"
-                                        CornerRadius="20"
-                                        HeightRequest="44"
-                                        IsVisible="{Binding IsAdminMode}"
-                                        Clicked="Edit_Click" />
+                                <VerticalStackLayout Grid.Column="1"
+                                                     Spacing="8"
+                                                     VerticalOptions="Center"
+                                                     IsVisible="{Binding IsAdminMode}">
 
-                                <Button Text="Удалить"
-                                        BackgroundColor="#EA5927"
-                                        TextColor="White"
-                                        FontAttributes="Bold"
-                                        CornerRadius="20"
-                                        HeightRequest="44"
-                                        IsVisible="{Binding IsAdminMode}"
-                                        Clicked="Delete_Click" />
-                            </VerticalStackLayout>
+                                    <Button Text="✎"
+                                            BackgroundColor="#F3F6FA"
+                                            TextColor="#657084"
+                                            FontAttributes="Bold"
+                                            FontSize="18"
+                                            WidthRequest="44"
+                                            HeightRequest="44"
+                                            CornerRadius="22"
+                                            Padding="0"
+                                            Clicked="Edit_Click" />
+
+                                    <Button Text="✕"
+                                            BackgroundColor="#F3F6FA"
+                                            TextColor="#657084"
+                                            FontAttributes="Bold"
+                                            FontSize="18"
+                                            WidthRequest="44"
+                                            HeightRequest="44"
+                                            CornerRadius="22"
+                                            Padding="0"
+                                            Clicked="Delete_Click" />
+                                </VerticalStackLayout>
+                            </Grid>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
@@ -107,11 +127,3 @@
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
-
-
-
-
-
-
-
-

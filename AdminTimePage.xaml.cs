@@ -160,6 +160,8 @@ public partial class AdminTimePage : ContentPage
 		public bool IsBusy { get; }
 		public bool IsPast { get; }
 
+		public LayoutOptions ContentHorizontalOptions => IsBusy ? LayoutOptions.Start : LayoutOptions.Center;
+		public TextAlignment TextAlignment => IsBusy ? TextAlignment.Start : TextAlignment.Center;
 		public string StateText
 		{
 			get
@@ -173,16 +175,51 @@ public partial class AdminTimePage : ContentPage
 			}
 		}
 
+		public string CardColor
+		{
+			get
+			{
+				if (!IsBusy && !IsPast)
+					return "#FFFFFF";
+				if (IsPast)
+					return "#F3F6FA";
+				if (request.Status == "accepted")
+					return "#FFF4EC";
+				if (request.Status == "done")
+					return "#EFFAF4";
+				if (request.Status == "cancelled")
+					return "#FFF0F0";
+
+				return "#F1F8FD";
+			}
+		}
+
+		public string BadgeTextColor
+		{
+			get
+			{
+				if (!IsBusy && !IsPast)
+					return "#12A7A7";
+
+				return "#FFFFFF";
+			}
+		}
 		public string BadgeColor
 		{
 			get
 			{
-				if (IsBusy)
-					return "#EA5927";
+				if (!IsBusy && !IsPast)
+					return "#FFFFFF";
 				if (IsPast)
-					return "#8E8E8E";
+					return "#9AA8B8";
+				if (request.Status == "accepted")
+					return "#FF8A5B";
+				if (request.Status == "done")
+					return "#30B878";
+				if (request.Status == "cancelled")
+					return "#D9534F";
 
-				return "#27AE60";
+				return "#4AA3D8";
 			}
 		}
 
@@ -190,12 +227,18 @@ public partial class AdminTimePage : ContentPage
 		{
 			get
 			{
-				if (IsBusy)
-					return "#F4B39F";
+				if (!IsBusy && !IsPast)
+					return "#12A7A7";
 				if (IsPast)
-					return "#D7D7D7";
+					return "#DDEBF3";
+				if (request.Status == "accepted")
+					return "#FF8A5B";
+				if (request.Status == "done")
+					return "#30B878";
+				if (request.Status == "cancelled")
+					return "#D9534F";
 
-				return "#C7ECD3";
+				return "#4AA3D8";
 			}
 		}
 
@@ -203,12 +246,18 @@ public partial class AdminTimePage : ContentPage
 		{
 			get
 			{
-				if (IsBusy)
-					return "#EA5927";
+				if (!IsBusy && !IsPast)
+					return "#12A7A7";
 				if (IsPast)
-					return "#646464";
+					return "#657084";
+				if (request.Status == "accepted")
+					return "#FF8A5B";
+				if (request.Status == "done")
+					return "#30B878";
+				if (request.Status == "cancelled")
+					return "#D9534F";
 
-				return "#27AE60";
+				return "#4AA3D8";
 			}
 		}
 
@@ -275,6 +324,8 @@ public partial class AdminTimePage : ContentPage
 		}
 	}
 }
+
+
 
 
 

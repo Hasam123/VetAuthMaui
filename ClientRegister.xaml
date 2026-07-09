@@ -3,18 +3,18 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="VetAuthMaui.ClientRegister"
              Title="Регистрация"
-             BackgroundColor="#F3FBFF">
+             BackgroundColor="#F6FAFF">
 
     <ScrollView>
         <VerticalStackLayout Padding="24,32,24,30" Spacing="16">
             <Label Text="Регистрация клиента"
-                   TextColor="#413F3F"
+                   TextColor="#17213A"
                    FontSize="28"
                    FontAttributes="Bold" />
 
-            <Border BackgroundColor="White" Stroke="#D7EDF7" StrokeThickness="1" Padding="18">
+            <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
                 <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="8" />
+                    <RoundRectangle CornerRadius="22" />
                 </Border.StrokeShape>
 
                 <VerticalStackLayout Spacing="12">
@@ -22,27 +22,27 @@
                            Placeholder="Имя"
                            BackgroundColor="White"
                            TextColor="#222222"
-                           PlaceholderColor="#9A9A9A" />
+                           PlaceholderColor="#9AA8B8" />
 
                     <Entry x:Name="PhoneEntry"
                            Placeholder="Телефон"
                            Keyboard="Telephone"
                            BackgroundColor="White"
                            TextColor="#222222"
-                           PlaceholderColor="#9A9A9A" />
+                           PlaceholderColor="#9AA8B8" />
 
                     <Entry x:Name="PasswordEntry"
                            Placeholder="Пароль"
                            IsPassword="True"
                            BackgroundColor="White"
                            TextColor="#222222"
-                           PlaceholderColor="#9A9A9A" />
+                           PlaceholderColor="#9AA8B8" />
 
                     <Button Text="Создать аккаунт"
-                            BackgroundColor="#27AE60"
+                            BackgroundColor="#30B878"
                             TextColor="White"
                             FontAttributes="Bold"
-                            CornerRadius="24"
+                            CornerRadius="26"
                             HeightRequest="52"
                             Clicked="Register_Click" />
                 </VerticalStackLayout>
@@ -50,6 +50,7 @@
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
+
 
 
 
