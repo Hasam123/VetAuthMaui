@@ -149,7 +149,7 @@
                            PlaceholderColor="#9AA8B8"
                            ClearButtonVisibility="WhileEditing" />
 
-                    <Grid x:Name="SavedPetsBorder"
+                    <Grid x:Name="SavedPetsBlock"
                           IsVisible="False"
                           ColumnDefinitions="40,*"
                           ColumnSpacing="10"

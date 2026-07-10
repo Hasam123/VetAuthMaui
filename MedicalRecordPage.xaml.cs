@@ -112,11 +112,6 @@ public partial class MedicalRecordPage : ContentPage
 	}
 
 	// ответ API
-	private class ApiResult
-	{
-		[JsonPropertyName("success")] public bool Success { get; set; }
-		[JsonPropertyName("message")] public string Message { get; set; } = "";
-	}
 }
 
 

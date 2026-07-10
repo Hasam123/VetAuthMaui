@@ -58,13 +58,13 @@ public partial class RequestPage : ContentPage
 	{
 		base.OnAppearing();
 		ApplyInitialStatus();
-		await LoadData();
+		await LoadAppointments();
 	}
 
 	private async void Refresh_Click(object sender, EventArgs e)
 	{
 		ApplyInitialStatus();
-		await LoadData();
+		await LoadAppointments();
 	}
 
 	private void Filter_Changed(object sender, EventArgs e)
@@ -129,7 +129,7 @@ public partial class RequestPage : ContentPage
 			}
 
 			ApplyInitialStatus();
-			await LoadData();
+			await LoadAppointments();
 		}
 		catch (Exception ex)
 		{
@@ -173,7 +173,7 @@ public partial class RequestPage : ContentPage
 			}
 
 			ApplyInitialStatus();
-			await LoadData();
+			await LoadAppointments();
 		}
 		catch (Exception ex)
 		{
@@ -240,7 +240,7 @@ public partial class RequestPage : ContentPage
 		}
 	}
 
-	private async Task LoadData()
+	private async Task LoadAppointments()
 	{
 		try
 		{
@@ -361,109 +361,4 @@ public partial class RequestPage : ContentPage
 		public List<Appointment> Appointments { get; set; } = new List<Appointment>();
 	}
 
-	private class ApiResult
-	{
-		[JsonPropertyName("success")] public bool Success { get; set; }
-		[JsonPropertyName("message")] public string Message { get; set; } = "";
-	}
-
-	private class Appointment
-	{
-		[JsonPropertyName("id")] public int Id { get; set; }
-		[JsonPropertyName("name")] public string Name { get; set; } = "";
-		[JsonPropertyName("phone")] public string Phone { get; set; } = "";
-		[JsonPropertyName("comment")] public string Comment { get; set; } = "";
-		[JsonPropertyName("admin_comment")] public string AdminComment { get; set; } = "";
-		[JsonPropertyName("created")] public string Created { get; set; } = "";
-		[JsonPropertyName("pet_name")] public string PetName { get; set; } = "";
-		[JsonPropertyName("pet_type")] public string PetType { get; set; } = "";
-		[JsonPropertyName("pet_age")] public string PetAge { get; set; } = "";
-		[JsonPropertyName("service_title")] public string ServiceTitle { get; set; } = "";
-		[JsonPropertyName("appointment_at")] public string AppointmentAt { get; set; } = "";
-		[JsonPropertyName("jaloba")] public string Jaloba { get; set; } = "";
-		[JsonPropertyName("diagnoz")] public string Diagnoz { get; set; } = "";
-		[JsonPropertyName("obsled_result")] public string ObsledResult { get; set; } = "";
-		[JsonPropertyName("naz_lech")] public string NazLech { get; set; } = "";
-		[JsonPropertyName("procedure_done")] public string ProcedureDone { get; set; } = "";
-		[JsonPropertyName("treatment_notes")] public string TreatmentNotes { get; set; } = "";
-		[JsonPropertyName("status")] public string Status { get; set; } = "";
-
-		public string PetInfo
-		{
-			get
-			{
-				var age = "";
-				if (PetAge != "")
-					age = $", {PetAge}";
-
-				if (PetName == "")
-					return "Питомец не указан";
-
-				return $"Питомец: {PetName}, {PetType}{age}";
-			}
-		}
-
-		public string ServiceInfo => string.IsNullOrWhiteSpace(ServiceTitle) ? "Услуга не выбрана" : $"Услуга: {ServiceTitle}";
-		public string TimeText => string.IsNullOrWhiteSpace(AppointmentAt) ? "Время не выбрано" : $"Запись: {FormatDate(AppointmentAt)}";
-		public string AdminText => string.IsNullOrWhiteSpace(AdminComment) ? "Комментарий администратора: нет" : $"Комментарий администратора: {AdminComment}";
-
-		public string MedText
-		{
-			get
-			{
-				if (string.IsNullOrWhiteSpace(Diagnoz) && string.IsNullOrWhiteSpace(NazLech))
-					return "Медицинская запись: нет";
-
-				var parts = new List<string>();
-				if (!string.IsNullOrWhiteSpace(Jaloba)) parts.Add($"Жалоба: {Jaloba}");
-				if (!string.IsNullOrWhiteSpace(Diagnoz)) parts.Add($"Диагноз: {Diagnoz}");
-				if (!string.IsNullOrWhiteSpace(ObsledResult)) parts.Add($"Результат: {ObsledResult}");
-				if (!string.IsNullOrWhiteSpace(NazLech)) parts.Add($"Лечение: {NazLech}");
-				if (!string.IsNullOrWhiteSpace(ProcedureDone)) parts.Add($"Сделано: {ProcedureDone}");
-				if (!string.IsNullOrWhiteSpace(TreatmentNotes)) parts.Add($"Заметки: {TreatmentNotes}");
-
-				return string.Join("\n", parts);
-			}
-		}
-
-		public string CreatedText => string.IsNullOrWhiteSpace(Created) ? "" : $"Создана: {FormatDate(Created)}";
-		public DateTime AppointmentDate => GetDate(AppointmentAt);
-
-		public string StatusText
-		{
-			get
-			{
-				if (Status == "new") return "Статус: новая";
-				if (Status == "accepted") return "Статус: принята";
-				if (Status == "done") return "Статус: выполнена";
-				if (Status == "cancelled") return "Статус: отменена";
-
-				return $"Статус: {Status}";
-			}
-		}
-
-		public string Color
-		{
-			get
-			{
-				if (Status == "new") return "#4AA3D8";
-				if (Status == "accepted") return "#FF8A5B";
-				if (Status == "done") return "#30B878";
-				if (Status == "cancelled") return "#D9534F";
-
-				return "#657084";
-			}
-		}
-
-		private static DateTime GetDate(string value)
-		{
-			return DateTime.TryParse(value, out var date) ? date : DateTime.MinValue;
-		}
-
-		private static string FormatDate(string value)
-		{
-			var date = GetDate(value);
-			return date == DateTime.MinValue ? value : date.ToString("dd.MM.yyyy, HH:mm");
-		}
-	}
 }

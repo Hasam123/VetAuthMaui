@@ -18,7 +18,7 @@ public partial class EditPetPage : ContentPage
 	{
 		base.OnAppearing();
 
-		pet = PetEditState.CurrentPet;
+		pet = State.SelectedPet;
 		if (pet == null)
 		{
 			await DisplayAlertAsync("Ошибка", "Питомец не выбран.", "Понятно");
@@ -31,7 +31,19 @@ public partial class EditPetPage : ContentPage
 		AgeEntry.Text = pet.Age;
 		WeightEntry.Text = pet.Weight;
 		if (DateTime.TryParse(pet.LastVaccinationDate, out var date))
+		{
+			HasVaccinationDateCheckBox.IsChecked = true;
 			VaccinationDatePicker.Date = date;
+		}
+		else
+		{
+			HasVaccinationDateCheckBox.IsChecked = false;
+		}
+	}
+
+	private void VaccinationDate_CheckedChanged(object sender, CheckedChangedEventArgs e)
+	{
+		VaccinationDatePicker.IsEnabled = e.Value;
 	}
 
 	private async void Save_Click(object sender, EventArgs e)
@@ -40,7 +52,9 @@ public partial class EditPetPage : ContentPage
 		var type = TypePicker.SelectedItem?.ToString() ?? "";
 		var age = AgeEntry.Text?.Trim() ?? "";
 		var weight = WeightEntry.Text?.Trim() ?? "";
-		var vaccinationDate = (VaccinationDatePicker.Date ?? DateTime.Today).ToString("yyyy-MM-dd");
+		var vaccinationDate = "";
+		if (HasVaccinationDateCheckBox.IsChecked)
+			vaccinationDate = VaccinationDatePicker.Date?.ToString("yyyy-MM-dd") ?? "";
 
 		if (name == "" || type == "")
 		{
@@ -61,6 +75,7 @@ public partial class EditPetPage : ContentPage
 			}
 
 			await DisplayAlertAsync("Готово", "Данные питомца изменены.", "ОК");
+			State.SelectedPet = null;
 			await Shell.Current.GoToAsync("..");
 		}
 		catch (Exception ex)

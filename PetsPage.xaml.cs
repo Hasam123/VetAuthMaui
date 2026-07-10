@@ -8,7 +8,6 @@ public partial class PetsPage : ContentPage
 {
 	private readonly HttpClient httpClient = new HttpClient();
 	private readonly ObservableCollection<Pet> pets = new ObservableCollection<Pet>();
-	private string phone = "";
 
 	public PetsPage()
 	{
@@ -27,7 +26,6 @@ public partial class PetsPage : ContentPage
 			return;
 		}
 
-		phone = State.ClientPhone;
 		await LoadPets();
 	}
 
@@ -36,7 +34,7 @@ public partial class PetsPage : ContentPage
 		try
 		{
 			StatusLabel.Text = "Загрузка питомцев...";
-			var url = $"{Api.BaseUrl}pets/list.php?phone={Uri.EscapeDataString(phone)}";
+			var url = $"{Api.BaseUrl}pets/list.php?phone={Uri.EscapeDataString(State.ClientPhone)}";
 			var result = await httpClient.GetFromJsonAsync<PetResult>(url);
 
 			pets.Clear();
@@ -59,7 +57,7 @@ public partial class PetsPage : ContentPage
 
 	private async void EditPet_Click(object sender, EventArgs e)
 	{
-		PetEditState.CurrentPet = (Pet)((Button)sender).BindingContext;
+		State.SelectedPet = (Pet)((Button)sender).BindingContext;
 		await Shell.Current.GoToAsync("EditPetPage");
 	}
 
@@ -73,7 +71,7 @@ public partial class PetsPage : ContentPage
 
 		try
 		{
-			var response = await httpClient.PostAsJsonAsync($"{Api.BaseUrl}pets/delete.php", new DeletePetData(pet.Id, phone));
+			var response = await httpClient.PostAsJsonAsync($"{Api.BaseUrl}pets/delete.php", new DeletePetData(pet.Id, State.ClientPhone));
 			var result = await response.Content.ReadFromJsonAsync<ApiResult>();
 
 			if (!response.IsSuccessStatusCode || result?.Success != true)

@@ -7,6 +7,7 @@ public static class State
 	public static int ClientId { get; set; }
 	public static string ClientName { get; set; } = "";
 	public static string ClientPhone { get; set; } = "";
+	public static Pet SelectedPet { get; set; }
 	public static MedicalRecord CurrentMedicalRecord { get; set; }
 
 	public static bool IsClientLoggedIn => !string.IsNullOrWhiteSpace(ClientPhone);
@@ -24,6 +25,7 @@ public static class State
 		ClientId = 0;
 		ClientName = "";
 		ClientPhone = "";
+		SelectedPet = null;
 		CurrentMedicalRecord = null;
 	}
 }

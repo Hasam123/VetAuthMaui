@@ -17,15 +17,15 @@ public partial class AdminPage : ContentPage
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
-		await LoadData();
+		await LoadStatistics();
 	}
 
 	private async void Refresh_Click(object sender, EventArgs e)
 	{
-		await LoadData();
+		await LoadStatistics();
 	}
 
-	private async Task LoadData()
+	private async Task LoadStatistics()
 	{
 		try
 		{

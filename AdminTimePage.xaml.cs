@@ -9,7 +9,7 @@ using System.Text.Json.Serialization;
 public partial class AdminTimePage : ContentPage
 {
 	private HttpClient httpClient = new HttpClient();
-	private List<Day> days = new List<Day>();
+	private List<ScheduleDay> days = new List<ScheduleDay>();
 	private List<Appointment> appointments = new List<Appointment>();
 	// Коллекция слотов отображается в расписании администратора.
 	private ObservableCollection<Slot> slots = new ObservableCollection<Slot>();
@@ -24,12 +24,12 @@ public partial class AdminTimePage : ContentPage
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
-		await LoadData();
+		await LoadSchedule();
 	}
 
 	private async void Refresh_Click(object sender, EventArgs e)
 	{
-		await LoadData();
+		await LoadSchedule();
 	}
 
 	private void Date_Changed(object sender, EventArgs e)
@@ -38,24 +38,25 @@ public partial class AdminTimePage : ContentPage
 	}
 
 	// Загружает интервалы времени и заявки, чтобы собрать расписание администратора.
-	private async Task LoadData()
+	private async Task LoadSchedule()
 	{
 		try
 		{
 			StatusLabel.Text = "Загрузка расписания...";
 
-			// запрос времени и заявок
-			var task2 = httpClient.GetFromJsonAsync<TimeResult>($"{Api.BaseUrl}schedule/free_slots.php");
-			var task3 = httpClient.GetFromJsonAsync<AppointmentResult>($"{Api.BaseUrl}schedule/get_zapis_admin.php");
+			var scheduleResult =
+				await httpClient.GetFromJsonAsync<TimeResult>(
+					$"{Api.BaseUrl}schedule/free_slots.php");
 
-			var res2 = await task2;
-			var res3 = await task3;
+			var appointmentsResult =
+				await httpClient.GetFromJsonAsync<AppointmentResult>(
+					$"{Api.BaseUrl}schedule/get_zapis_admin.php");
 
 			days.Clear();
-			days.AddRange(res2?.Days ?? new List<Day>());
+			days.AddRange(scheduleResult?.Days ?? new List<ScheduleDay>());
 
 			appointments.Clear();
-			appointments.AddRange((res3?.Appointments ?? new List<Appointment>())
+			appointments.AddRange((appointmentsResult?.Appointments ?? new List<Appointment>())
 				.Where(appointment => !string.IsNullOrWhiteSpace(appointment.AppointmentAt)));
 
 			DatePicker.ItemsSource = days;
@@ -76,7 +77,7 @@ public partial class AdminTimePage : ContentPage
 	// Показывает выбранный день и сопоставляет каждый временной слот с заявкой.
 	private void ShowDay()
 	{
-		var day = DatePicker.SelectedItem as Day;
+		var day = DatePicker.SelectedItem as ScheduleDay;
 		slots.Clear();
 
 		if (day == null)
@@ -103,11 +104,11 @@ public partial class AdminTimePage : ContentPage
 	private class TimeResult
 	{
 		[JsonPropertyName("days")]
-		public List<Day> Days { get; set; } = new List<Day>();
+		public List<ScheduleDay> Days { get; set; } = new List<ScheduleDay>();
 	}
 
 	// день
-	private class Day
+	private class ScheduleDay
 	{
 		[JsonPropertyName("date")] public string Date { get; set; } = "";
 		[JsonPropertyName("label")] public string Label { get; set; } = "";
@@ -128,20 +129,6 @@ public partial class AdminTimePage : ContentPage
 	{
 		[JsonPropertyName("requests")]
 		public List<Appointment> Appointments { get; set; } = new List<Appointment>();
-	}
-
-	// заявка
-	private class Appointment
-	{
-		[JsonPropertyName("id")] public int Id { get; set; }
-		[JsonPropertyName("name")] public string Name { get; set; } = "";
-		[JsonPropertyName("phone")] public string Phone { get; set; } = "";
-		[JsonPropertyName("pet_name")] public string PetName { get; set; } = "";
-		[JsonPropertyName("pet_type")] public string PetType { get; set; } = "";
-		[JsonPropertyName("service_title")] public string ServiceTitle { get; set; } = "";
-		[JsonPropertyName("appointment_at")] public string AppointmentAt { get; set; } = "";
-		[JsonPropertyName("comment")] public string Comment { get; set; } = "";
-		[JsonPropertyName("status")] public string Status { get; set; } = "";
 	}
 
 	// ячейка времени

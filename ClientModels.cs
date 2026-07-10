@@ -148,6 +148,12 @@ public class Appointment
 	[JsonPropertyName("id")]
 	public int Id { get; set; }
 
+	[JsonPropertyName("name")]
+	public string Name { get; set; } = "";
+
+	[JsonPropertyName("phone")]
+	public string Phone { get; set; } = "";
+
 	[JsonPropertyName("comment")]
 	public string Comment { get; set; } = "";
 
@@ -192,6 +198,17 @@ public class Appointment
 
 	[JsonPropertyName("status")]
 	public string Status { get; set; } = "";
+
+	public DateTime AppointmentDate
+	{
+		get
+		{
+			if (DateTime.TryParse(AppointmentAt, out var date))
+				return date;
+
+			return DateTime.MinValue;
+		}
+	}
 
 	public string StatusText
 	{
@@ -323,8 +340,4 @@ public class Appointment
 	}
 }
 
-public static class PetEditState
-{
-	public static Pet CurrentPet { get; set; }
-}
 

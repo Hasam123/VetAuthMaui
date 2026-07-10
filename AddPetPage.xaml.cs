@@ -14,13 +14,20 @@ public partial class AddPetPage : ContentPage
 		TypePicker.SelectedIndex = 0;
 	}
 
+	private void VaccinationDate_CheckedChanged(object sender, CheckedChangedEventArgs e)
+	{
+		VaccinationDatePicker.IsEnabled = e.Value;
+	}
+
 	private async void Save_Click(object sender, EventArgs e)
 	{
 		var name = NameEntry.Text?.Trim() ?? "";
 		var type = TypePicker.SelectedItem?.ToString() ?? "";
 		var age = AgeEntry.Text?.Trim() ?? "";
 		var weight = WeightEntry.Text?.Trim() ?? "";
-		var vaccinationDate = (VaccinationDatePicker.Date ?? DateTime.Today).ToString("yyyy-MM-dd");
+		var vaccinationDate = "";
+		if (HasVaccinationDateCheckBox.IsChecked)
+			vaccinationDate = VaccinationDatePicker.Date?.ToString("yyyy-MM-dd") ?? "";
 
 		if (name == "" || type == "")
 		{

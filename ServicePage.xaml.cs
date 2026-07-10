@@ -113,6 +113,7 @@ public partial class ServicePage : ContentPage
 			services.Remove(service);
 			showServices.Remove(service);
 			StatusLabel.Text = $"Услуг: {showServices.Count}";
+			await DisplayAlertAsync("Готово", "Услуга удалена.", "ОК");
 		}
 		catch (Exception ex)
 		{
@@ -225,12 +226,6 @@ public partial class ServicePage : ContentPage
 		public int PriceValue { get; set; }
 		public string PriceText { get; set; } = "";
 		public bool IsAdminMode { get; set; }
-	}
-	// ответ API
-	private class ApiResult
-	{
-		[JsonPropertyName("success")] public bool Success { get; set; }
-		[JsonPropertyName("message")] public string Message { get; set; } = "";
 	}
 }
 

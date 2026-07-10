@@ -20,8 +20,15 @@
             </Picker>
             <Entry x:Name="AgeEntry" Placeholder="Возраст" />
             <Entry x:Name="WeightEntry" Placeholder="Вес" Keyboard="Numeric" />
-            <Label Text="Дата последней вакцинации" TextColor="#657084" FontSize="14" />
-            <DatePicker x:Name="VaccinationDatePicker" />
+            <HorizontalStackLayout Spacing="8">
+                <CheckBox x:Name="HasVaccinationDateCheckBox"
+                          CheckedChanged="VaccinationDate_CheckedChanged" />
+                <Label Text="Указать дату вакцинации"
+                       TextColor="#657084"
+                       FontSize="14"
+                       VerticalTextAlignment="Center" />
+            </HorizontalStackLayout>
+            <DatePicker x:Name="VaccinationDatePicker" IsEnabled="False" />
 
             <Button Text="Сохранить"
                     BackgroundColor="#12A7A7"

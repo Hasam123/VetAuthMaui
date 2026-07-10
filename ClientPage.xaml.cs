@@ -8,7 +8,6 @@ public partial class ClientPage : ContentPage
 {
 	private readonly HttpClient httpClient = new HttpClient();
 	private readonly ObservableCollection<Appointment> appointments = new ObservableCollection<Appointment>();
-	private string phone = "";
 
 	public ClientPage()
 	{
@@ -22,19 +21,21 @@ public partial class ClientPage : ContentPage
 		base.OnAppearing();
 
 		if (State.IsClientLoggedIn)
-			await LoadData(State.ClientPhone);
+			await LoadClientCabinet();
 	}
 
-	private async Task LoadData(string phone)
+	private async Task LoadClientCabinet()
 	{
 		try
 		{
-			this.phone = phone;
+			if (State.ClientPhone == "")
+				return;
+
 			StatusLabel.Text = "Загрузка личного кабинета...";
 			ClientCard.IsVisible = false;
 			appointments.Clear();
 
-			var url = $"{Api.BaseUrl}clients/profile.php?phone={Uri.EscapeDataString(phone)}";
+			var url = $"{Api.BaseUrl}clients/profile.php?phone={Uri.EscapeDataString(State.ClientPhone)}";
 			var response = await httpClient.GetFromJsonAsync<ClientResult>(url);
 
 			foreach (var appointment in response?.Requests ?? new List<Appointment>())
@@ -84,7 +85,7 @@ public partial class ClientPage : ContentPage
 		{
 			var response = await httpClient.PostAsJsonAsync(
 				$"{Api.BaseUrl}appointments/cancel.php",
-				new CancelData(appointment.Id, phone));
+				new CancelData(appointment.Id, State.ClientPhone));
 
 			var result = await response.Content.ReadFromJsonAsync<ApiResult>();
 
@@ -95,7 +96,7 @@ public partial class ClientPage : ContentPage
 			}
 
 			await DisplayAlertAsync("Готово", result.Message, "ОК");
-			await LoadData(phone);
+			await LoadClientCabinet();
 		}
 		catch (Exception ex)
 		{

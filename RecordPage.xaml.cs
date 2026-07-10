@@ -11,12 +11,12 @@ public partial class RecordPage : ContentPage
 {
 	private HttpClient httpClient = new HttpClient();
 	private List<Service> services = new List<Service>();
-	private List<Day> days = new List<Day>();
+	private List<ScheduleDay> days = new List<ScheduleDay>();
 	private List<SavedPet> savedPets = new List<SavedPet>();
 	// Коллекции привязаны к плиткам даты и времени на экране записи.
 	private ObservableCollection<DayItem> showDays = new ObservableCollection<DayItem>();
 	private ObservableCollection<TimeItem> showTimes = new ObservableCollection<TimeItem>();
-	private Day selectedDay;
+	private ScheduleDay selectedDay;
 	private TimeItem selectedTime;
 
 	public RecordPage()
@@ -33,7 +33,7 @@ public partial class RecordPage : ContentPage
 	{
 		base.OnAppearing();
 		FillClient();
-		await LoadData();
+		await LoadAppointmentData();
 	}
 
 	private void FillClient()
@@ -46,7 +46,7 @@ public partial class RecordPage : ContentPage
 	}
 
 	// Загружает услуги и свободные интервалы времени из API.
-	private async Task LoadData()
+	private async Task LoadAppointmentData()
 	{
 		try
 		{
@@ -72,7 +72,7 @@ public partial class RecordPage : ContentPage
 			ServicePicker.ItemDisplayBinding = new Binding("Text");
 
 			days.Clear();
-			days.AddRange(scheduleResult?.Days ?? new List<Day>());
+			days.AddRange(scheduleResult?.Days ?? new List<ScheduleDay>());
 
 			if (ServicePicker.SelectedIndex < 0 && services.Count > 0)
 				ServicePicker.SelectedIndex = 0;
@@ -102,16 +102,17 @@ public partial class RecordPage : ContentPage
 			var result = await httpClient.GetFromJsonAsync<SavedPetResult>(url);
 
 			savedPets.Clear();
+			savedPets.Add(new SavedPet { Id = 0, Name = "Новый питомец" });
 			savedPets.AddRange(result?.Pets ?? new List<SavedPet>());
 			SavedPetPicker.ItemsSource = null;
 			SavedPetPicker.ItemsSource = savedPets;
-			SavedPetsBorder.IsVisible = savedPets.Count > 0;
-			SavedPetPicker.SelectedIndex = -1;
+			SavedPetsBlock.IsVisible = savedPets.Count > 1;
+			SavedPetPicker.SelectedIndex = 0;
 		}
 		catch
 		{
 			// Если список временно недоступен, запись вручную остается доступной.
-			SavedPetsBorder.IsVisible = false;
+			SavedPetsBlock.IsVisible = false;
 		}
 	}
 
@@ -120,12 +121,26 @@ public partial class RecordPage : ContentPage
 	{
 		var pet = SavedPetPicker.SelectedItem as SavedPet;
 
-		if (pet == null)
+		if (pet == null || pet.Id == 0)
+		{
+			PetNameEntry.Text = "";
+			PetAgeEntry.Text = "";
+			PetTypePicker.SelectedItem = null;
+			SetPetFieldsEditable(true);
 			return;
+		}
 
 		PetNameEntry.Text = pet.Name;
 		PetAgeEntry.Text = pet.Age;
 		SetPetType(pet.Type);
+		SetPetFieldsEditable(false);
+	}
+
+	private void SetPetFieldsEditable(bool isEditable)
+	{
+		PetNameEntry.IsReadOnly = !isEditable;
+		PetAgeEntry.IsReadOnly = !isEditable;
+		PetTypePicker.IsEnabled = isEditable;
 	}
 
 	private void SetPetType(string type)
@@ -155,7 +170,7 @@ public partial class RecordPage : ContentPage
 			showDays.Add(new DayItem(day, day == selectedDay));
 	}
 
-	// Формирует список времени для выбранного дня и автоматически выбирает первый свободный слот.
+	// Формирует список времени для выбранного дня.
 	private void BuildTimes()
 	{
 		showTimes.Clear();
@@ -165,13 +180,6 @@ public partial class RecordPage : ContentPage
 		{
 			var item = new TimeItem(slot, false);
 			showTimes.Add(item);
-
-			if (selectedTime == null && slot.IsAvailable)
-			{
-				selectedTime = item;
-				item.IsSelected = true;
-				item.RefreshStyle();
-			}
 		}
 	}
 
@@ -249,7 +257,7 @@ public partial class RecordPage : ContentPage
 
 			Clear();
 			await DisplayAlertAsync("Заявка отправлена", "Администратор проверит запись и изменит статус.", "ОК");
-			await LoadData();
+			await LoadAppointmentData();
 		}
 		catch (Exception ex)
 		{
@@ -263,7 +271,8 @@ public partial class RecordPage : ContentPage
 		PetNameEntry.Text = "";
 		PetTypePicker.SelectedIndex = 0;
 		PetAgeEntry.Text = "";
-		SavedPetPicker.SelectedIndex = -1;
+		SavedPetPicker.SelectedIndex = 0;
+		SetPetFieldsEditable(true);
 		CommentEditor.Text = "";
 
 		if (services.Count > 0)
@@ -289,14 +298,14 @@ public partial class RecordPage : ContentPage
 	// Модель плитки даты: хранит текст и цвета выбранного/обычного состояния.
 	private class DayItem : SelectableItem
 	{
-		public Day Day { get; }
+		public ScheduleDay Day { get; }
 		public bool IsSelected { get; set; }
 		public string DayName => Day.Label;
 		public Color BackgroundColor { get; private set; } = Color.FromArgb("#FFFFFF");
 		public Color StrokeColor { get; private set; } = Color.FromArgb("#DDEBF3");
 		public Color TextColor { get; private set; } = Color.FromArgb("#657084");
 
-		public DayItem(Day day, bool isSelected)
+		public DayItem(ScheduleDay day, bool isSelected)
 		{
 			Day = day;
 			IsSelected = isSelected;
@@ -428,10 +437,10 @@ public partial class RecordPage : ContentPage
 	private class TimeResult
 	{
 		[JsonPropertyName("days")]
-		public List<Day> Days { get; set; } = new List<Day>();
+		public List<ScheduleDay> Days { get; set; } = new List<ScheduleDay>();
 	}
 
-	private class Day
+	private class ScheduleDay
 	{
 		[JsonPropertyName("date")] public string Date { get; set; } = "";
 		[JsonPropertyName("label")] public string Label { get; set; } = "";
@@ -445,11 +454,6 @@ public partial class RecordPage : ContentPage
 		[JsonPropertyName("is_available")] public bool IsAvailable { get; set; }
 	}
 
-	private class ApiResult
-	{
-		[JsonPropertyName("success")] public bool Success { get; set; }
-		[JsonPropertyName("message")] public string Message { get; set; } = "";
-	}
 }
 
 
