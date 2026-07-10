@@ -52,7 +52,7 @@ public partial class RecordPage : ContentPage
 		{
 			if (!State.IsClientLoggedIn)
 			{
-				await Shell.Current.GoToAsync("ClientLogin");
+				await Shell.Current.GoToAsync("//MainPage");
 				return;
 			}
 

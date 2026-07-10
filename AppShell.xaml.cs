@@ -7,7 +7,6 @@ public partial class AppShell : Shell
 	{
 		InitializeComponent();
 		// регистрация страниц
-		Routing.RegisterRoute("ClientLogin", typeof(ClientLogin));
 		Routing.RegisterRoute("ClientRegister", typeof(ClientRegister));
 		Routing.RegisterRoute("AdminLogin", typeof(AdminLogin));
 		Routing.RegisterRoute("AdminPage", typeof(AdminPage));

@@ -4,7 +4,8 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="VetAuthMaui.AdminLogin"
              Title="Вход администратора"
-             BackgroundColor="#F6FAFF">
+             BackgroundColor="#F6FAFF"
+             Shell.NavBarIsVisible="False">
 
     <ScrollView>
         <VerticalStackLayout Padding="24,28,24,30" Spacing="18">
