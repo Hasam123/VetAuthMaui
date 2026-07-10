@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<!-- Личный кабинет клиента: телефон, карточка клиента и его заявки. -->
+<!-- Личный кабинет клиента: телефон, карточка клиента, питомцы и заявки. -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="VetAuthMaui.ClientPage"
@@ -9,32 +9,6 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="14">
             <Label Text="Личный кабинет" TextColor="#17213A" FontSize="26" FontAttributes="Bold" />
-
-            <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="22" />
-                </Border.StrokeShape>
-
-                <VerticalStackLayout Spacing="12">
-                    <Entry
-                        x:Name="PhoneEntry"
-                        Placeholder="Введите телефон"
-                        Keyboard="Telephone"
-                        BackgroundColor="White"
-                        TextColor="#222222"
-                        PlaceholderColor="#9AA8B8"
-                        ClearButtonVisibility="WhileEditing" />
-
-                    <Button
-                        Text="Показать мои заявки"
-                        BackgroundColor="#12A7A7"
-                        TextColor="White"
-                        FontAttributes="Bold"
-                        CornerRadius="26"
-                        HeightRequest="50"
-                        Clicked="Load_Click" />
-                </VerticalStackLayout>
-            </Border>
 
             <Border x:Name="ClientCard" IsVisible="False" BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
                 <Border.StrokeShape>
@@ -46,6 +20,97 @@
                     <Label x:Name="ClientNameLabel" TextColor="#17213A" FontSize="16" />
                     <Label x:Name="ClientPhoneLabel" TextColor="#12A7A7" FontSize="15" />
                     <Label x:Name="LastStatusLabel" TextColor="#FF8A5B" FontSize="15" FontAttributes="Bold" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Border x:Name="PetsCard" IsVisible="False" BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="22" />
+                </Border.StrokeShape>
+
+                <VerticalStackLayout Spacing="12">
+                    <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                        <VerticalStackLayout Spacing="2">
+                            <Label Text="Мои питомцы" TextColor="#17213A" FontSize="18" FontAttributes="Bold" />
+                            <Label x:Name="PetsStatusLabel" TextColor="#657084" FontSize="14" />
+                        </VerticalStackLayout>
+
+                        <Button Grid.Column="1"
+                                Text="+"
+                                BackgroundColor="#12A7A7"
+                                TextColor="White"
+                                FontSize="24"
+                                FontAttributes="Bold"
+                                WidthRequest="46"
+                                HeightRequest="46"
+                                CornerRadius="23"
+                                Padding="0"
+                                Clicked="AddPet_Click" />
+                    </Grid>
+
+                    <CollectionView x:Name="PetsCollectionView">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Border BackgroundColor="#F6FAFF" Stroke="#DDEBF3" StrokeThickness="1" Padding="12" Margin="0,0,0,10">
+                                    <Border.StrokeShape>
+                                        <RoundRectangle CornerRadius="18" />
+                                    </Border.StrokeShape>
+
+                                    <Grid ColumnDefinitions="70,*,Auto" ColumnSpacing="12">
+                                        <Border WidthRequest="64" HeightRequest="64" Stroke="#DDEBF3" StrokeThickness="1" BackgroundColor="White">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="32" />
+                                            </Border.StrokeShape>
+
+                                            <Grid>
+                                                <Image Source="{Binding PhotoImage}"
+                                                       IsVisible="{Binding HasPhoto}"
+                                                       Aspect="AspectFill" />
+                                                <Label Text="✚"
+                                                       IsVisible="{Binding HasNoPhoto}"
+                                                       TextColor="#12A7A7"
+                                                       FontSize="24"
+                                                       FontAttributes="Bold"
+                                                       HorizontalOptions="Center"
+                                                       VerticalOptions="Center" />
+                                            </Grid>
+                                        </Border>
+
+                                        <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                                            <Label Text="{Binding Name}" TextColor="#17213A" FontSize="17" FontAttributes="Bold" />
+                                            <Label Text="{Binding TypeText}" TextColor="#657084" FontSize="14" />
+                                            <Label Text="{Binding AgeWeightText}" TextColor="#657084" FontSize="14" />
+                                            <Label Text="{Binding VaccinationText}" TextColor="#FF8A5B" FontSize="14" FontAttributes="Bold" />
+                                        </VerticalStackLayout>
+
+                                        <VerticalStackLayout Grid.Column="2" Spacing="8" VerticalOptions="Center">
+                                            <Button Text="&#x270E;"
+                                                    BackgroundColor="#F3F6FA"
+                                                    TextColor="#657084"
+                                                    FontAttributes="Bold"
+                                                    FontSize="18"
+                                                    WidthRequest="44"
+                                                    HeightRequest="44"
+                                                    CornerRadius="22"
+                                                    Padding="0"
+                                                    Clicked="EditPet_Click" />
+
+                                            <Button Text="&#x1F5D1;"
+                                                    BackgroundColor="#F3F6FA"
+                                                    TextColor="#657084"
+                                                    FontAttributes="Bold"
+                                                    FontSize="18"
+                                                    WidthRequest="44"
+                                                    HeightRequest="44"
+                                                    CornerRadius="22"
+                                                    Padding="0"
+                                                    Clicked="DeletePet_Click" />
+                                        </VerticalStackLayout>
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
                 </VerticalStackLayout>
             </Border>
 
@@ -89,11 +154,3 @@
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
-
-
-
-
-
-
-
-

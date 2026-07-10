@@ -12,6 +12,7 @@ public partial class RecordPage : ContentPage
 	private HttpClient httpClient = new HttpClient();
 	private List<Service> services = new List<Service>();
 	private List<Day> days = new List<Day>();
+	private List<SavedPet> savedPets = new List<SavedPet>();
 	// Коллекции привязаны к плиткам даты и времени на экране записи.
 	private ObservableCollection<DayItem> showDays = new ObservableCollection<DayItem>();
 	private ObservableCollection<TimeItem> showTimes = new ObservableCollection<TimeItem>();
@@ -24,6 +25,8 @@ public partial class RecordPage : ContentPage
 		httpClient.Timeout = TimeSpan.FromSeconds(10);
 		DateCollectionView.ItemsSource = showDays;
 		TimeCollectionView.ItemsSource = showTimes;
+		SavedPetPicker.ItemsSource = savedPets;
+		SavedPetPicker.ItemDisplayBinding = new Binding("Text");
 	}
 
 	protected override async void OnAppearing()
@@ -53,10 +56,12 @@ public partial class RecordPage : ContentPage
 				return;
 			}
 
-			var task1 = httpClient.GetFromJsonAsync<ServiceResult>($"{Api.BaseUrl}services/list.php");
-			var task2 = httpClient.GetFromJsonAsync<TimeResult>($"{Api.BaseUrl}schedule/free_slots.php");
-			var res = await task1;
-			var res2 = await task2;
+		var task1 = httpClient.GetFromJsonAsync<ServiceResult>($"{Api.BaseUrl}services/list.php");
+		var task2 = httpClient.GetFromJsonAsync<TimeResult>($"{Api.BaseUrl}schedule/free_slots.php");
+		var task3 = LoadSavedPets();
+		var res = await task1;
+		var res2 = await task2;
+		await task3;
 
 			services.Clear();
 			services.AddRange(res?.Services ?? new List<Service>());
@@ -80,6 +85,60 @@ public partial class RecordPage : ContentPage
 		{
 			await DisplayAlertAsync("Ошибка", $"Не удалось загрузить услуги и расписание: {ex.Message}", "ОК");
 		}
+	}
+
+	// Загружает питомцев из личного кабинета текущего клиента.
+	private async Task LoadSavedPets()
+	{
+		if (!State.IsClientLoggedIn || string.IsNullOrWhiteSpace(State.ClientPhone))
+			return;
+
+		try
+		{
+			var url = $"{Api.BaseUrl}appointments/pets_list.php?phone={Uri.EscapeDataString(State.ClientPhone)}";
+			var result = await httpClient.GetFromJsonAsync<SavedPetResult>(url);
+
+			savedPets.Clear();
+			savedPets.AddRange(result?.Pets ?? new List<SavedPet>());
+			SavedPetPicker.ItemsSource = null;
+			SavedPetPicker.ItemsSource = savedPets;
+			SavedPetsBorder.IsVisible = savedPets.Count > 0;
+			SavedPetPicker.SelectedIndex = -1;
+		}
+		catch
+		{
+			// Если список временно недоступен, запись вручную остается доступной.
+			SavedPetsBorder.IsVisible = false;
+		}
+	}
+
+	// Подставляет данные выбранного питомца в обычные поля формы.
+	private void SavedPet_Changed(object sender, EventArgs e)
+	{
+		if (SavedPetPicker.SelectedItem is not SavedPet pet)
+			return;
+
+		PetNameEntry.Text = pet.Name;
+		PetAgeEntry.Text = pet.Age;
+		SetPetType(pet.Type);
+	}
+
+	private void SetPetType(string type)
+	{
+		if (string.IsNullOrWhiteSpace(type))
+			return;
+
+		for (var index = 0; index < PetTypePicker.Items.Count; index++)
+		{
+			if (string.Equals(PetTypePicker.Items[index], type, StringComparison.OrdinalIgnoreCase))
+			{
+				PetTypePicker.SelectedIndex = index;
+				return;
+			}
+		}
+
+		PetTypePicker.Items.Add(type);
+		PetTypePicker.SelectedIndex = PetTypePicker.Items.Count - 1;
 	}
 
 	// Формирует плитки ближайших дней для выбора даты приема.
@@ -197,6 +256,7 @@ public partial class RecordPage : ContentPage
 		PetNameEntry.Text = "";
 		PetTypePicker.SelectedIndex = 0;
 		PetAgeEntry.Text = "";
+		SavedPetPicker.SelectedIndex = -1;
 		CommentEditor.Text = "";
 
 		if (services.Count > 0)
@@ -338,6 +398,20 @@ public partial class RecordPage : ContentPage
 	{
 		[JsonPropertyName("services")]
 		public List<Service> Services { get; set; } = new List<Service>();
+	}
+
+	private class SavedPetResult
+	{
+		[JsonPropertyName("pets")] public List<SavedPet> Pets { get; set; } = new List<SavedPet>();
+	}
+
+	private class SavedPet
+	{
+		[JsonPropertyName("id")] public int Id { get; set; }
+		[JsonPropertyName("name")] public string Name { get; set; } = "";
+		[JsonPropertyName("type")] public string Type { get; set; } = "";
+		[JsonPropertyName("age")] public string Age { get; set; } = "";
+		public string Text => string.IsNullOrWhiteSpace(Type) ? Name : $"{Name} - {Type}";
 	}
 
 	private class Service

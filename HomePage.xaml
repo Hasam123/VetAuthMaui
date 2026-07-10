@@ -69,43 +69,6 @@
                     </Grid>
                 </Border>
 
-                <VerticalStackLayout Spacing="12" Margin="0,8,0,4">
-                    <Label Text="Полезные советы" TextColor="#17213A" FontSize="20" FontAttributes="Bold" />
-
-                    <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="14">
-                        <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
-                        <Grid ColumnDefinitions="92,*" ColumnSpacing="14">
-                            <Image Source="tip_check.png" HeightRequest="70" WidthRequest="92" Aspect="AspectFill" />
-                            <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
-                                <Label Text="Следите за поведением" TextColor="#17213A" FontSize="16" FontAttributes="Bold" />
-                                <Label Text="Если питомец стал вялым, лучше записаться на осмотр." TextColor="#657084" FontSize="13" />
-                            </VerticalStackLayout>
-                        </Grid>
-                    </Border>
-
-                    <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="14">
-                        <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
-                        <Grid ColumnDefinitions="92,*" ColumnSpacing="14">
-                            <Image Source="tip_food.png" HeightRequest="70" WidthRequest="92" Aspect="AspectFill" />
-                            <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
-                                <Label Text="Вода всегда рядом" TextColor="#17213A" FontSize="16" FontAttributes="Bold" />
-                                <Label Text="У питомца всегда должна быть чистая питьевая вода." TextColor="#657084" FontSize="13" />
-                            </VerticalStackLayout>
-                        </Grid>
-                    </Border>
-
-                    <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="14">
-                        <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
-                        <Grid ColumnDefinitions="92,*" ColumnSpacing="14">
-                            <Image Source="tip_vaccine.png" HeightRequest="70" WidthRequest="92" Aspect="AspectFill" />
-                            <VerticalStackLayout Grid.Column="1" Spacing="4" VerticalOptions="Center">
-                                <Label Text="Не забывайте профилактику" TextColor="#17213A" FontSize="16" FontAttributes="Bold" />
-                                <Label Text="Плановый осмотр помогает заметить проблему раньше." TextColor="#657084" FontSize="13" />
-                            </VerticalStackLayout>
-                        </Grid>
-                    </Border>
-                </VerticalStackLayout>
-
                 <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18" Margin="0,4,0,0">
                     <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
                     <Grid ColumnDefinitions="54,*" ColumnSpacing="14">

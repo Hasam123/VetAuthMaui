@@ -10,6 +10,7 @@ public partial class ClientPage : ContentPage
 {
 	private HttpClient httpClient = new HttpClient();
 	private ObservableCollection<Request> requests = new ObservableCollection<Request>();
+	private ObservableCollection<Pet> pets = new ObservableCollection<Pet>();
 	private string phone = "";
 
 	public ClientPage()
@@ -17,6 +18,7 @@ public partial class ClientPage : ContentPage
 		InitializeComponent();
 		httpClient.Timeout = TimeSpan.FromSeconds(10);
 		RequestsCollectionView.ItemsSource = requests;
+		PetsCollectionView.ItemsSource = pets;
 	}
 
 	protected override async void OnAppearing()
@@ -26,23 +28,8 @@ public partial class ClientPage : ContentPage
 		// если клиент уже вошел
 		if (State.IsClientLoggedIn)
 		{
-			PhoneEntry.Text = State.ClientPhone;
 			await LoadData(State.ClientPhone);
 		}
-	}
-
-	private async void Load_Click(object sender, EventArgs e)
-	{
-		// поиск по телефону
-		var phone = PhoneEntry.Text?.Trim() ?? "";
-
-		if (phone == "")
-		{
-			await DisplayAlertAsync("Ошибка", "Введите номер телефона.", "Понятно");
-			return;
-		}
-
-		await LoadData(phone);
 	}
 
 	private async Task LoadData(string phone)
@@ -53,7 +40,9 @@ public partial class ClientPage : ContentPage
 			this.phone = phone;
 			StatusLabel.Text = "Загрузка личного кабинета...";
 			ClientCard.IsVisible = false;
+			PetsCard.IsVisible = false;
 			requests.Clear();
+			pets.Clear();
 
 			var url = $"{Api.BaseUrl}appointments/client_profile.php?phone={Uri.EscapeDataString(phone)}";
 			var response = await httpClient.GetFromJsonAsync<ClientResult>(url);
@@ -67,6 +56,8 @@ public partial class ClientPage : ContentPage
 			ClientCard.IsVisible = true;
 			ClientNameLabel.Text = $"Имя: {response?.Client.Name}";
 			ClientPhoneLabel.Text = $"Телефон: {response?.Client.Phone}";
+
+			await LoadPets(phone);
 
 			if (requests.Count == 0)
 			{
@@ -82,6 +73,236 @@ public partial class ClientPage : ContentPage
 		{
 			StatusLabel.Text = "";
 			await DisplayAlertAsync("Ошибка", $"Не удалось загрузить кабинет: {ex.Message}", "Понятно");
+		}
+	}
+
+	// Загружает питомцев владельца в отдельный блок личного кабинета.
+	private async Task LoadPets(string phone)
+	{
+		var url = $"{Api.BaseUrl}appointments/pets_list.php?phone={Uri.EscapeDataString(phone)}";
+		var result = await httpClient.GetFromJsonAsync<PetResult>(url);
+
+		pets.Clear();
+		foreach (var pet in result?.Pets ?? new List<Pet>())
+		{
+			pets.Add(pet);
+		}
+
+		PetsCard.IsVisible = true;
+		PetsStatusLabel.Text = pets.Count == 0 ? "Питомцы пока не добавлены" : $"Добавлено питомцев: {pets.Count}";
+	}
+
+	private async void AddPet_Click(object sender, EventArgs e)
+	{
+		var currentPhone = phone;
+
+		if (currentPhone == "")
+		{
+			await DisplayAlertAsync("Ошибка", "Войдите в личный кабинет клиента.", "Понятно");
+			return;
+		}
+
+		var name = await DisplayPromptAsync("Питомец", "Кличка питомца", "Далее", "Отмена", "Например: Барни");
+		if (name == null)
+			return;
+
+		name = name.Trim();
+		if (name == "")
+		{
+			await DisplayAlertAsync("Ошибка", "Введите кличку питомца.", "Понятно");
+			return;
+		}
+
+		var type = await DisplayPromptAsync("Питомец", "Вид животного", "Далее", "Отмена", "Например: собака");
+		if (type == null)
+			return;
+
+		type = type.Trim();
+		if (type == "")
+		{
+			await DisplayAlertAsync("Ошибка", "Введите вид животного.", "Понятно");
+			return;
+		}
+
+		var age = await DisplayPromptAsync("Питомец", "Возраст", "Далее", "Отмена", "Например: 3 года");
+		if (age == null)
+			return;
+
+		var weight = await DisplayPromptAsync("Питомец", "Вес", "Далее", "Отмена", "Например: 12 кг");
+		if (weight == null)
+			return;
+
+		var vaccination = await DisplayPromptAsync("Питомец", "Дата последней прививки", "Далее", "Отмена", "Например: 12.03.2026");
+		if (vaccination == null)
+			return;
+
+		var vaccinationDate = NormalizeDate(vaccination.Trim());
+		if (vaccination.Trim() != "" && vaccinationDate == "")
+		{
+			await DisplayAlertAsync("Ошибка", "Введите дату прививки в формате 12.03.2026 или 2026-03-12.", "Понятно");
+			return;
+		}
+
+		var photo = await PickPetPhoto();
+		await SavePet(currentPhone, name, type, age.Trim(), weight.Trim(), vaccinationDate, photo);
+	}
+
+	// Изменяет данные выбранного питомца и сохраняет их в его карточке.
+	private async void EditPet_Click(object sender, EventArgs e)
+	{
+		var pet = (Pet)((Button)sender).BindingContext;
+		var name = await DisplayPromptAsync("Изменить питомца", "Кличка питомца", "Далее", "Отмена", initialValue: pet.Name);
+		if (name == null)
+			return;
+
+		name = name.Trim();
+		if (name == "")
+		{
+			await DisplayAlertAsync("Ошибка", "Введите кличку питомца.", "Понятно");
+			return;
+		}
+
+		var type = await DisplayPromptAsync("Изменить питомца", "Вид животного", "Далее", "Отмена", initialValue: pet.Type);
+		if (type == null)
+			return;
+
+		type = type.Trim();
+		if (type == "")
+		{
+			await DisplayAlertAsync("Ошибка", "Введите вид животного.", "Понятно");
+			return;
+		}
+
+		var age = await DisplayPromptAsync("Изменить питомца", "Возраст", "Далее", "Отмена", initialValue: pet.Age);
+		if (age == null)
+			return;
+
+		var weight = await DisplayPromptAsync("Изменить питомца", "Вес", "Далее", "Отмена", initialValue: pet.Weight);
+		if (weight == null)
+			return;
+
+		var vaccination = await DisplayPromptAsync("Изменить питомца", "Дата последней прививки", "Далее", "Отмена", "Например: 12.03.2026", initialValue: FormatEditableDate(pet.LastVaccinationDate));
+		if (vaccination == null)
+			return;
+
+		var vaccinationDate = NormalizeDate(vaccination.Trim());
+		if (vaccination.Trim() != "" && vaccinationDate == "")
+		{
+			await DisplayAlertAsync("Ошибка", "Введите дату прививки в формате 12.03.2026 или 2026-03-12.", "Понятно");
+			return;
+		}
+
+		var photo = pet.Photo;
+		var photoChoice = await DisplayActionSheetAsync("Фото питомца", "Оставить как есть", null, "Заменить фото", "Удалить фото");
+		if (photoChoice == "Заменить фото")
+			photo = await PickPetPhoto();
+		else if (photoChoice == "Удалить фото")
+			photo = "";
+
+		await UpdatePet(pet.Id, name, type, age.Trim(), weight.Trim(), vaccinationDate, photo);
+	}
+
+	// Удаляет карточку питомца только после подтверждения пользователя.
+	private async void DeletePet_Click(object sender, EventArgs e)
+	{
+		var pet = (Pet)((Button)sender).BindingContext;
+		var confirmed = await DisplayAlertAsync("Удалить питомца?", $"Карточка питомца «{pet.Name}» будет удалена.", "Удалить", "Отмена");
+		if (!confirmed)
+			return;
+
+		try
+		{
+			var response = await httpClient.PostAsJsonAsync($"{Api.BaseUrl}appointments/pets_delete.php", new DeletePetData(pet.Id, phone));
+			var result = await response.Content.ReadFromJsonAsync<ApiResult>();
+
+			if (!response.IsSuccessStatusCode || result?.Success != true)
+			{
+				await DisplayAlertAsync("Ошибка", result?.Message ?? "Не удалось удалить питомца.", "Понятно");
+				return;
+			}
+
+			await LoadPets(phone);
+		}
+		catch (Exception ex)
+		{
+			await DisplayAlertAsync("Ошибка", $"Не удалось удалить питомца: {ex.Message}", "Понятно");
+		}
+	}
+
+	// Сохраняет питомца через API и обновляет список без перезахода в кабинет.
+	private async Task SavePet(string phone, string name, string type, string age, string weight, string vaccinationDate, string photo)
+	{
+		try
+		{
+			var data = new AddPetData(phone, name, type, age, weight, vaccinationDate, photo);
+			var response = await httpClient.PostAsJsonAsync($"{Api.BaseUrl}appointments/pets_create.php", data);
+			var result = await response.Content.ReadFromJsonAsync<ApiResult>();
+
+			if (!response.IsSuccessStatusCode || result?.Success != true)
+			{
+				await DisplayAlertAsync("Ошибка", result?.Message ?? "Питомец не добавлен.", "Понятно");
+				return;
+			}
+
+			await DisplayAlertAsync("Готово", "Питомец добавлен.", "ОК");
+			await LoadPets(phone);
+		}
+		catch (Exception ex)
+		{
+			await DisplayAlertAsync("Ошибка", $"Не удалось добавить питомца: {ex.Message}", "Понятно");
+		}
+	}
+
+	private async Task UpdatePet(int id, string name, string type, string age, string weight, string vaccinationDate, string photo)
+	{
+		try
+		{
+			var data = new UpdatePetData(id, phone, name, type, age, weight, vaccinationDate, photo);
+			var response = await httpClient.PostAsJsonAsync($"{Api.BaseUrl}appointments/pets_update.php", data);
+			var result = await response.Content.ReadFromJsonAsync<ApiResult>();
+
+			if (!response.IsSuccessStatusCode || result?.Success != true)
+			{
+				await DisplayAlertAsync("Ошибка", result?.Message ?? "Не удалось изменить питомца.", "Понятно");
+				return;
+			}
+
+			await DisplayAlertAsync("Готово", "Данные питомца изменены.", "ОК");
+			await LoadPets(phone);
+		}
+		catch (Exception ex)
+		{
+			await DisplayAlertAsync("Ошибка", $"Не удалось изменить питомца: {ex.Message}", "Понятно");
+		}
+	}
+
+	// Фото необязательное: пользователь может оставить карточку только с текстовыми данными.
+	private async Task<string> PickPetPhoto()
+	{
+		var choice = await DisplayActionSheetAsync("Фото питомца", "Без фото", null, "Выбрать фото");
+		if (choice != "Выбрать фото")
+			return "";
+
+		try
+		{
+			var files = await MediaPicker.Default.PickPhotosAsync(new MediaPickerOptions
+			{
+				Title = "Выберите фото питомца"
+			});
+			var file = files?.FirstOrDefault();
+
+			if (file == null)
+				return "";
+
+			using var stream = await file.OpenReadAsync();
+			using var memory = new MemoryStream();
+			await stream.CopyToAsync(memory);
+			return Convert.ToBase64String(memory.ToArray());
+		}
+		catch (Exception ex)
+		{
+			await DisplayAlertAsync("Фото не выбрано", $"Не удалось добавить фото: {ex.Message}", "Понятно");
+			return "";
 		}
 	}
 
@@ -117,12 +338,32 @@ public partial class ClientPage : ContentPage
 			}
 
 			await DisplayAlertAsync("Готово", result.Message, "ОК");
-			Load_Click(this, EventArgs.Empty);
+			await LoadData(phone);
 		}
 		catch (Exception ex)
 		{
 			await DisplayAlertAsync("Ошибка", $"Ошибка отмены записи: {ex.Message}", "Понятно");
 		}
+	}
+
+	private static string NormalizeDate(string value)
+	{
+		if (value == "")
+			return "";
+
+		var formats = new[] { "dd.MM.yyyy", "yyyy-MM-dd" };
+		if (DateTime.TryParseExact(value, formats, CultureInfo.InvariantCulture, DateTimeStyles.None, out var date))
+			return date.ToString("yyyy-MM-dd");
+
+		if (DateTime.TryParse(value, out date))
+			return date.ToString("yyyy-MM-dd");
+
+		return "";
+	}
+
+	private static string FormatEditableDate(string value)
+	{
+		return DateTime.TryParse(value, out var date) ? date.ToString("dd.MM.yyyy") : value;
 	}
 
 	// результат кабинета
@@ -144,6 +385,135 @@ public partial class ClientPage : ContentPage
 
 		[JsonPropertyName("phone")]
 		public string Phone { get; set; } = "";
+	}
+
+	private class PetResult
+	{
+		[JsonPropertyName("pets")]
+		public List<Pet> Pets { get; set; } = new List<Pet>();
+	}
+
+	// питомец клиента
+	private class Pet
+	{
+		[JsonPropertyName("id")]
+		public int Id { get; set; }
+
+		[JsonPropertyName("name")]
+		public string Name { get; set; } = "";
+
+		[JsonPropertyName("type")]
+		public string Type { get; set; } = "";
+
+		[JsonPropertyName("age")]
+		public string Age { get; set; } = "";
+
+		[JsonPropertyName("weight")]
+		public string Weight { get; set; } = "";
+
+		[JsonPropertyName("last_vaccination_date")]
+		public string LastVaccinationDate { get; set; } = "";
+
+		[JsonPropertyName("photo")]
+		public string Photo { get; set; } = "";
+
+		public bool HasPhoto => !string.IsNullOrWhiteSpace(Photo);
+		public bool HasNoPhoto => !HasPhoto;
+		public string TypeText => string.IsNullOrWhiteSpace(Type) ? "Вид не указан" : Type;
+
+		public string AgeWeightText
+		{
+			get
+			{
+				var parts = new List<string>();
+
+				if (!string.IsNullOrWhiteSpace(Age))
+					parts.Add($"Возраст: {Age}");
+				if (!string.IsNullOrWhiteSpace(Weight))
+					parts.Add($"Вес: {Weight}");
+
+				return parts.Count == 0 ? "Возраст и вес не указаны" : string.Join(" · ", parts);
+			}
+		}
+
+		public string VaccinationText
+		{
+			get
+			{
+				if (string.IsNullOrWhiteSpace(LastVaccinationDate))
+					return "Прививка не указана";
+
+				if (DateTime.TryParse(LastVaccinationDate, out var date))
+					return $"Последняя прививка: {date:dd.MM.yyyy}";
+
+				return $"Последняя прививка: {LastVaccinationDate}";
+			}
+		}
+
+		public ImageSource PhotoImage
+		{
+			get
+			{
+				if (string.IsNullOrWhiteSpace(Photo))
+					return null;
+
+				try
+				{
+					var bytes = Convert.FromBase64String(Photo);
+					return ImageSource.FromStream(() => new MemoryStream(bytes));
+				}
+				catch
+				{
+					return null;
+				}
+			}
+		}
+	}
+
+	// данные добавления питомца
+	private class AddPetData
+	{
+		[JsonPropertyName("phone")] public string Phone { get; set; }
+		[JsonPropertyName("name")] public string Name { get; set; }
+		[JsonPropertyName("type")] public string Type { get; set; }
+		[JsonPropertyName("age")] public string Age { get; set; }
+		[JsonPropertyName("weight")] public string Weight { get; set; }
+		[JsonPropertyName("last_vaccination_date")] public string LastVaccinationDate { get; set; }
+		[JsonPropertyName("photo")] public string Photo { get; set; }
+
+		public AddPetData(string phone, string name, string type, string age, string weight, string lastVaccinationDate, string photo)
+		{
+			Phone = phone;
+			Name = name;
+			Type = type;
+			Age = age;
+			Weight = weight;
+			LastVaccinationDate = lastVaccinationDate;
+			Photo = photo;
+		}
+	}
+
+	private class UpdatePetData : AddPetData
+	{
+		[JsonPropertyName("id")] public int Id { get; set; }
+
+		public UpdatePetData(int id, string phone, string name, string type, string age, string weight, string lastVaccinationDate, string photo)
+			: base(phone, name, type, age, weight, lastVaccinationDate, photo)
+		{
+			Id = id;
+		}
+	}
+
+	private class DeletePetData
+	{
+		[JsonPropertyName("id")] public int Id { get; set; }
+		[JsonPropertyName("phone")] public string Phone { get; set; }
+
+		public DeletePetData(int id, string phone)
+		{
+			Id = id;
+			Phone = phone;
+		}
 	}
 
 	// данные отмены
@@ -350,37 +720,4 @@ public partial class ClientPage : ContentPage
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

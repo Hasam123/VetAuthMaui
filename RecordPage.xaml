@@ -62,25 +62,20 @@
                         <Border BackgroundColor="{Binding BackgroundColor}"
                                 Stroke="{Binding StrokeColor}"
                                 StrokeThickness="1"
-                                Padding="12,9"
+                                Padding="10,9"
                                 Margin="0,0,8,0"
-                                WidthRequest="72">
+                                WidthRequest="100">
                             <Border.StrokeShape>
                                 <RoundRectangle CornerRadius="18" />
                             </Border.StrokeShape>
 
-                            <VerticalStackLayout Spacing="3" HorizontalOptions="Center">
-                                <Label Text="{Binding DayName}"
-                                       TextColor="{Binding TextColor}"
-                                       FontSize="13"
-                                       HorizontalTextAlignment="Center" />
-
-                                <Label Text="{Binding DayNumber}"
-                                       TextColor="{Binding TextColor}"
-                                       FontSize="18"
-                                       FontAttributes="Bold"
-                                       HorizontalTextAlignment="Center" />
-                            </VerticalStackLayout>
+                            <Label Text="{Binding DayName}"
+                                   TextColor="{Binding TextColor}"
+                                   FontSize="14"
+                                   FontAttributes="Bold"
+                                   LineBreakMode="NoWrap"
+                                   HorizontalTextAlignment="Center"
+                                   VerticalTextAlignment="Center" />
 
                             <Border.GestureRecognizers>
                                 <TapGestureRecognizer Tapped="Date_Tapped" />
@@ -158,6 +153,40 @@
                            TextColor="#222222"
                            PlaceholderColor="#9AA8B8"
                            ClearButtonVisibility="WhileEditing" />
+
+                    <Grid x:Name="SavedPetsBorder"
+                          IsVisible="False"
+                          ColumnDefinitions="40,*"
+                          ColumnSpacing="10"
+                          Padding="0,2">
+                        <Border BackgroundColor="#EAF7F8"
+                                StrokeThickness="0"
+                                WidthRequest="40"
+                                HeightRequest="40"
+                                VerticalOptions="Center">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="14" />
+                            </Border.StrokeShape>
+                            <Label Text="✚"
+                                   TextColor="#12A7A7"
+                                   FontSize="19"
+                                   FontAttributes="Bold"
+                                   HorizontalTextAlignment="Center"
+                                   VerticalTextAlignment="Center" />
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="2">
+                            <Label Text="Питомец для записи"
+                                   TextColor="#657084"
+                                   FontSize="13" />
+                            <Picker x:Name="SavedPetPicker"
+                                    Title="Выберите из профиля"
+                                    BackgroundColor="White"
+                                    TextColor="#17213A"
+                                    TitleColor="#9AA8B8"
+                                    SelectedIndexChanged="SavedPet_Changed" />
+                        </VerticalStackLayout>
+                    </Grid>
 
                     <Entry x:Name="PetNameEntry"
                            Placeholder="Кличка питомца"

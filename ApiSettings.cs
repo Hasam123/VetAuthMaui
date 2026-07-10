@@ -3,7 +3,7 @@
 // адрес API
 public static class Api
 {
-	public const string BaseUrl = "http://10.243.43.212/veterenar/api/";
+	public const string BaseUrl = "http://192.168.0.130/veterenar/api/";
 
 
 
