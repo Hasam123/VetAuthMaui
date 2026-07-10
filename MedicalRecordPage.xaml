@@ -8,11 +8,6 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="14">
-            <Label Text="Обследование и лечение"
-                   TextColor="#17213A"
-                   FontSize="26"
-                   FontAttributes="Bold" />
-
             <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="22" />
@@ -108,6 +103,7 @@
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
+
 
 
 

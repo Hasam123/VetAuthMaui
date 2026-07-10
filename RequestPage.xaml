@@ -8,11 +8,6 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="14">
-            <Label Text="Заявки на прием"
-                   TextColor="#17213A"
-                   FontSize="26"
-                   FontAttributes="Bold" />
-
             <Button Text="Обновить"
                     BackgroundColor="#12A7A7"
                     TextColor="White"
@@ -124,6 +119,7 @@
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
+
 
 
 

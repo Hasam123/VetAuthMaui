@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Форма изменения питомца. -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VetAuthMaui.EditPetPage"
+             Title="Изменить питомца"
+             BackgroundColor="#F6FAFF">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="12">
+            <Entry x:Name="NameEntry" Placeholder="Кличка питомца" />
+            <Picker x:Name="TypePicker" Title="Вид животного">
+                <Picker.Items>
+                    <x:String>Собака</x:String>
+                    <x:String>Кошка</x:String>
+                    <x:String>Попугай</x:String>
+                    <x:String>Хомяк</x:String>
+                    <x:String>Другое</x:String>
+                </Picker.Items>
+            </Picker>
+            <Entry x:Name="AgeEntry" Placeholder="Возраст" />
+            <Entry x:Name="WeightEntry" Placeholder="Вес" Keyboard="Numeric" />
+            <Label Text="Дата последней вакцинации" TextColor="#657084" FontSize="14" />
+            <DatePicker x:Name="VaccinationDatePicker" />
+
+            <Button Text="Сохранить"
+                    BackgroundColor="#12A7A7"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    CornerRadius="22"
+                    HeightRequest="46"
+                    Clicked="Save_Click" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+

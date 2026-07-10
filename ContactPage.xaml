@@ -9,10 +9,6 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="14">
             <VerticalStackLayout Spacing="4">
-                <Label Text="Контакты"
-                       TextColor="#17213A"
-                       FontSize="26"
-                       FontAttributes="Bold" />
                 <Label Text="Адреса и время работы ветеринарной клиники"
                        TextColor="#657084"
                        FontSize="14" />
@@ -65,6 +61,7 @@
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
+
 
 
 

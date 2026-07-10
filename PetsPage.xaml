@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!-- Список питомцев клиента. -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VetAuthMaui.PetsPage"
+             Title="Мои питомцы"
+             BackgroundColor="#F6FAFF">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="14">
+            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                <VerticalStackLayout Spacing="2">
+                    <Label x:Name="StatusLabel" TextColor="#657084" FontSize="14" />
+                </VerticalStackLayout>
+
+                <Button Grid.Column="1"
+                        Text="+"
+                        BackgroundColor="#12A7A7"
+                        TextColor="White"
+                        FontSize="24"
+                        FontAttributes="Bold"
+                        WidthRequest="46"
+                        HeightRequest="46"
+                        CornerRadius="23"
+                        Padding="0"
+                        Clicked="AddPet_Click" />
+            </Grid>
+
+            <CollectionView x:Name="PetsCollectionView">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="12" Margin="0,0,0,10">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="18" />
+                            </Border.StrokeShape>
+
+                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                                <VerticalStackLayout Grid.Column="0" Spacing="3" VerticalOptions="Center">
+                                    <Label Text="{Binding Name}" TextColor="#17213A" FontSize="17" FontAttributes="Bold" />
+                                    <Label Text="{Binding TypeText}" TextColor="#657084" FontSize="14" />
+                                    <Label Text="{Binding AgeWeightText}" TextColor="#657084" FontSize="14" />
+                                    <Label Text="{Binding VaccinationText}" TextColor="#FF8A5B" FontSize="14" FontAttributes="Bold" />
+                                </VerticalStackLayout>
+
+                                <VerticalStackLayout Grid.Column="1" Spacing="8" VerticalOptions="Center">
+                                    <Button Text="&#x270E;"
+                                            BackgroundColor="#F3F6FA"
+                                            TextColor="#657084"
+                                            FontAttributes="Bold"
+                                            FontSize="18"
+                                            WidthRequest="44"
+                                            HeightRequest="44"
+                                            CornerRadius="22"
+                                            Padding="0"
+                                            Clicked="EditPet_Click" />
+
+                                    <Button Text="&#x1F5D1;"
+                                            BackgroundColor="#F3F6FA"
+                                            TextColor="#657084"
+                                            FontAttributes="Bold"
+                                            FontSize="18"
+                                            WidthRequest="44"
+                                            HeightRequest="44"
+                                            CornerRadius="22"
+                                            Padding="0"
+                                            Clicked="DeletePet_Click" />
+                                </VerticalStackLayout>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+

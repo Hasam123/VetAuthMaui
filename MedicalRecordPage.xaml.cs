@@ -137,3 +137,4 @@ public partial class MedicalRecordPage : ContentPage
 
 
 
+

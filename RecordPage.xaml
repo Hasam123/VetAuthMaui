@@ -7,11 +7,6 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="14">
-            <Label Text="Запись на приём"
-                   TextColor="#17213A"
-                   FontSize="26"
-                   FontAttributes="Bold" />
-
             <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="16">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="22" />
@@ -204,7 +199,6 @@
                             <x:String>Собака</x:String>
                             <x:String>Кошка</x:String>
                             <x:String>Попугай</x:String>
-                            <x:String>Кролик</x:String>
                             <x:String>Другое</x:String>
                         </Picker.Items>
                     </Picker>
@@ -235,4 +229,5 @@
         </VerticalStackLayout>
     </ScrollView>
 </ContentPage>
+
 

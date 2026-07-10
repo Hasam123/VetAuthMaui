@@ -49,6 +49,7 @@ public partial class AdminLogin : ContentPage
 			if (response.IsSuccessStatusCode && result?.Success == true)
 			{
 				MessageLabel.Text = result.Message;
+				State.IsAdminMode = true;
 				await Shell.Current.GoToAsync("AdminPage");
 				return;
 			}
@@ -86,6 +87,7 @@ public partial class AdminLogin : ContentPage
 		[JsonPropertyName("message")] public string Message { get; set; } = "";
 	}
 }
+
 
 
 

@@ -88,7 +88,6 @@ public partial class AdminPage : ContentPage
 
 	private async void ServicesSummary_Tapped(object sender, TappedEventArgs e)
 	{
-		State.IsAdminMode = true;
 		await Shell.Current.GoToAsync("ServicePage");
 	}
 private async void Schedule_Click(object sender, EventArgs e)
@@ -98,13 +97,12 @@ private async void Schedule_Click(object sender, EventArgs e)
 
 	private async void Services_Click(object sender, EventArgs e)
 	{
-		// режим админа
-		State.IsAdminMode = true;
 		await Shell.Current.GoToAsync("ServicePage");
 	}
 
 	private async void Logout_Click(object sender, EventArgs e)
 	{
+		State.IsAdminMode = false;
 		await Shell.Current.GoToAsync("//MainPage");
 	}
 
@@ -127,6 +125,7 @@ private async void Schedule_Click(object sender, EventArgs e)
 		[JsonPropertyName("services_total")] public int ServicesTotal { get; set; }
 	}
 }
+
 
 
 

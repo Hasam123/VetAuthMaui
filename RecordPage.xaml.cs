@@ -56,20 +56,23 @@ public partial class RecordPage : ContentPage
 				return;
 			}
 
-		var task1 = httpClient.GetFromJsonAsync<ServiceResult>($"{Api.BaseUrl}services/list.php");
-		var task2 = httpClient.GetFromJsonAsync<TimeResult>($"{Api.BaseUrl}schedule/free_slots.php");
-		var task3 = LoadSavedPets();
-		var res = await task1;
-		var res2 = await task2;
-		await task3;
+		var servicesResult =
+			await httpClient.GetFromJsonAsync<ServiceResult>(
+				$"{Api.BaseUrl}services/list.php");
+
+		var scheduleResult =
+			await httpClient.GetFromJsonAsync<TimeResult>(
+				$"{Api.BaseUrl}schedule/free_slots.php");
+
+		await LoadSavedPets();
 
 			services.Clear();
-			services.AddRange(res?.Services ?? new List<Service>());
+			services.AddRange(servicesResult?.Services ?? new List<Service>());
 			ServicePicker.ItemsSource = services;
 			ServicePicker.ItemDisplayBinding = new Binding("Text");
 
 			days.Clear();
-			days.AddRange(res2?.Days ?? new List<Day>());
+			days.AddRange(scheduleResult?.Days ?? new List<Day>());
 
 			if (ServicePicker.SelectedIndex < 0 && services.Count > 0)
 				ServicePicker.SelectedIndex = 0;
@@ -95,7 +98,7 @@ public partial class RecordPage : ContentPage
 
 		try
 		{
-			var url = $"{Api.BaseUrl}appointments/pets_list.php?phone={Uri.EscapeDataString(State.ClientPhone)}";
+			var url = $"{Api.BaseUrl}pets/list.php?phone={Uri.EscapeDataString(State.ClientPhone)}";
 			var result = await httpClient.GetFromJsonAsync<SavedPetResult>(url);
 
 			savedPets.Clear();
@@ -115,7 +118,9 @@ public partial class RecordPage : ContentPage
 	// Подставляет данные выбранного питомца в обычные поля формы.
 	private void SavedPet_Changed(object sender, EventArgs e)
 	{
-		if (SavedPetPicker.SelectedItem is not SavedPet pet)
+		var pet = SavedPetPicker.SelectedItem as SavedPet;
+
+		if (pet == null)
 			return;
 
 		PetNameEntry.Text = pet.Name;
@@ -156,7 +161,7 @@ public partial class RecordPage : ContentPage
 		showTimes.Clear();
 		selectedTime = null;
 
-		foreach (var slot in selectedDay?.Slots ?? new List<Time>())
+		foreach (var slot in selectedDay?.Slots ?? new List<TimeSlot>())
 		{
 			var item = new TimeItem(slot, false);
 			showTimes.Add(item);
@@ -196,7 +201,7 @@ public partial class RecordPage : ContentPage
 		var view = (BindableObject)sender;
 		var item = view.BindingContext as TimeItem;
 
-		if (item == null || !item.Time.IsAvailable)
+		if (item == null || !item.Slot.IsAvailable)
 			return;
 
 		foreach (var time in showTimes)
@@ -220,17 +225,19 @@ public partial class RecordPage : ContentPage
 		var petAge = PetAgeEntry.Text?.Trim() ?? "";
 		var comment = CommentEditor.Text?.Trim() ?? "";
 		var service = ServicePicker.SelectedItem as Service;
-		var time = selectedTime?.Time;
+		var time = selectedTime?.Slot;
+		var savedPet = SavedPetPicker.SelectedItem as SavedPet;
 
-		if (name == "" || phone == "" || petName == "" || petType == "" || service == null || time == null || comment == "")
+		if (name == "" || phone == "" || petName == "" || petType == "" || service == null || time == null)
 		{
-			await DisplayAlertAsync("Ошибка", "Заполните имя, телефон, питомца, услугу, дату, время и комментарий.", "ОК");
+			await DisplayAlertAsync("Ошибка", "Заполните данные клиента, питомца, услугу и время.", "ОК");
 			return;
 		}
 
 		try
 		{
-			var data = new FeedbackData(name, phone, petName, petType, petAge, service.Id, time.Value, comment);
+			var petId = savedPet?.Id ?? 0;
+			var data = new AppointmentData(name, phone, petName, petType, petAge, petId, service.Id, time.Value, comment);
 			var response = await httpClient.PostAsJsonAsync($"{Api.BaseUrl}appointments/create.php", data);
 			var result = await response.Content.ReadFromJsonAsync<ApiResult>();
 
@@ -284,8 +291,7 @@ public partial class RecordPage : ContentPage
 	{
 		public Day Day { get; }
 		public bool IsSelected { get; set; }
-		public string DayName { get; }
-		public string DayNumber { get; }
+		public string DayName => Day.Label;
 		public Color BackgroundColor { get; private set; } = Color.FromArgb("#FFFFFF");
 		public Color StrokeColor { get; private set; } = Color.FromArgb("#DDEBF3");
 		public Color TextColor { get; private set; } = Color.FromArgb("#657084");
@@ -294,11 +300,6 @@ public partial class RecordPage : ContentPage
 		{
 			Day = day;
 			IsSelected = isSelected;
-
-			var label = day.Label ?? "";
-			var parts = label.Split(' ', StringSplitOptions.RemoveEmptyEntries);
-			DayName = parts.Length > 0 ? parts[0] : label;
-			DayNumber = parts.Length > 1 ? parts[1] : "";
 
 			RefreshStyle();
 		}
@@ -328,23 +329,23 @@ public partial class RecordPage : ContentPage
 	// Модель плитки времени: отвечает за цвета свободного, занятого и выбранного слота.
 	private class TimeItem : SelectableItem
 	{
-		public Time Time { get; }
+		public TimeSlot Slot { get; }
 		public bool IsSelected { get; set; }
-		public string Label => Time.Label;
+		public string Label => Slot.Label;
 		public Color BackgroundColor { get; private set; } = Color.FromArgb("#FFFFFF");
 		public Color StrokeColor { get; private set; } = Color.FromArgb("#DDEBF3");
 		public Color TextColor { get; private set; } = Color.FromArgb("#17213A");
 
-		public TimeItem(Time time, bool isSelected)
+		public TimeItem(TimeSlot slot, bool isSelected)
 		{
-			Time = time;
+			Slot = slot;
 			IsSelected = isSelected;
 			RefreshStyle();
 		}
 
 		public void RefreshStyle()
 		{
-			if (!Time.IsAvailable)
+			if (!Slot.IsAvailable)
 			{
 				BackgroundColor = Color.FromArgb("#EEF3F7");
 				StrokeColor = Color.FromArgb("#EEF3F7");
@@ -370,24 +371,26 @@ public partial class RecordPage : ContentPage
 		}
 	}
 
-	private class FeedbackData
+	private class AppointmentData
 	{
 		[JsonPropertyName("name")] public string Name { get; set; }
 		[JsonPropertyName("phone")] public string Phone { get; set; }
 		[JsonPropertyName("pet_name")] public string PetName { get; set; }
 		[JsonPropertyName("pet_type")] public string PetType { get; set; }
 		[JsonPropertyName("pet_age")] public string PetAge { get; set; }
+		[JsonPropertyName("pet_id")] public int PetId { get; set; }
 		[JsonPropertyName("service_id")] public int ServiceId { get; set; }
 		[JsonPropertyName("appointment_at")] public string AppointmentAt { get; set; }
 		[JsonPropertyName("comment")] public string Comment { get; set; }
 
-		public FeedbackData(string name, string phone, string petName, string petType, string petAge, int serviceId, string appointmentAt, string comment)
+		public AppointmentData(string name, string phone, string petName, string petType, string petAge, int petId, int serviceId, string appointmentAt, string comment)
 		{
 			Name = name;
 			Phone = phone;
 			PetName = petName;
 			PetType = petType;
 			PetAge = petAge;
+			PetId = petId;
 			ServiceId = serviceId;
 			AppointmentAt = appointmentAt;
 			Comment = comment;
@@ -432,10 +435,10 @@ public partial class RecordPage : ContentPage
 	{
 		[JsonPropertyName("date")] public string Date { get; set; } = "";
 		[JsonPropertyName("label")] public string Label { get; set; } = "";
-		[JsonPropertyName("slots")] public List<Time> Slots { get; set; } = new List<Time>();
+		[JsonPropertyName("slots")] public List<TimeSlot> Slots { get; set; } = new List<TimeSlot>();
 	}
 
-	private class Time
+	private class TimeSlot
 	{
 		[JsonPropertyName("time")] public string Value { get; set; } = "";
 		[JsonPropertyName("label")] public string Label { get; set; } = "";
@@ -448,6 +451,9 @@ public partial class RecordPage : ContentPage
 		[JsonPropertyName("message")] public string Message { get; set; } = "";
 	}
 }
+
+
+
 
 
 

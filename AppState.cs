@@ -7,7 +7,7 @@ public static class State
 	public static int ClientId { get; set; }
 	public static string ClientName { get; set; } = "";
 	public static string ClientPhone { get; set; } = "";
-	public static Record CurrentMedicalRecord { get; set; }
+	public static MedicalRecord CurrentMedicalRecord { get; set; }
 
 	public static bool IsClientLoggedIn => !string.IsNullOrWhiteSpace(ClientPhone);
 
@@ -20,11 +20,14 @@ public static class State
 
 	public static void LogoutClient()
 	{
+		IsAdminMode = false;
 		ClientId = 0;
 		ClientName = "";
 		ClientPhone = "";
+		CurrentMedicalRecord = null;
 	}
 }
+
 
 
 

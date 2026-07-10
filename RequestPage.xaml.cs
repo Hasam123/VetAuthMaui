@@ -1,20 +1,18 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 using System.Collections.ObjectModel;
-using System.Globalization;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 
 [QueryProperty(nameof(InitialStatus), "status")]
-
-// список заявок
 public partial class RequestPage : ContentPage
 {
-	private HttpClient httpClient = new HttpClient();
-	private List<Request> allRequests = new List<Request>();
-	private ObservableCollection<Request> requests = new ObservableCollection<Request>();
+	private readonly HttpClient httpClient = new HttpClient();
+	private readonly List<Appointment> allAppointments = new List<Appointment>();
+	private readonly ObservableCollection<Appointment> appointments = new ObservableCollection<Appointment>();
 	private string initialStatus = "";
-	private List<FilterItem> dates = new List<FilterItem>()
+
+	private readonly List<FilterItem> dates = new List<FilterItem>
 	{
 		new FilterItem("Все даты", "all"),
 		new FilterItem("Сегодня", "today"),
@@ -22,7 +20,8 @@ public partial class RequestPage : ContentPage
 		new FilterItem("Ближайшие 5 дней", "next5"),
 		new FilterItem("Без времени", "empty")
 	};
-	private List<FilterItem> statuses = new List<FilterItem>()
+
+	private readonly List<FilterItem> statuses = new List<FilterItem>
 	{
 		new FilterItem("Все статусы", ""),
 		new FilterItem("Новые", "new"),
@@ -40,6 +39,7 @@ public partial class RequestPage : ContentPage
 			ApplyInitialStatus();
 		}
 	}
+
 	public RequestPage()
 	{
 		InitializeComponent();
@@ -50,20 +50,10 @@ public partial class RequestPage : ContentPage
 		StatusFilterPicker.ItemsSource = statuses;
 		StatusFilterPicker.ItemDisplayBinding = new Binding("Name");
 		StatusFilterPicker.SelectedIndex = 0;
-		RequestsCollectionView.ItemsSource = requests;
+		RequestsCollectionView.ItemsSource = appointments;
 		ApplyInitialStatus();
 	}
 
-	// Применяет статус, переданный из панели администратора через навигацию.
-	private void ApplyInitialStatus()
-	{
-		if (StatusFilterPicker == null)
-			return;
-
-		var index = statuses.FindIndex(item => item.Value == initialStatus);
-		if (index >= 0 && StatusFilterPicker.SelectedIndex != index)
-			StatusFilterPicker.SelectedIndex = index;
-	}
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
@@ -82,14 +72,21 @@ public partial class RequestPage : ContentPage
 		Filter();
 	}
 
-	// Открывает меню смены статуса заявки.
+	private void ApplyInitialStatus()
+	{
+		if (StatusFilterPicker == null)
+			return;
+
+		var index = statuses.FindIndex(item => item.Value == initialStatus);
+		if (index >= 0 && StatusFilterPicker.SelectedIndex != index)
+			StatusFilterPicker.SelectedIndex = index;
+	}
+
 	private async void Status_Click(object sender, EventArgs e)
 	{
-		// выбранная заявка
-		Button button = (Button)sender;
-		Request request = (Request)button.BindingContext;
+		var button = (Button)sender;
+		var appointment = (Appointment)button.BindingContext;
 
-		// выбор нового статуса
 		var selected = await DisplayActionSheetAsync(
 			"Изменить статус",
 			"Отмена",
@@ -99,30 +96,29 @@ public partial class RequestPage : ContentPage
 			"Выполнена",
 			"Отменена");
 
-		var text = "";
+		var status = "";
 		if (selected == "Новая")
-			text = "new";
+			status = "new";
 		if (selected == "Принята")
-			text = "accepted";
+			status = "accepted";
 		if (selected == "Выполнена")
-			text = "done";
+			status = "done";
 		if (selected == "Отменена")
-			text = "cancelled";
+			status = "cancelled";
 
-		if (text == "")
+		if (status == "")
 			return;
 
-		await SaveStatusData(request, text);
+		await SaveStatusData(appointment, status);
 	}
 
-	private async Task SaveStatusData(Request request, string text)
+	private async Task SaveStatusData(Appointment appointment, string status)
 	{
 		try
 		{
-			// отправка статуса
 			var response = await httpClient.PostAsJsonAsync(
 				$"{Api.BaseUrl}appointments/update_status.php",
-				new StatusData(request.Id, text));
+				new StatusData(appointment.Id, status));
 
 			var result = await response.Content.ReadFromJsonAsync<ApiResult>();
 
@@ -141,11 +137,10 @@ public partial class RequestPage : ContentPage
 		}
 	}
 
-	// Позволяет администратору добавить комментарий, который увидит клиент.
 	private async void Comment_Click(object sender, EventArgs e)
 	{
-		Button button = (Button)sender;
-		Request request = (Request)button.BindingContext;
+		var button = (Button)sender;
+		var appointment = (Appointment)button.BindingContext;
 
 		var text = await DisplayPromptAsync(
 			"Комментарий администратора",
@@ -153,21 +148,21 @@ public partial class RequestPage : ContentPage
 			"Сохранить",
 			"Отмена",
 			"Например: приходите за 10 минут до приема",
-			initialValue: request.AdminComment);
+			initialValue: appointment.AdminComment);
 
 		if (text == null)
 			return;
 
-		await SaveCommentData(request, text.Trim());
+		await SaveCommentData(appointment, text.Trim());
 	}
 
-	private async Task SaveCommentData(Request request, string comment)
+	private async Task SaveCommentData(Appointment appointment, string comment)
 	{
 		try
 		{
 			var response = await httpClient.PostAsJsonAsync(
 				$"{Api.BaseUrl}appointments/update_admin_comment.php",
-				new CommentData(request.Id, comment));
+				new CommentData(appointment.Id, comment));
 
 			var result = await response.Content.ReadFromJsonAsync<ApiResult>();
 
@@ -186,40 +181,36 @@ public partial class RequestPage : ContentPage
 		}
 	}
 
-	// Передает данные заявки на экран обследования и лечения.
 	private async void Med_Click(object sender, EventArgs e)
 	{
-		Button button = (Button)sender;
-		Request request = (Request)button.BindingContext;
+		var button = (Button)sender;
+		var appointment = (Appointment)button.BindingContext;
 
-		// подготовка медкарты
-		State.CurrentMedicalRecord = new Record
+		State.CurrentMedicalRecord = new MedicalRecord
 		{
-			RequestId = request.Id,
-			ClientName = request.Name ?? "",
-			PetName = request.PetName ?? "",
-			AppointmentText = request.TimeText ?? "",
-			Jaloba = request.Jaloba ?? "",
-			Diagnoz = request.Diagnoz ?? "",
-			ObsledResult = request.ObsledResult ?? "",
-			NazLech = request.NazLech ?? "",
-			ProcedureDone = request.ProcedureDone ?? "",
-			TreatmentNotes = request.TreatmentNotes ?? ""
+			RequestId = appointment.Id,
+			ClientName = appointment.Name ?? "",
+			PetName = appointment.PetName ?? "",
+			AppointmentText = appointment.TimeText ?? "",
+			Jaloba = appointment.Jaloba ?? "",
+			Diagnoz = appointment.Diagnoz ?? "",
+			ObsledResult = appointment.ObsledResult ?? "",
+			NazLech = appointment.NazLech ?? "",
+			ProcedureDone = appointment.ProcedureDone ?? "",
+			TreatmentNotes = appointment.TreatmentNotes ?? ""
 		};
 
 		await Shell.Current.GoToAsync("MedicalRecordPage");
 	}
 
-	// Удаляет заявку после подтверждения администратора.
 	private async void Delete_Click(object sender, EventArgs e)
 	{
-		// удаление заявки
-		Button button = (Button)sender;
-		Request request = (Request)button.BindingContext;
+		var button = (Button)sender;
+		var appointment = (Appointment)button.BindingContext;
 
 		var ok = await DisplayAlertAsync(
 			"Удалить заявку?",
-			$"Заявка от {request.Name} будет удалена.",
+			$"Заявка от {appointment.Name} будет удалена.",
 			"Удалить",
 			"Отмена");
 
@@ -230,7 +221,7 @@ public partial class RequestPage : ContentPage
 		{
 			var response = await httpClient.PostAsJsonAsync(
 				$"{Api.BaseUrl}appointments/delete.php",
-				new RequestData(request.Id));
+				new AppointmentIdData(appointment.Id));
 
 			var result = await response.Content.ReadFromJsonAsync<ApiResult>();
 
@@ -240,7 +231,7 @@ public partial class RequestPage : ContentPage
 				return;
 			}
 
-			requests.Remove(request);
+			appointments.Remove(appointment);
 			ShowCountText();
 		}
 		catch (Exception ex)
@@ -253,14 +244,13 @@ public partial class RequestPage : ContentPage
 	{
 		try
 		{
-			// загрузка заявок
 			StatusLabel.Text = "Загрузка заявок...";
 
-			var response = await httpClient.GetFromJsonAsync<RequestResult>($"{Api.BaseUrl}appointments/list.php");
-			allRequests.Clear();
+			var response = await httpClient.GetFromJsonAsync<AppointmentResult>($"{Api.BaseUrl}appointments/list.php");
+			allAppointments.Clear();
 
-			foreach (var item in response?.Requests ?? new List<Request>())
-				allRequests.Add(item);
+			foreach (var item in response?.Appointments ?? new List<Appointment>())
+				allAppointments.Add(item);
 
 			Filter();
 		}
@@ -273,28 +263,26 @@ public partial class RequestPage : ContentPage
 
 	private void ShowCountText()
 	{
-		if (requests.Count == 0)
+		if (appointments.Count == 0)
 			StatusLabel.Text = "Заявок по фильтру нет.";
 		else
-			StatusLabel.Text = $"Показано: {requests.Count} из {allRequests.Count}";
+			StatusLabel.Text = $"Показано: {appointments.Count} из {allAppointments.Count}";
 	}
 
-	// Фильтрует заявки по выбранной дате и статусу.
 	private void Filter()
 	{
-		// фильтр заявок
 		var dateFilter = DateFilterPicker.SelectedItem as FilterItem;
 		var statusFilter = StatusFilterPicker.SelectedItem as FilterItem;
 		var today = DateTime.Today;
 		var tomorrow = today.AddDays(1);
 		var day2 = today.AddDays(4);
 
-		requests.Clear();
+		appointments.Clear();
 
-		foreach (var request in allRequests)
+		foreach (var appointment in allAppointments)
 		{
-			var statusOk = string.IsNullOrWhiteSpace(statusFilter?.Value) || request.Status == statusFilter.Value;
-			var date = request.AppointmentDate;
+			var statusOk = string.IsNullOrWhiteSpace(statusFilter?.Value) || appointment.Status == statusFilter.Value;
+			var date = appointment.AppointmentDate;
 			var dateOk = true;
 			var filter = dateFilter?.Value ?? "all";
 
@@ -308,13 +296,12 @@ public partial class RequestPage : ContentPage
 				dateOk = date == DateTime.MinValue;
 
 			if (statusOk && dateOk)
-				requests.Add(request);
+				appointments.Add(appointment);
 		}
 
 		ShowCountText();
 	}
 
-	// пункт фильтра
 	private class FilterItem
 	{
 		public string Name { get; set; }
@@ -327,20 +314,17 @@ public partial class RequestPage : ContentPage
 		}
 	}
 
-	// данные заявки
-	// заявка
-	private class RequestData
+	private class AppointmentIdData
 	{
 		[JsonPropertyName("id")]
 		public int Id { get; set; }
 
-		public RequestData(int id)
+		public AppointmentIdData(int id)
 		{
 			Id = id;
 		}
 	}
 
-	// данные статуса
 	private class StatusData
 	{
 		[JsonPropertyName("id")]
@@ -356,7 +340,6 @@ public partial class RequestPage : ContentPage
 		}
 	}
 
-	// данные комментария
 	private class CommentData
 	{
 		[JsonPropertyName("id")]
@@ -371,23 +354,20 @@ public partial class RequestPage : ContentPage
 			AdminComment = adminComment;
 		}
 	}
-	// результат заявок
-	// заявка
-	private class RequestResult
+
+	private class AppointmentResult
 	{
 		[JsonPropertyName("requests")]
-		public List<Request> Requests { get; set; } = new List<Request>();
+		public List<Appointment> Appointments { get; set; } = new List<Appointment>();
 	}
 
-	// ответ API
 	private class ApiResult
 	{
 		[JsonPropertyName("success")] public bool Success { get; set; }
 		[JsonPropertyName("message")] public string Message { get; set; } = "";
 	}
 
-	// заявка
-	private class Request
+	private class Appointment
 	{
 		[JsonPropertyName("id")] public int Id { get; set; }
 		[JsonPropertyName("name")] public string Name { get; set; } = "";
@@ -406,7 +386,6 @@ public partial class RequestPage : ContentPage
 		[JsonPropertyName("naz_lech")] public string NazLech { get; set; } = "";
 		[JsonPropertyName("procedure_done")] public string ProcedureDone { get; set; } = "";
 		[JsonPropertyName("treatment_notes")] public string TreatmentNotes { get; set; } = "";
-
 		[JsonPropertyName("status")] public string Status { get; set; } = "";
 
 		public string PetInfo
@@ -424,38 +403,9 @@ public partial class RequestPage : ContentPage
 			}
 		}
 
-		public string ServiceInfo
-		{
-			get
-			{
-				if (string.IsNullOrWhiteSpace(ServiceTitle))
-					return "Услуга не выбрана";
-
-				return $"Услуга: {ServiceTitle}";
-			}
-		}
-
-		public string TimeText
-		{
-			get
-			{
-				if (string.IsNullOrWhiteSpace(AppointmentAt))
-					return "Время не выбрано";
-
-				return $"Запись: {FormatDate(AppointmentAt)}";
-			}
-		}
-
-		public string AdminText
-		{
-			get
-			{
-				if (string.IsNullOrWhiteSpace(AdminComment))
-					return "Комментарий администратора: нет";
-
-				return $"Комментарий администратора: {AdminComment}";
-			}
-		}
+		public string ServiceInfo => string.IsNullOrWhiteSpace(ServiceTitle) ? "Услуга не выбрана" : $"Услуга: {ServiceTitle}";
+		public string TimeText => string.IsNullOrWhiteSpace(AppointmentAt) ? "Время не выбрано" : $"Запись: {FormatDate(AppointmentAt)}";
+		public string AdminText => string.IsNullOrWhiteSpace(AdminComment) ? "Комментарий администратора: нет" : $"Комментарий администратора: {AdminComment}";
 
 		public string MedText
 		{
@@ -465,67 +415,41 @@ public partial class RequestPage : ContentPage
 					return "Медицинская запись: нет";
 
 				var parts = new List<string>();
-
-				if (!string.IsNullOrWhiteSpace(Jaloba))
-					parts.Add($"Жалоба: {Jaloba}");
-				if (!string.IsNullOrWhiteSpace(Diagnoz))
-					parts.Add($"Диагноз: {Diagnoz}");
-				if (!string.IsNullOrWhiteSpace(ObsledResult))
-					parts.Add($"Результат: {ObsledResult}");
-				if (!string.IsNullOrWhiteSpace(NazLech))
-					parts.Add($"Лечение: {NazLech}");
-				if (!string.IsNullOrWhiteSpace(ProcedureDone))
-					parts.Add($"Сделано: {ProcedureDone}");
-				if (!string.IsNullOrWhiteSpace(TreatmentNotes))
-					parts.Add($"Заметки: {TreatmentNotes}");
+				if (!string.IsNullOrWhiteSpace(Jaloba)) parts.Add($"Жалоба: {Jaloba}");
+				if (!string.IsNullOrWhiteSpace(Diagnoz)) parts.Add($"Диагноз: {Diagnoz}");
+				if (!string.IsNullOrWhiteSpace(ObsledResult)) parts.Add($"Результат: {ObsledResult}");
+				if (!string.IsNullOrWhiteSpace(NazLech)) parts.Add($"Лечение: {NazLech}");
+				if (!string.IsNullOrWhiteSpace(ProcedureDone)) parts.Add($"Сделано: {ProcedureDone}");
+				if (!string.IsNullOrWhiteSpace(TreatmentNotes)) parts.Add($"Заметки: {TreatmentNotes}");
 
 				return string.Join("\n", parts);
 			}
 		}
 
-		public string CreatedText
-		{
-			get
-			{
-				if (string.IsNullOrWhiteSpace(Created))
-					return "";
-
-				return $"Создана: {FormatDate(Created)}";
-			}
-		}
-
+		public string CreatedText => string.IsNullOrWhiteSpace(Created) ? "" : $"Создана: {FormatDate(Created)}";
 		public DateTime AppointmentDate => GetDate(AppointmentAt);
 
 		public string StatusText
 		{
 			get
 			{
-				if (Status == "new")
-					return "Статус: новая";
-				if (Status == "accepted")
-					return "Статус: принята";
-				if (Status == "done")
-					return "Статус: выполнена";
-				if (Status == "cancelled")
-					return "Статус: отменена";
+				if (Status == "new") return "Статус: новая";
+				if (Status == "accepted") return "Статус: принята";
+				if (Status == "done") return "Статус: выполнена";
+				if (Status == "cancelled") return "Статус: отменена";
 
 				return $"Статус: {Status}";
 			}
 		}
 
-		// Цвет бейджа отражает текущий статус заявки.
 		public string Color
 		{
 			get
 			{
-				if (Status == "new")
-					return "#4AA3D8";
-				if (Status == "accepted")
-					return "#FF8A5B";
-				if (Status == "done")
-					return "#30B878";
-				if (Status == "cancelled")
-					return "#D9534F";
+				if (Status == "new") return "#4AA3D8";
+				if (Status == "accepted") return "#FF8A5B";
+				if (Status == "done") return "#30B878";
+				if (Status == "cancelled") return "#D9534F";
 
 				return "#657084";
 			}
@@ -533,68 +457,13 @@ public partial class RequestPage : ContentPage
 
 		private static DateTime GetDate(string value)
 		{
-			if (DateTime.TryParse(value, out var date))
-				return date;
-
-			return DateTime.MinValue;
+			return DateTime.TryParse(value, out var date) ? date : DateTime.MinValue;
 		}
 
 		private static string FormatDate(string value)
 		{
 			var date = GetDate(value);
-						if (date == DateTime.MinValue)
-				return value;
-
-			return date.ToString("dd.MM.yyyy, HH:mm");
+			return date == DateTime.MinValue ? value : date.ToString("dd.MM.yyyy, HH:mm");
 		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -15,13 +15,14 @@ public partial class ServicePage : ContentPage
 	private List<Category> list = new List<Category>()
 	{
 		new Category("Все категории", ""),
-		new Category("Терапия", "terapia"),
-		new Category("Лаборатория", "lab"),
-		new Category("Хирургия", "hirurgia"),
-		new Category("Вакцинация", "vactinatia"),
-		new Category("Стоматология", "stomatologia"),
-		new Category("Аллергология", "allergia"),
-		new Category("Прочее", "other")
+		new Category("Прием", "Прием"),
+		new Category("Профилактика", "Профилактика"),
+		new Category("Уход", "Уход"),
+		new Category("Диагностика", "Диагностика"),
+		new Category("Стоматология", "Стоматология"),
+		new Category("Лечение", "Лечение"),
+		new Category("Хирургия", "Хирургия"),
+		new Category("Стационар", "Стационар")
 	};
 
 	public ServicePage()
@@ -232,6 +233,7 @@ public partial class ServicePage : ContentPage
 		[JsonPropertyName("message")] public string Message { get; set; } = "";
 	}
 }
+
 
 
 

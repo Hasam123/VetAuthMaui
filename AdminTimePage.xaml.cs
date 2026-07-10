@@ -10,7 +10,7 @@ public partial class AdminTimePage : ContentPage
 {
 	private HttpClient httpClient = new HttpClient();
 	private List<Day> days = new List<Day>();
-	private List<Request> requests = new List<Request>();
+	private List<Appointment> appointments = new List<Appointment>();
 	// Коллекция слотов отображается в расписании администратора.
 	private ObservableCollection<Slot> slots = new ObservableCollection<Slot>();
 
@@ -46,7 +46,7 @@ public partial class AdminTimePage : ContentPage
 
 			// запрос времени и заявок
 			var task2 = httpClient.GetFromJsonAsync<TimeResult>($"{Api.BaseUrl}schedule/free_slots.php");
-			var task3 = httpClient.GetFromJsonAsync<RequestResult>($"{Api.BaseUrl}schedule/get_zapis_admin.php");
+			var task3 = httpClient.GetFromJsonAsync<AppointmentResult>($"{Api.BaseUrl}schedule/get_zapis_admin.php");
 
 			var res2 = await task2;
 			var res3 = await task3;
@@ -54,9 +54,9 @@ public partial class AdminTimePage : ContentPage
 			days.Clear();
 			days.AddRange(res2?.Days ?? new List<Day>());
 
-			requests.Clear();
-			requests.AddRange((res3?.Requests ?? new List<Request>())
-				.Where(request => !string.IsNullOrWhiteSpace(request.AppointmentAt)));
+			appointments.Clear();
+			appointments.AddRange((res3?.Appointments ?? new List<Appointment>())
+				.Where(appointment => !string.IsNullOrWhiteSpace(appointment.AppointmentAt)));
 
 			DatePicker.ItemsSource = days;
 			DatePicker.ItemDisplayBinding = new Binding("Label");
@@ -88,8 +88,8 @@ public partial class AdminTimePage : ContentPage
 		// показ слотов
 		foreach (var slot in day.Slots)
 		{
-			var request = requests.FirstOrDefault(item => item.AppointmentAt == slot.Value);
-			slots.Add(new Slot(slot, request));
+			var appointment = appointments.FirstOrDefault(item => item.AppointmentAt == slot.Value);
+			slots.Add(new Slot(slot, appointment));
 		}
 
 		// подсчет мест
@@ -111,11 +111,11 @@ public partial class AdminTimePage : ContentPage
 	{
 		[JsonPropertyName("date")] public string Date { get; set; } = "";
 		[JsonPropertyName("label")] public string Label { get; set; } = "";
-		[JsonPropertyName("slots")] public List<Time> Slots { get; set; } = new List<Time>();
+		[JsonPropertyName("slots")] public List<TimeSlot> Slots { get; set; } = new List<TimeSlot>();
 	}
 
 	// время
-	private class Time
+	private class TimeSlot
 	{
 		[JsonPropertyName("time")] public string Value { get; set; } = "";
 		[JsonPropertyName("label")] public string Label { get; set; } = "";
@@ -124,14 +124,14 @@ public partial class AdminTimePage : ContentPage
 
 	// результат заявок
 	// заявка
-	private class RequestResult
+	private class AppointmentResult
 	{
 		[JsonPropertyName("requests")]
-		public List<Request> Requests { get; set; } = new List<Request>();
+		public List<Appointment> Appointments { get; set; } = new List<Appointment>();
 	}
 
 	// заявка
-	private class Request
+	private class Appointment
 	{
 		[JsonPropertyName("id")] public int Id { get; set; }
 		[JsonPropertyName("name")] public string Name { get; set; } = "";
@@ -147,15 +147,15 @@ public partial class AdminTimePage : ContentPage
 	// ячейка времени
 	private class Slot
 	{
-		private Request request;
+		private Appointment appointment;
 
-		public Slot(Time slot, Request request)
+		public Slot(TimeSlot slot, Appointment appointment)
 		{
-			this.request = request;
+			this.appointment = appointment;
 			TimeLabel = slot.Label;
-			IsBusy = request != null;
-			IsPast = !slot.IsAvailable && request == null;
-			RequestId = request?.Id ?? 0;
+			IsBusy = appointment != null;
+			IsPast = !slot.IsAvailable && appointment == null;
+			RequestId = appointment?.Id ?? 0;
 		}
 
 		public string TimeLabel { get; }
@@ -187,11 +187,11 @@ public partial class AdminTimePage : ContentPage
 					return "#FFFFFF";
 				if (IsPast)
 					return "#F3F6FA";
-				if (request.Status == "accepted")
+				if (appointment.Status == "accepted")
 					return "#FFF4EC";
-				if (request.Status == "done")
+				if (appointment.Status == "done")
 					return "#EFFAF4";
-				if (request.Status == "cancelled")
+				if (appointment.Status == "cancelled")
 					return "#FFF0F0";
 
 				return "#F1F8FD";
@@ -217,11 +217,11 @@ public partial class AdminTimePage : ContentPage
 					return "#FFFFFF";
 				if (IsPast)
 					return "#9AA8B8";
-				if (request.Status == "accepted")
+				if (appointment.Status == "accepted")
 					return "#FF8A5B";
-				if (request.Status == "done")
+				if (appointment.Status == "done")
 					return "#30B878";
-				if (request.Status == "cancelled")
+				if (appointment.Status == "cancelled")
 					return "#D9534F";
 
 				return "#4AA3D8";
@@ -236,11 +236,11 @@ public partial class AdminTimePage : ContentPage
 					return "#12A7A7";
 				if (IsPast)
 					return "#DDEBF3";
-				if (request.Status == "accepted")
+				if (appointment.Status == "accepted")
 					return "#FF8A5B";
-				if (request.Status == "done")
+				if (appointment.Status == "done")
 					return "#30B878";
-				if (request.Status == "cancelled")
+				if (appointment.Status == "cancelled")
 					return "#D9534F";
 
 				return "#4AA3D8";
@@ -255,11 +255,11 @@ public partial class AdminTimePage : ContentPage
 					return "#12A7A7";
 				if (IsPast)
 					return "#657084";
-				if (request.Status == "accepted")
+				if (appointment.Status == "accepted")
 					return "#FF8A5B";
-				if (request.Status == "done")
+				if (appointment.Status == "done")
 					return "#30B878";
-				if (request.Status == "cancelled")
+				if (appointment.Status == "cancelled")
 					return "#D9534F";
 
 				return "#4AA3D8";
@@ -271,10 +271,10 @@ public partial class AdminTimePage : ContentPage
 		{
 			get
 			{
-				if (request == null)
+				if (appointment == null)
 					return "";
 
-				return $"{request.Name}, {request.Phone}";
+				return $"{appointment.Name}, {appointment.Phone}";
 			}
 		}
 
@@ -282,12 +282,12 @@ public partial class AdminTimePage : ContentPage
 		{
 			get
 			{
-				if (request == null)
+				if (appointment == null)
 					return "";
-				if (string.IsNullOrWhiteSpace(request.PetName))
+				if (string.IsNullOrWhiteSpace(appointment.PetName))
 					return "Питомец не указан";
 
-				return $"Питомец: {request.PetName}, {request.PetType}";
+				return $"Питомец: {appointment.PetName}, {appointment.PetType}";
 			}
 		}
 
@@ -295,12 +295,12 @@ public partial class AdminTimePage : ContentPage
 		{
 			get
 			{
-				if (request == null)
+				if (appointment == null)
 					return "";
-				if (string.IsNullOrWhiteSpace(request.ServiceTitle))
+				if (string.IsNullOrWhiteSpace(appointment.ServiceTitle))
 					return "Услуга не выбрана";
 
-				return $"Услуга: {request.ServiceTitle}";
+				return $"Услуга: {appointment.ServiceTitle}";
 			}
 		}
 
@@ -308,10 +308,10 @@ public partial class AdminTimePage : ContentPage
 		{
 			get
 			{
-				if (request == null)
+				if (appointment == null)
 					return "";
 
-				return $"Статус: {GetStatus(request.Status)}";
+				return $"Статус: {GetStatus(appointment.Status)}";
 			}
 		}
 
@@ -330,6 +330,8 @@ public partial class AdminTimePage : ContentPage
 		}
 	}
 }
+
+
 
 
 
