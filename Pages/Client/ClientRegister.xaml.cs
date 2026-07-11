@@ -1,4 +1,4 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
@@ -14,6 +14,7 @@ public partial class ClientRegister : ContentPage
 		httpClient.Timeout = TimeSpan.FromSeconds(10);
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void Register_Click(object sender, EventArgs e)
 	{
 		var name = NameEntry.Text?.Trim() ?? "";

@@ -1,4 +1,4 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 using System.Collections.ObjectModel;
 using System.Net.Http.Json;
@@ -38,6 +38,7 @@ public partial class ServicePage : ContentPage
 		ServicesCollectionView.ItemsSource = showServices;
 	}
 
+	// Загружает данные при открытии страницы.
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
@@ -46,26 +47,31 @@ public partial class ServicePage : ContentPage
 		await LoadServices();
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void Refresh_Click(object sender, EventArgs e)
 	{
 		await LoadServices();
 	}
 
+	// Обрабатывает изменение выбранного значения.
 	private void Search_Changed(object sender, TextChangedEventArgs e)
 	{
 		Filter();
 	}
 
+	// Обрабатывает изменение выбранного значения.
 	private void Category_Changed(object sender, EventArgs e)
 	{
 		Filter();
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void Add_Click(object sender, EventArgs e)
 	{
 		await Shell.Current.GoToAsync("AddPage");
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void Edit_Click(object sender, EventArgs e)
 	{
 		// переход к редактированию
@@ -81,6 +87,7 @@ public partial class ServicePage : ContentPage
 		await Shell.Current.GoToAsync(route);
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void Delete_Click(object sender, EventArgs e)
 	{
 		// удаление услуги
@@ -121,6 +128,7 @@ public partial class ServicePage : ContentPage
 		}
 	}
 
+	// Загружает данные для страницы.
 	private async Task LoadServices()
 	{
 		try
@@ -154,6 +162,7 @@ public partial class ServicePage : ContentPage
 		}
 	}
 
+	// Фильтрует список по выбранным условиям.
 	private void Filter()
 	{
 		// фильтр услуг

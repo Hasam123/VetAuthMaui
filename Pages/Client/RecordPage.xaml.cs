@@ -1,4 +1,4 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -12,7 +12,8 @@ public partial class RecordPage : ContentPage
 	private HttpClient httpClient = new HttpClient();
 	private List<Service> services = new List<Service>();
 	private List<ScheduleDay> days = new List<ScheduleDay>();
-	private List<SavedPet> savedPets = new List<SavedPet>();
+	private List<Pet> savedPets = new List<Pet>();
+	private Pet selectedPet;
 	// Коллекции привязаны к плиткам даты и времени на экране записи.
 	private ObservableCollection<DayItem> showDays = new ObservableCollection<DayItem>();
 	private ObservableCollection<TimeItem> showTimes = new ObservableCollection<TimeItem>();
@@ -26,9 +27,10 @@ public partial class RecordPage : ContentPage
 		DateCollectionView.ItemsSource = showDays;
 		TimeCollectionView.ItemsSource = showTimes;
 		SavedPetPicker.ItemsSource = savedPets;
-		SavedPetPicker.ItemDisplayBinding = new Binding("Text");
+		SavedPetPicker.ItemDisplayBinding = new Binding("PickerText");
 	}
 
+	// Загружает данные при открытии страницы.
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
@@ -36,6 +38,7 @@ public partial class RecordPage : ContentPage
 		await LoadAppointmentData();
 	}
 
+	// Подставляет имя и телефон авторизованного клиента в форму записи.
 	private void FillClient()
 	{
 		if (!State.IsClientLoggedIn)
@@ -80,7 +83,7 @@ public partial class RecordPage : ContentPage
 			if (PetTypePicker.SelectedIndex < 0)
 				PetTypePicker.SelectedIndex = 0;
 
-			selectedDay = days.FirstOrDefault(day => day.Slots.Any(slot => slot.IsAvailable)) ?? days.FirstOrDefault();
+			selectedDay = FindFirstAvailableDay();
 			BuildDays();
 			BuildTimes();
 		}
@@ -99,11 +102,11 @@ public partial class RecordPage : ContentPage
 		try
 		{
 			var url = $"{Api.BaseUrl}pets/list.php?phone={Uri.EscapeDataString(State.ClientPhone)}";
-			var result = await httpClient.GetFromJsonAsync<SavedPetResult>(url);
+			var result = await httpClient.GetFromJsonAsync<PetResult>(url);
 
 			savedPets.Clear();
-			savedPets.Add(new SavedPet { Id = 0, Name = "Новый питомец" });
-			savedPets.AddRange(result?.Pets ?? new List<SavedPet>());
+			savedPets.Add(new Pet { Id = 0, Name = "Новый питомец" });
+			savedPets.AddRange(result?.Pets ?? new List<Pet>());
 			SavedPetPicker.ItemsSource = null;
 			SavedPetPicker.ItemsSource = savedPets;
 			SavedPetsBlock.IsVisible = savedPets.Count > 1;
@@ -119,9 +122,9 @@ public partial class RecordPage : ContentPage
 	// Подставляет данные выбранного питомца в обычные поля формы.
 	private void SavedPet_Changed(object sender, EventArgs e)
 	{
-		var pet = SavedPetPicker.SelectedItem as SavedPet;
+		selectedPet = SavedPetPicker.SelectedItem as Pet;
 
-		if (pet == null || pet.Id == 0)
+		if (selectedPet == null || selectedPet.Id == 0)
 		{
 			PetNameEntry.Text = "";
 			PetAgeEntry.Text = "";
@@ -130,12 +133,13 @@ public partial class RecordPage : ContentPage
 			return;
 		}
 
-		PetNameEntry.Text = pet.Name;
-		PetAgeEntry.Text = pet.Age;
-		SetPetType(pet.Type);
+		PetNameEntry.Text = selectedPet.Name;
+		PetAgeEntry.Text = selectedPet.Age;
+		SetPetType(selectedPet.Type);
 		SetPetFieldsEditable(false);
 	}
 
+	// Устанавливает значение или состояние.
 	private void SetPetFieldsEditable(bool isEditable)
 	{
 		PetNameEntry.IsReadOnly = !isEditable;
@@ -143,6 +147,7 @@ public partial class RecordPage : ContentPage
 		PetTypePicker.IsEnabled = isEditable;
 	}
 
+	// Устанавливает значение или состояние.
 	private void SetPetType(string type)
 	{
 		if (string.IsNullOrWhiteSpace(type))
@@ -159,6 +164,24 @@ public partial class RecordPage : ContentPage
 
 		PetTypePicker.Items.Add(type);
 		PetTypePicker.SelectedIndex = PetTypePicker.Items.Count - 1;
+	}
+
+	// Находит нужный элемент в списке.
+	private ScheduleDay FindFirstAvailableDay()
+	{
+		foreach (var day in days)
+		{
+			foreach (var slot in day.Slots)
+			{
+				if (slot.IsAvailable)
+					return day;
+			}
+		}
+
+		if (days.Count > 0)
+			return days[0];
+
+		return null;
 	}
 
 	// Формирует плитки ближайших дней для выбора даты приема.
@@ -234,7 +257,6 @@ public partial class RecordPage : ContentPage
 		var comment = CommentEditor.Text?.Trim() ?? "";
 		var service = ServicePicker.SelectedItem as Service;
 		var time = selectedTime?.Slot;
-		var savedPet = SavedPetPicker.SelectedItem as SavedPet;
 
 		if (name == "" || phone == "" || petName == "" || petType == "" || service == null || time == null)
 		{
@@ -244,7 +266,7 @@ public partial class RecordPage : ContentPage
 
 		try
 		{
-			var petId = savedPet?.Id ?? 0;
+			var petId = selectedPet?.Id ?? 0;
 			var data = new AppointmentData(name, phone, petName, petType, petAge, petId, service.Id, time.Value, comment);
 			var response = await httpClient.PostAsJsonAsync($"{Api.BaseUrl}appointments/create.php", data);
 			var result = await response.Content.ReadFromJsonAsync<ApiResult>();
@@ -265,6 +287,7 @@ public partial class RecordPage : ContentPage
 		}
 	}
 
+	// Очищает поля формы.
 	private void Clear()
 	{
 		FillClient();
@@ -280,7 +303,7 @@ public partial class RecordPage : ContentPage
 		else
 			ServicePicker.SelectedIndex = -1;
 
-		selectedDay = days.FirstOrDefault(day => day.Slots.Any(slot => slot.IsAvailable)) ?? days.FirstOrDefault();
+		selectedDay = FindFirstAvailableDay();
 		BuildDays();
 		BuildTimes();
 	}
@@ -289,6 +312,7 @@ public partial class RecordPage : ContentPage
 	{
 		public event PropertyChangedEventHandler PropertyChanged;
 
+		// Сообщает интерфейсу об изменении цвета или состояния плитки.
 		protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
 		{
 			PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -300,7 +324,13 @@ public partial class RecordPage : ContentPage
 	{
 		public ScheduleDay Day { get; }
 		public bool IsSelected { get; set; }
-		public string DayName => Day.Label;
+		public string DayName
+		{
+			get
+			{
+				return Day.Label;
+			}
+		}
 		public Color BackgroundColor { get; private set; } = Color.FromArgb("#FFFFFF");
 		public Color StrokeColor { get; private set; } = Color.FromArgb("#DDEBF3");
 		public Color TextColor { get; private set; } = Color.FromArgb("#657084");
@@ -313,6 +343,7 @@ public partial class RecordPage : ContentPage
 			RefreshStyle();
 		}
 
+		// Обновляет цвета плитки даты после выбора или отмены выбора.
 		public void RefreshStyle()
 		{
 			if (IsSelected)
@@ -340,7 +371,13 @@ public partial class RecordPage : ContentPage
 	{
 		public TimeSlot Slot { get; }
 		public bool IsSelected { get; set; }
-		public string Label => Slot.Label;
+		public string Label
+		{
+			get
+			{
+				return Slot.Label;
+			}
+		}
 		public Color BackgroundColor { get; private set; } = Color.FromArgb("#FFFFFF");
 		public Color StrokeColor { get; private set; } = Color.FromArgb("#DDEBF3");
 		public Color TextColor { get; private set; } = Color.FromArgb("#17213A");
@@ -352,6 +389,7 @@ public partial class RecordPage : ContentPage
 			RefreshStyle();
 		}
 
+		// Обновляет цвета плитки времени после выбора или отмены выбора.
 		public void RefreshStyle()
 		{
 			if (!Slot.IsAvailable)
@@ -412,26 +450,19 @@ public partial class RecordPage : ContentPage
 		public List<Service> Services { get; set; } = new List<Service>();
 	}
 
-	private class SavedPetResult
-	{
-		[JsonPropertyName("pets")] public List<SavedPet> Pets { get; set; } = new List<SavedPet>();
-	}
-
-	private class SavedPet
-	{
-		[JsonPropertyName("id")] public int Id { get; set; }
-		[JsonPropertyName("name")] public string Name { get; set; } = "";
-		[JsonPropertyName("type")] public string Type { get; set; } = "";
-		[JsonPropertyName("age")] public string Age { get; set; } = "";
-		public string Text => string.IsNullOrWhiteSpace(Type) ? Name : $"{Name} - {Type}";
-	}
 
 	private class Service
 	{
 		[JsonPropertyName("id")] public int Id { get; set; }
 		[JsonPropertyName("title")] public string Title { get; set; } = "";
 		[JsonPropertyName("price")] public int Price { get; set; }
-		public string Text => $"{Title} - {Price} руб.";
+		public string Text
+		{
+			get
+			{
+				return $"{Title} - {Price} руб.";
+			}
+		}
 	}
 
 	private class TimeResult

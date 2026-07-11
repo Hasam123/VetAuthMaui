@@ -1,4 +1,4 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
@@ -14,6 +14,7 @@ public partial class MainPage : ContentPage
 		httpClient.Timeout = TimeSpan.FromSeconds(10);
 	}
 
+	// Загружает данные при открытии страницы.
 	protected override void OnAppearing()
 	{
 		base.OnAppearing();
@@ -25,6 +26,7 @@ public partial class MainPage : ContentPage
 		}
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void Login_Click(object sender, EventArgs e)
 	{
 		var phone = PhoneEntry.Text?.Trim() ?? "";
@@ -63,16 +65,19 @@ public partial class MainPage : ContentPage
 		}
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void Register_Click(object sender, EventArgs e)
 	{
 		await Shell.Current.GoToAsync("ClientRegister");
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void Admin_Click(object sender, EventArgs e)
 	{
 		await Shell.Current.GoToAsync("AdminLogin");
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void About_Click(object sender, EventArgs e)
 	{
 		await Shell.Current.GoToAsync("About");

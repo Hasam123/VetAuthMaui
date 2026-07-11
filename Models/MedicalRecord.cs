@@ -1,9 +1,9 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 // запись лечения
 public class MedicalRecord
 {
-	public int RequestId { get; set; }
+	public int AppointmentId { get; set; }
 	public string ClientName { get; set; } = "";
 	public string PetName { get; set; } = "";
 	public string AppointmentText { get; set; } = "";

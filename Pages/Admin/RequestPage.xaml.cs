@@ -32,7 +32,10 @@ public partial class RequestPage : ContentPage
 
 	public string InitialStatus
 	{
-		get => initialStatus;
+		get
+		{
+			return initialStatus;
+		}
 		set
 		{
 			initialStatus = value ?? "";
@@ -54,6 +57,7 @@ public partial class RequestPage : ContentPage
 		ApplyInitialStatus();
 	}
 
+	// Загружает данные при открытии страницы.
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
@@ -61,17 +65,20 @@ public partial class RequestPage : ContentPage
 		await LoadAppointments();
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void Refresh_Click(object sender, EventArgs e)
 	{
 		ApplyInitialStatus();
 		await LoadAppointments();
 	}
 
+	// Обрабатывает изменение выбранного значения.
 	private void Filter_Changed(object sender, EventArgs e)
 	{
 		Filter();
 	}
 
+	// Устанавливает статус, переданный при переходе из панели администратора.
 	private void ApplyInitialStatus()
 	{
 		if (StatusFilterPicker == null)
@@ -82,6 +89,7 @@ public partial class RequestPage : ContentPage
 			StatusFilterPicker.SelectedIndex = index;
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void Status_Click(object sender, EventArgs e)
 	{
 		var button = (Button)sender;
@@ -112,6 +120,7 @@ public partial class RequestPage : ContentPage
 		await SaveStatusData(appointment, status);
 	}
 
+	// Сохраняет измененные данные.
 	private async Task SaveStatusData(Appointment appointment, string status)
 	{
 		try
@@ -137,6 +146,7 @@ public partial class RequestPage : ContentPage
 		}
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void Comment_Click(object sender, EventArgs e)
 	{
 		var button = (Button)sender;
@@ -156,6 +166,7 @@ public partial class RequestPage : ContentPage
 		await SaveCommentData(appointment, text.Trim());
 	}
 
+	// Сохраняет измененные данные.
 	private async Task SaveCommentData(Appointment appointment, string comment)
 	{
 		try
@@ -181,6 +192,7 @@ public partial class RequestPage : ContentPage
 		}
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void Med_Click(object sender, EventArgs e)
 	{
 		var button = (Button)sender;
@@ -188,7 +200,7 @@ public partial class RequestPage : ContentPage
 
 		State.CurrentMedicalRecord = new MedicalRecord
 		{
-			RequestId = appointment.Id,
+			AppointmentId = appointment.Id,
 			ClientName = appointment.Name ?? "",
 			PetName = appointment.PetName ?? "",
 			AppointmentText = appointment.TimeText ?? "",
@@ -203,6 +215,7 @@ public partial class RequestPage : ContentPage
 		await Shell.Current.GoToAsync("MedicalRecordPage");
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void Delete_Click(object sender, EventArgs e)
 	{
 		var button = (Button)sender;
@@ -240,6 +253,7 @@ public partial class RequestPage : ContentPage
 		}
 	}
 
+	// Загружает данные для страницы.
 	private async Task LoadAppointments()
 	{
 		try
@@ -261,6 +275,7 @@ public partial class RequestPage : ContentPage
 		}
 	}
 
+	// Показывает количество заявок после применения фильтра.
 	private void ShowCountText()
 	{
 		if (appointments.Count == 0)
@@ -269,6 +284,7 @@ public partial class RequestPage : ContentPage
 			StatusLabel.Text = $"Показано: {appointments.Count} из {allAppointments.Count}";
 	}
 
+	// Фильтрует список по выбранным условиям.
 	private void Filter()
 	{
 		var dateFilter = DateFilterPicker.SelectedItem as FilterItem;

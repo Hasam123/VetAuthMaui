@@ -1,4 +1,4 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 // данные приложения
 public static class State
@@ -10,8 +10,18 @@ public static class State
 	public static Pet SelectedPet { get; set; }
 	public static MedicalRecord CurrentMedicalRecord { get; set; }
 
-	public static bool IsClientLoggedIn => !string.IsNullOrWhiteSpace(ClientPhone);
+	public static bool IsClientLoggedIn
+	{
+		get
+		{
+			if (string.IsNullOrWhiteSpace(ClientPhone))
+				return false;
 
+			return true;
+		}
+	}
+
+	// Устанавливает значение или состояние.
 	public static void SetClient(int id, string name, string phone)
 	{
 		ClientId = id;
@@ -19,6 +29,7 @@ public static class State
 		ClientPhone = phone;
 	}
 
+	// Очищает данные текущего клиента после выхода из приложения.
 	public static void LogoutClient()
 	{
 		IsAdminMode = false;

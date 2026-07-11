@@ -1,4 +1,4 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 // переходы между страницами
 public partial class AppShell : Shell

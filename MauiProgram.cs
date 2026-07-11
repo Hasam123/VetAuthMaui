@@ -1,10 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging;
 
 namespace VetAuthMaui;
 
 // настройка приложения
 public static class MauiProgram
 {
+	// Создает приложение MAUI.
 	public static MauiApp CreateMauiApp()
 	{
 		var builder = MauiApp.CreateBuilder();

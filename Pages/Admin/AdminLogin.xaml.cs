@@ -1,4 +1,4 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
@@ -14,11 +14,13 @@ public partial class AdminLogin : ContentPage
 		httpClient.Timeout = TimeSpan.FromSeconds(10);
 	}
 
+	// Обрабатывает изменение выбранного значения.
 	private void ShowPassword_Changed(object sender, CheckedChangedEventArgs e)
 	{
 		PasswordEntry.IsPassword = !e.Value;
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void Login_Click(object sender, EventArgs e)
 	{
 		// проверка формы

@@ -1,4 +1,4 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 using System.Net.Http.Json;
 
@@ -14,6 +14,7 @@ public partial class EditPetPage : ContentPage
 		httpClient.Timeout = TimeSpan.FromSeconds(10);
 	}
 
+	// Загружает данные при открытии страницы.
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
@@ -41,11 +42,13 @@ public partial class EditPetPage : ContentPage
 		}
 	}
 
+	// Включает или выключает выбор даты вакцинации по флажку.
 	private void VaccinationDate_CheckedChanged(object sender, CheckedChangedEventArgs e)
 	{
 		VaccinationDatePicker.IsEnabled = e.Value;
 	}
 
+	// Сохраняет измененные данные.
 	private async void Save_Click(object sender, EventArgs e)
 	{
 		var name = NameEntry.Text?.Trim() ?? "";
@@ -84,6 +87,7 @@ public partial class EditPetPage : ContentPage
 		}
 	}
 
+	// Устанавливает значение или состояние.
 	private void SetPetType(string type)
 	{
 		if (string.IsNullOrWhiteSpace(type))

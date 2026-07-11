@@ -1,4 +1,4 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 using System.Collections.ObjectModel;
 using System.Net.Http.Json;
@@ -16,6 +16,7 @@ public partial class ClientPage : ContentPage
 		RequestsCollectionView.ItemsSource = appointments;
 	}
 
+	// Загружает данные при открытии страницы.
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
@@ -24,11 +25,12 @@ public partial class ClientPage : ContentPage
 			await LoadClientCabinet();
 	}
 
+	// Загружает данные для страницы.
 	private async Task LoadClientCabinet()
 	{
 		try
 		{
-			if (State.ClientPhone == "")
+			if (string.IsNullOrWhiteSpace(State.ClientPhone))
 				return;
 
 			StatusLabel.Text = "Загрузка личного кабинета...";
@@ -38,7 +40,7 @@ public partial class ClientPage : ContentPage
 			var url = $"{Api.BaseUrl}clients/profile.php?phone={Uri.EscapeDataString(State.ClientPhone)}";
 			var response = await httpClient.GetFromJsonAsync<ClientResult>(url);
 
-			foreach (var appointment in response?.Requests ?? new List<Appointment>())
+			foreach (var appointment in response?.Appointments ?? new List<Appointment>())
 				appointments.Add(appointment);
 
 			ClientCard.IsVisible = true;
@@ -62,11 +64,13 @@ public partial class ClientPage : ContentPage
 		}
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void Pets_Click(object sender, EventArgs e)
 	{
 		await Shell.Current.GoToAsync("PetsPage");
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void Cancel_Click(object sender, EventArgs e)
 	{
 		var button = (Button)sender;
@@ -74,7 +78,7 @@ public partial class ClientPage : ContentPage
 
 		var ok = await DisplayAlertAsync(
 			"Отменить запись?",
-			$"Запись на {appointment.TimeText} будет отменена.",
+			$"{appointment.TimeText} будет отменена.",
 			"Отменить",
 			"Назад");
 

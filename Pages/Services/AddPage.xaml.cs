@@ -1,17 +1,13 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 
-[QueryProperty("ServiceId", "id")]
-[QueryProperty("ServiceTitle", "title")]
-[QueryProperty("ServiceDescription", "description")]
-[QueryProperty("ServicePrice", "price")]
-[QueryProperty("ServiceCategory", "category")]
-// редактирование услуги
-public partial class EditPage : ContentPage
+// добавление услуги
+public partial class AddPage : ContentPage
 {
 	private HttpClient httpClient = new HttpClient();
+	// список категорий
 	private List<Category> list = new List<Category>()
 	{
 		new Category("Прием", "Прием"),
@@ -24,13 +20,7 @@ public partial class EditPage : ContentPage
 		new Category("Стационар", "Стационар")
 	};
 
-	public string ServiceId { get; set; } = "";
-	public string ServiceTitle { get; set; } = "";
-	public string ServiceDescription { get; set; } = "";
-	public string ServicePrice { get; set; } = "";
-	public string ServiceCategory { get; set; } = "";
-
-	public EditPage()
+	public AddPage()
 	{
 		InitializeComponent();
 		httpClient.Timeout = TimeSpan.FromSeconds(10);
@@ -39,17 +29,7 @@ public partial class EditPage : ContentPage
 		CategoryPicker.ItemDisplayBinding = new Binding("Name");
 	}
 
-	protected override void OnAppearing()
-	{
-		base.OnAppearing();
-
-		// заполнение формы
-		TitleEntry.Text = ServiceTitle;
-		DescriptionEditor.Text = ServiceDescription;
-		PriceEntry.Text = ServicePrice;
-		CategoryPicker.SelectedItem = list.FirstOrDefault(category => category.Value == ServiceCategory);
-	}
-
+	// Сохраняет измененные данные.
 	private async void Save_Click(object sender, EventArgs e)
 	{
 		// проверка формы
@@ -57,17 +37,12 @@ public partial class EditPage : ContentPage
 		var description = DescriptionEditor.Text?.Trim() ?? "";
 		var category = CategoryPicker.SelectedItem as Category;
 
-		if (!int.TryParse(ServiceId, out var id))
-		{
-			id = 0;
-		}
-
 		if (!int.TryParse(PriceEntry.Text, out var price))
 		{
 			price = 0;
 		}
 
-		if (id <= 0 || title == "" || description == "" || price <= 0 || category == null)
+		if (title == "" || description == "" || price <= 0 || category == null)
 		{
 			await DisplayAlertAsync("Ошибка", "Заполните название, описание, цену и категорию.", "Понятно");
 			return;
@@ -77,14 +52,14 @@ public partial class EditPage : ContentPage
 		{
 			// отправка данных в API
 			var response = await httpClient.PostAsJsonAsync(
-				$"{Api.BaseUrl}services/update.php",
-				new ServiceData(id, title, description, price, category.Value));
+				$"{Api.BaseUrl}services/create.php",
+				new ServiceData(title, description, price, category.Value));
 
 			var result = await response.Content.ReadFromJsonAsync<ApiResult>();
 
 			if (!response.IsSuccessStatusCode || result?.Success != true)
 			{
-				await DisplayAlertAsync("Ошибка", result?.Message ?? "Не удалось обновить услугу.", "Понятно");
+				await DisplayAlertAsync("Ошибка", result?.Message ?? "Не удалось добавить услугу.", "Понятно");
 				return;
 			}
 
@@ -93,7 +68,7 @@ public partial class EditPage : ContentPage
 		}
 		catch (Exception ex)
 		{
-			await DisplayAlertAsync("Ошибка", $"Не удалось обновить услугу: {ex.Message}", "Понятно");
+			await DisplayAlertAsync("Ошибка", $"Не удалось добавить услугу: {ex.Message}", "Понятно");
 		}
 	}
 
@@ -113,15 +88,13 @@ public partial class EditPage : ContentPage
 	// данные услуги
 	private class ServiceData
 	{
-		[JsonPropertyName("id")] public int Id { get; set; }
 		[JsonPropertyName("title")] public string Title { get; set; }
 		[JsonPropertyName("description")] public string Description { get; set; }
 		[JsonPropertyName("price")] public int Price { get; set; }
 		[JsonPropertyName("category")] public string Category { get; set; }
 
-		public ServiceData(int id, string title, string description, int price, string category)
+		public ServiceData(string title, string description, int price, string category)
 		{
-			Id = id;
 			Title = title;
 			Description = description;
 			Price = price;
@@ -130,6 +103,7 @@ public partial class EditPage : ContentPage
 	}
 
 }
+
 
 
 

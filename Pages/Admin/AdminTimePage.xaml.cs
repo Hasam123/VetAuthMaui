@@ -1,4 +1,4 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -21,17 +21,20 @@ public partial class AdminTimePage : ContentPage
 		ScheduleCollectionView.ItemsSource = slots;
 	}
 
+	// Загружает данные при открытии страницы.
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
 		await LoadSchedule();
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void Refresh_Click(object sender, EventArgs e)
 	{
 		await LoadSchedule();
 	}
 
+	// Обрабатывает изменение выбранного значения.
 	private void Date_Changed(object sender, EventArgs e)
 	{
 		ShowDay();
@@ -150,8 +153,27 @@ public partial class AdminTimePage : ContentPage
 		public bool IsBusy { get; }
 		public bool IsPast { get; }
 
-		public LayoutOptions ContentHorizontalOptions => IsBusy ? LayoutOptions.Start : LayoutOptions.Center;
-		public TextAlignment TextAlignment => IsBusy ? TextAlignment.Start : TextAlignment.Center;
+		public LayoutOptions ContentHorizontalOptions
+		{
+			get
+			{
+				if (IsBusy)
+					return LayoutOptions.Start;
+
+				return LayoutOptions.Center;
+			}
+		}
+
+		public TextAlignment TextAlignment
+		{
+			get
+			{
+				if (IsBusy)
+					return TextAlignment.Start;
+
+				return TextAlignment.Center;
+			}
+		}
 		public string StateText
 		{
 			get
@@ -302,6 +324,7 @@ public partial class AdminTimePage : ContentPage
 			}
 		}
 
+		// Возвращает данные для отображения.
 		private static string GetStatus(string status)
 		{
 			if (status == "new")

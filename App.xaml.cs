@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace VetAuthMaui;
 
@@ -10,6 +10,7 @@ public partial class App : Application
 		InitializeComponent();
 	}
 
+	// Создает главное окно приложения.
 	protected override Window CreateWindow(IActivationState activationState)
 	{
 		return new Window(new AppShell());

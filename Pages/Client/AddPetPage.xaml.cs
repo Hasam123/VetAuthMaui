@@ -1,4 +1,4 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 using System.Net.Http.Json;
 
@@ -14,11 +14,13 @@ public partial class AddPetPage : ContentPage
 		TypePicker.SelectedIndex = 0;
 	}
 
+	// Включает или выключает выбор даты вакцинации по флажку.
 	private void VaccinationDate_CheckedChanged(object sender, CheckedChangedEventArgs e)
 	{
 		VaccinationDatePicker.IsEnabled = e.Value;
 	}
 
+	// Сохраняет измененные данные.
 	private async void Save_Click(object sender, EventArgs e)
 	{
 		var name = NameEntry.Text?.Trim() ?? "";

@@ -1,4 +1,4 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 using System.Collections.ObjectModel;
 using System.Net.Http.Json;
@@ -16,6 +16,7 @@ public partial class PetsPage : ContentPage
 		PetsCollectionView.ItemsSource = pets;
 	}
 
+	// Загружает данные при открытии страницы.
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
@@ -29,6 +30,7 @@ public partial class PetsPage : ContentPage
 		await LoadPets();
 	}
 
+	// Загружает данные для страницы.
 	private async Task LoadPets()
 	{
 		try
@@ -41,7 +43,10 @@ public partial class PetsPage : ContentPage
 			foreach (var pet in result?.Pets ?? new List<Pet>())
 				pets.Add(pet);
 
-			StatusLabel.Text = pets.Count == 0 ? "Питомцы пока не добавлены" : $"Добавлено питомцев: {pets.Count}";
+			if (pets.Count == 0)
+				StatusLabel.Text = "Питомцы пока не добавлены";
+			else
+				StatusLabel.Text = $"Добавлено питомцев: {pets.Count}";
 		}
 		catch (Exception ex)
 		{
@@ -50,17 +55,20 @@ public partial class PetsPage : ContentPage
 		}
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void AddPet_Click(object sender, EventArgs e)
 	{
 		await Shell.Current.GoToAsync("AddPetPage");
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void EditPet_Click(object sender, EventArgs e)
 	{
 		State.SelectedPet = (Pet)((Button)sender).BindingContext;
 		await Shell.Current.GoToAsync("EditPetPage");
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void DeletePet_Click(object sender, EventArgs e)
 	{
 		var pet = (Pet)((Button)sender).BindingContext;

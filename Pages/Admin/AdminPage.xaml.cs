@@ -1,4 +1,4 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
@@ -14,17 +14,20 @@ public partial class AdminPage : ContentPage
 		httpClient.Timeout = TimeSpan.FromSeconds(10);
 	}
 
+	// Загружает данные при открытии страницы.
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
 		await LoadStatistics();
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void Refresh_Click(object sender, EventArgs e)
 	{
 		await LoadStatistics();
 	}
 
+	// Загружает данные для страницы.
 	private async Task LoadStatistics()
 	{
 		try
@@ -53,6 +56,7 @@ public partial class AdminPage : ContentPage
 		}
 	}
 
+	// Открывает список заявок и передает статус для начального фильтра.
 	private async Task OpenRequests(string status = "")
 	{
 		if (string.IsNullOrWhiteSpace(status))
@@ -61,45 +65,54 @@ public partial class AdminPage : ContentPage
 			await Shell.Current.GoToAsync($"RequestPage?status={Uri.EscapeDataString(status)}");
 	}
 
+	// Открывает список всех заявок без фильтра по статусу.
 	private async void AllRequests_Tapped(object sender, TappedEventArgs e)
 	{
 		await OpenRequests();
 	}
 
+	// Открывает список только новых заявок.
 	private async void NewRequests_Tapped(object sender, TappedEventArgs e)
 	{
 		await OpenRequests("new");
 	}
 
+	// Открывает список заявок, которые администратор уже принял.
 	private async void AcceptedRequests_Tapped(object sender, TappedEventArgs e)
 	{
 		await OpenRequests("accepted");
 	}
 
+	// Открывает список завершенных заявок.
 	private async void DoneRequests_Tapped(object sender, TappedEventArgs e)
 	{
 		await OpenRequests("done");
 	}
 
+	// Открывает список заявок, отмененных клиентами.
 	private async void CancelledRequests_Tapped(object sender, TappedEventArgs e)
 	{
 		await OpenRequests("cancelled");
 	}
 
+	// Открывает страницу услуг при нажатии на карточку статистики.
 	private async void ServicesSummary_Tapped(object sender, TappedEventArgs e)
 	{
 		await Shell.Current.GoToAsync("ServicePage");
 	}
+// Обрабатывает нажатие кнопки.
 private async void Schedule_Click(object sender, EventArgs e)
 	{
 		await Shell.Current.GoToAsync("AdminTimePage");
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void Services_Click(object sender, EventArgs e)
 	{
 		await Shell.Current.GoToAsync("ServicePage");
 	}
 
+	// Обрабатывает нажатие кнопки.
 	private async void Logout_Click(object sender, EventArgs e)
 	{
 		State.IsAdminMode = false;

@@ -1,4 +1,4 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
@@ -15,8 +15,9 @@ public partial class MedicalRecordPage : ContentPage
 		httpClient.Timeout = TimeSpan.FromSeconds(10);
 	}
 
-	private int requestId;
+	private int appointmentId;
 
+	// Загружает данные при открытии страницы.
 	protected override void OnAppearing()
 	{
 		base.OnAppearing();
@@ -37,7 +38,7 @@ public partial class MedicalRecordPage : ContentPage
 		}
 
 		// заполнение формы
-		requestId = draft.RequestId;
+		appointmentId = draft.AppointmentId;
 		PatientLabel.Text = $"{draft.ClientName} - {draft.PetName}";
 		AppointmentLabel.Text = draft.AppointmentText;
 		JalobaEditor.Text = draft.Jaloba;
@@ -48,10 +49,11 @@ public partial class MedicalRecordPage : ContentPage
 		TreatmentNotesEditor.Text = draft.TreatmentNotes;
 	}
 
+	// Сохраняет измененные данные.
 	private async void Save_Click(object sender, EventArgs e)
 	{
 		// проверка заявки
-		if (requestId <= 0)
+		if (appointmentId <= 0)
 		{
 			await DisplayAlertAsync("Ошибка", "Не найдена заявка для сохранения.", "ОК");
 			return;
@@ -63,7 +65,7 @@ public partial class MedicalRecordPage : ContentPage
 			var response = await httpClient.PostAsJsonAsync(
 				$"{Api.BaseUrl}appointments/update_medical_record.php",
 				new RecordData(
-					requestId,
+					appointmentId,
 					JalobaEditor.Text?.Trim() ?? "",
 					DiagnozEditor.Text?.Trim() ?? "",
 					ObsledResultEditor.Text?.Trim() ?? "",
