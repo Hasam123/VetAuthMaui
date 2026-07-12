@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VetAuthMaui.BottomNavigation">
+    <Border BackgroundColor="White"
+            Stroke="#DDEBF3"
+            StrokeThickness="1"
+            Padding="0,6">
+        <Grid ColumnDefinitions="*,*,*,*">
+            <Grid Grid.Column="0" Padding="4">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Home_Tapped" />
+                </Grid.GestureRecognizers>
+                <VerticalStackLayout Spacing="0" HorizontalOptions="Center">
+                    <Label Text="⌂" TextColor="#12A7A7" FontSize="23" HorizontalTextAlignment="Center" />
+                    <Label Text="Главная" TextColor="#657084" FontSize="11" HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <Grid Grid.Column="1" Padding="4">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Services_Tapped" />
+                </Grid.GestureRecognizers>
+                <VerticalStackLayout Spacing="0" HorizontalOptions="Center">
+                    <Label Text="☰" TextColor="#12A7A7" FontSize="22" HorizontalTextAlignment="Center" />
+                    <Label Text="Услуги" TextColor="#657084" FontSize="11" HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <Grid Grid.Column="2" Padding="4">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Record_Tapped" />
+                </Grid.GestureRecognizers>
+                <VerticalStackLayout Spacing="0" HorizontalOptions="Center">
+                    <Label Text="✚" TextColor="#FF8A5B" FontSize="21" HorizontalTextAlignment="Center" />
+                    <Label Text="Запись" TextColor="#657084" FontSize="11" HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </Grid>
+
+            <Grid Grid.Column="3" Padding="4">
+                <Grid.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Profile_Tapped" />
+                </Grid.GestureRecognizers>
+                <VerticalStackLayout Spacing="0" HorizontalOptions="Center">
+                    <Label Text="◎" TextColor="#12A7A7" FontSize="22" HorizontalTextAlignment="Center" />
+                    <Label Text="Профиль" TextColor="#657084" FontSize="11" HorizontalTextAlignment="Center" />
+                </VerticalStackLayout>
+            </Grid>
+        </Grid>
+    </Border>
+</ContentView>

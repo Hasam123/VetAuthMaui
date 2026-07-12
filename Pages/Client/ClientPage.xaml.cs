@@ -35,6 +35,7 @@ public partial class ClientPage : ContentPage
 
 			StatusLabel.Text = "Загрузка личного кабинета...";
 			ClientCard.IsVisible = false;
+			PetsCard.IsVisible = false;
 			appointments.Clear();
 
 			var url = $"{Api.BaseUrl}clients/profile.php?phone={Uri.EscapeDataString(State.ClientPhone)}";
@@ -44,6 +45,7 @@ public partial class ClientPage : ContentPage
 				appointments.Add(appointment);
 
 			ClientCard.IsVisible = true;
+			PetsCard.IsVisible = true;
 			ClientNameLabel.Text = $"Имя: {response?.Client.Name}";
 			ClientPhoneLabel.Text = $"Телефон: {response?.Client.Phone}";
 
@@ -64,8 +66,8 @@ public partial class ClientPage : ContentPage
 		}
 	}
 
-	// Обрабатывает нажатие кнопки.
-	private async void Pets_Click(object sender, EventArgs e)
+	// Открывает страницу питомцев при нажатии на карточку.
+	private async void Pets_Tapped(object sender, TappedEventArgs e)
 	{
 		await Shell.Current.GoToAsync("PetsPage");
 	}

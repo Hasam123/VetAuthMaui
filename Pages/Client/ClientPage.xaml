@@ -2,12 +2,14 @@
 <!-- Личный кабинет клиента: карточка клиента и список записей. -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:VetAuthMaui"
              x:Class="VetAuthMaui.ClientPage"
              Title="Личный кабинет"
              BackgroundColor="#F6FAFF">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="14">
+    <Grid RowDefinitions="*,Auto">
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Padding="20" Spacing="14">
             <Border x:Name="ClientCard" IsVisible="False" BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="22" />
@@ -18,19 +20,32 @@
                     <Label x:Name="ClientNameLabel" TextColor="#17213A" FontSize="16" />
                     <Label x:Name="ClientPhoneLabel" TextColor="#12A7A7" FontSize="15" />
                     <Label x:Name="LastStatusLabel" TextColor="#FF8A5B" FontSize="15" FontAttributes="Bold" />
-
-                    <Button Text="Мои питомцы"
-                            BackgroundColor="#12A7A7"
-                            BorderColor="#0F9090"
-                            BorderWidth="1"
-                            TextColor="White"
-                            FontAttributes="Bold"
-                            CornerRadius="22"
-                            HeightRequest="48"
-                            Margin="0,6,0,0"
-                            Padding="16,0"
-                            Clicked="Pets_Click" />
                 </VerticalStackLayout>
+            </Border>
+
+            <Border x:Name="PetsCard" IsVisible="False" BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="16">
+                <Border.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="Pets_Tapped" />
+                </Border.GestureRecognizers>
+                <Border.StrokeShape>
+                    <RoundRectangle CornerRadius="22" />
+                </Border.StrokeShape>
+
+                <Grid ColumnDefinitions="52,*,Auto" ColumnSpacing="14">
+                    <Border BackgroundColor="#EAF7F8" StrokeThickness="0" WidthRequest="52" HeightRequest="52">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="18" />
+                        </Border.StrokeShape>
+                        <Label Text="🐾" FontSize="24" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                    </Border>
+
+                    <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                        <Label Text="Мои питомцы" TextColor="#17213A" FontSize="18" FontAttributes="Bold" />
+                        <Label Text="Добавление и изменение данных питомцев" TextColor="#657084" FontSize="13" />
+                    </VerticalStackLayout>
+
+                    <Label Grid.Column="2" Text="›" TextColor="#12A7A7" FontSize="30" VerticalTextAlignment="Center" />
+                </Grid>
             </Border>
 
             <Label x:Name="StatusLabel" Text="" TextColor="#657084" FontSize="14" />
@@ -70,7 +85,10 @@
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
             </CollectionView>
-        </VerticalStackLayout>
-    </ScrollView>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <controls:BottomNavigation Grid.Row="1" />
+    </Grid>
 </ContentPage>
 

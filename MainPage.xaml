@@ -40,8 +40,8 @@
                 <Image
                     Source="dog_logo.png"
                     HeightRequest="220"
-                    Aspect="AspectFill"
-                    HorizontalOptions="Fill" />
+                    Aspect="AspectFit"
+                    HorizontalOptions="Center" />
 
                 <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
                     <Border.StrokeShape>
@@ -50,10 +50,11 @@
 
                     <VerticalStackLayout Spacing="14">
                         <Label
-                            Text="Вход клиента"
+                            Text="Вход "
                             TextColor="#17213A"
                             FontSize="22"
-                            FontAttributes="Bold" />
+                            FontAttributes="Bold"
+                            HorizontalOptions="Center"/>
 
                         <Entry
                             x:Name="PhoneEntry"
@@ -70,6 +71,19 @@
                             BackgroundColor="White"
                             TextColor="#222222"
                             PlaceholderColor="#9AA8B8" />
+
+                        <HorizontalStackLayout Spacing="8">
+                            <CheckBox
+                                x:Name="ShowPasswordCheckBox"
+                                Color="#12A7A7"
+                                CheckedChanged="ShowPassword_CheckedChanged" />
+
+                            <Label
+                                Text="Показать пароль"
+                                TextColor="#657084"
+                                FontSize="14"
+                                VerticalOptions="Center" />
+                        </HorizontalStackLayout>
 
                         <Button
                             Text="Войти"

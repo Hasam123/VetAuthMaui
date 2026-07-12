@@ -57,7 +57,7 @@ public partial class MainPage : ContentPage
 			State.IsAdminMode = false;
 			State.SetClient(result.Client.Id, result.Client.Name, result.Client.Phone);
 			PasswordEntry.Text = "";
-			await Shell.Current.GoToAsync("HomePage");
+			await Shell.Current.GoToAsync("//HomePage");
 		}
 		catch (Exception ex)
 		{
@@ -69,6 +69,12 @@ public partial class MainPage : ContentPage
 	private async void Register_Click(object sender, EventArgs e)
 	{
 		await Shell.Current.GoToAsync("ClientRegister");
+	}
+
+	// Переключает видимость пароля клиента на форме входа.
+	private void ShowPassword_CheckedChanged(object sender, CheckedChangedEventArgs e)
+	{
+		PasswordEntry.IsPassword = !e.Value;
 	}
 
 	// Обрабатывает нажатие кнопки.

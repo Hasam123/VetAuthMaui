@@ -10,7 +10,34 @@
     <ShellContent
         Title="Старт"
         ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
+        Route="MainPage"
+        Shell.TabBarIsVisible="False" />
+
+    <TabBar Route="ClientTabs">
+        <ShellContent
+            Title="Главная"
+            ContentTemplate="{DataTemplate local:HomePage}"
+            Route="HomePage"
+            Shell.TabBarIsVisible="False" />
+
+        <ShellContent
+            Title="Услуги"
+            ContentTemplate="{DataTemplate local:ServicePage}"
+            Route="ServicePage"
+            Shell.TabBarIsVisible="False" />
+
+        <ShellContent
+            Title="Запись"
+            ContentTemplate="{DataTemplate local:RecordPage}"
+            Route="RecordPage"
+            Shell.TabBarIsVisible="False" />
+
+        <ShellContent
+            Title="Профиль"
+            ContentTemplate="{DataTemplate local:ClientPage}"
+            Route="ClientPage"
+            Shell.TabBarIsVisible="False" />
+    </TabBar>
 
 </Shell>
 

@@ -2,12 +2,13 @@
 <!-- Меню клиента с переходами в кабинет, услуги, запись и контакты. -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:VetAuthMaui"
              x:Class="VetAuthMaui.HomePage"
              Title="Клиент"
              BackgroundColor="#F6FAFF"
              Shell.NavBarIsVisible="False">
 
-    <Grid RowDefinitions="Auto,*">
+    <Grid RowDefinitions="Auto,*,Auto">
         <Border BackgroundColor="#12A7A7" StrokeThickness="0" Padding="24,36,24,28">
             <Border.StrokeShape>
                 <RoundRectangle CornerRadius="0,0,34,34" />
@@ -90,6 +91,8 @@
                 <Button Text="Выйти" BackgroundColor="Transparent" BorderColor="#FF8A5B" BorderWidth="1" TextColor="#FF8A5B" FontAttributes="Bold" CornerRadius="26" HeightRequest="52" Clicked="Logout_Click" />
             </VerticalStackLayout>
         </ScrollView>
+
+        <controls:BottomNavigation Grid.Row="2" />
     </Grid>
 </ContentPage>
 

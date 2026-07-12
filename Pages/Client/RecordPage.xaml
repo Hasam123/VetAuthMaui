@@ -1,12 +1,14 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:VetAuthMaui"
              x:Class="VetAuthMaui.RecordPage"
              Title="Запись"
              BackgroundColor="#F6FAFF">
 
-    <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="14">
+    <Grid RowDefinitions="*,Auto">
+        <ScrollView Grid.Row="0">
+            <VerticalStackLayout Padding="20" Spacing="14">
             <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="16">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="22" />
@@ -226,8 +228,11 @@
                     CornerRadius="26"
                     HeightRequest="52"
                     Clicked="Send_Click" />
-        </VerticalStackLayout>
-    </ScrollView>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <controls:BottomNavigation Grid.Row="1" />
+    </Grid>
 </ContentPage>
 
 

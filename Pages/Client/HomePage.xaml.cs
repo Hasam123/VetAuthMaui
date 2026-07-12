@@ -20,20 +20,20 @@ public partial class HomePage : ContentPage
 	// Обрабатывает нажатие кнопки.
 	private async void Profile_Click(object sender, EventArgs e)
 	{
-		await Shell.Current.GoToAsync("ClientPage");
+		await Shell.Current.GoToAsync("//ClientPage");
 	}
 
 	// Обрабатывает нажатие кнопки.
 	private async void Services_Click(object sender, EventArgs e)
 	{
 		State.IsAdminMode = false;
-		await Shell.Current.GoToAsync("ServicePage");
+		await Shell.Current.GoToAsync("//ServicePage");
 	}
 
 	// Обрабатывает нажатие кнопки.
 	private async void Appointment_Click(object sender, EventArgs e)
 	{
-		await Shell.Current.GoToAsync("RecordPage");
+		await Shell.Current.GoToAsync("//RecordPage");
 	}
 
 	// Обрабатывает нажатие кнопки.

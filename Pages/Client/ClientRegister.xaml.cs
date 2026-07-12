@@ -45,7 +45,7 @@ public partial class ClientRegister : ContentPage
 			// сохранение клиента
 			State.SetClient(result.Client.Id, result.Client.Name, result.Client.Phone);
 			await DisplayAlertAsync("Готово", result.Message, "ОК");
-			await Shell.Current.GoToAsync("HomePage");
+			await Shell.Current.GoToAsync("//HomePage");
 		}
 		catch (Exception ex)
 		{
