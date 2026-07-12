@@ -98,7 +98,7 @@ public partial class AdminPage : ContentPage
 	// Открывает страницу услуг при нажатии на карточку статистики.
 	private async void ServicesSummary_Tapped(object sender, TappedEventArgs e)
 	{
-		await Shell.Current.GoToAsync("ServicePage");
+		await Shell.Current.GoToAsync("//ServicePage");
 	}
 // Обрабатывает нажатие кнопки.
 private async void Schedule_Click(object sender, EventArgs e)
@@ -109,7 +109,7 @@ private async void Schedule_Click(object sender, EventArgs e)
 	// Обрабатывает нажатие кнопки.
 	private async void Services_Click(object sender, EventArgs e)
 	{
-		await Shell.Current.GoToAsync("ServicePage");
+		await Shell.Current.GoToAsync("//ServicePage");
 	}
 
 	// Обрабатывает нажатие кнопки.

@@ -28,10 +28,10 @@
 		<MauiXamlInflator>SourceGen</MauiXamlInflator>
 
 		<!-- Display name -->
-		<ApplicationTitle>Veterenar</ApplicationTitle>
+		<ApplicationTitle>VetClinic</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.vetauthmaui</ApplicationId>
+		<ApplicationId>com.companyname.vetclinic</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>

@@ -8,8 +8,17 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="12">
-            <Entry x:Name="NameEntry" Placeholder="Кличка питомца" />
-            <Picker x:Name="TypePicker" Title="Вид животного">
+            <Entry x:Name="NameEntry"
+                   Placeholder="Кличка питомца"
+                   BackgroundColor="White"
+                   TextColor="#222222"
+                   PlaceholderColor="#9AA8B8" />
+
+            <Picker x:Name="TypePicker"
+                    Title="Вид животного"
+                    BackgroundColor="White"
+                    TextColor="#222222"
+                    TitleColor="#9AA8B8">
                 <Picker.Items>
                     <x:String>Собака</x:String>
                     <x:String>Кошка</x:String>
@@ -18,17 +27,38 @@
                     <x:String>Другое</x:String>
                 </Picker.Items>
             </Picker>
-            <Entry x:Name="AgeEntry" Placeholder="Возраст" />
-            <Entry x:Name="WeightEntry" Placeholder="Вес" Keyboard="Numeric" />
+
+            <Entry x:Name="AgeEntry"
+                   Placeholder="Возраст"
+                   BackgroundColor="White"
+                   TextColor="#222222"
+                   PlaceholderColor="#9AA8B8" />
+
+            <Entry x:Name="WeightEntry"
+                   Placeholder="Вес"
+                   Keyboard="Numeric"
+                   BackgroundColor="White"
+                   TextColor="#222222"
+                   PlaceholderColor="#9AA8B8" />
+
             <HorizontalStackLayout Spacing="8">
                 <CheckBox x:Name="HasVaccinationDateCheckBox"
+                          Color="#12A7A7"
                           CheckedChanged="VaccinationDate_CheckedChanged" />
                 <Label Text="Указать дату вакцинации"
                        TextColor="#657084"
                        FontSize="14"
                        VerticalTextAlignment="Center" />
             </HorizontalStackLayout>
-            <DatePicker x:Name="VaccinationDatePicker" IsEnabled="False" />
+
+            <Label Text="Дата вакцинации"
+                   TextColor="#657084"
+                   FontSize="14" />
+
+            <DatePicker x:Name="VaccinationDatePicker"
+                        IsEnabled="False"
+                        BackgroundColor="White"
+                        TextColor="#222222" />
 
             <Button Text="Сохранить"
                     BackgroundColor="#12A7A7"

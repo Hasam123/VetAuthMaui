@@ -57,7 +57,7 @@
                                             Padding="0"
                                             Clicked="EditPet_Click" />
 
-                                    <Button Text="&#x1F5D1;"
+                                    <Button Text="×"
                                             BackgroundColor="#F3F6FA"
                                             TextColor="#657084"
                                             FontAttributes="Bold"
@@ -79,4 +79,5 @@
         <controls:BottomNavigation Grid.Row="1" />
     </Grid>
 </ContentPage>
+
 

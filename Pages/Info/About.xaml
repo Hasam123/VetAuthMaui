@@ -20,7 +20,7 @@
                 </Border.StrokeShape>
 
                 <VerticalStackLayout Spacing="8">
-                    <Label Text="Veterenar" TextColor="#17213A" FontSize="21" FontAttributes="Bold" />
+                    <Label Text="VetClinic" TextColor="#17213A" FontSize="21" FontAttributes="Bold" />
                     <Label Text="Мобильный кабинет ветеринарной клиники для клиентов и администратора." TextColor="#657084" FontSize="15" LineBreakMode="WordWrap" />
                 </VerticalStackLayout>
             </Border>
