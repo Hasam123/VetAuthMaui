@@ -2,11 +2,13 @@
 <!-- Страница с контактной информацией ветеринарной клиники. -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:VetAuthMaui"
              x:Class="VetAuthMaui.ContactPage"
              Title="Контакты"
-             BackgroundColor="#F6FAFF">
-
-    <ScrollView>
+             BackgroundColor="#F6FAFF"
+             Shell.TabBarIsVisible="False">
+    <Grid RowDefinitions="*,Auto">
+        <ScrollView Grid.Row="0">
         <VerticalStackLayout Padding="20" Spacing="14">
             <VerticalStackLayout Spacing="4">
                 <Label Text="Адреса и время работы ветеринарной клиники"
@@ -36,31 +38,16 @@
                     <Label Text="ул. Коммунальная, д.188" TextColor="#657084" />
                 </VerticalStackLayout>
             </Border>
-
-            <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="22" />
-                </Border.StrokeShape>
-
-                <VerticalStackLayout Spacing="8">
-                    <Label Text="г. Тирасполь" TextColor="#17213A" FontSize="18" FontAttributes="Bold" />
-                    <Label Text="ул. Советская, д.52" TextColor="#657084" />
-                </VerticalStackLayout>
-            </Border>
-
-            <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
-                <Border.StrokeShape>
-                    <RoundRectangle CornerRadius="22" />
-                </Border.StrokeShape>
-
-                <VerticalStackLayout Spacing="8">
-                    <Label Text="г. Григориополь" TextColor="#17213A" FontSize="18" FontAttributes="Bold" />
-                    <Label Text="ул. Ленина, д.10" TextColor="#657084" />
-                </VerticalStackLayout>
-            </Border>
         </VerticalStackLayout>
     </ScrollView>
+
+        <controls:BottomNavigation Grid.Row="1" />
+    </Grid>
 </ContentPage>
+
+
+
+
 
 
 

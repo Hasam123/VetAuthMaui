@@ -124,6 +124,9 @@
             </VerticalStackLayout>
         </ScrollView>
 
-        <controls:BottomNavigation Grid.Row="1" />
+        <controls:BottomNavigation x:Name="BottomNav" Grid.Row="1" />
     </Grid>
 </ContentPage>
+
+
+

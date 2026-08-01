@@ -1,4 +1,4 @@
-namespace VetAuthMaui;
+﻿namespace VetAuthMaui;
 
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -278,7 +278,7 @@ public partial class RecordPage : ContentPage
 			}
 
 			Clear();
-			await DisplayAlertAsync("Заявка отправлена", "Администратор проверит запись и изменит статус.", "ОК");
+			await DisplayAlertAsync("Заявка отправлена", "Администратор в ближайшее время рассмотрит вашу заявку. Статус заявки - в личном кабинете пользователя", "ОК");
 			await LoadAppointmentData();
 		}
 		catch (Exception ex)
@@ -486,6 +486,8 @@ public partial class RecordPage : ContentPage
 	}
 
 }
+
+
 
 
 

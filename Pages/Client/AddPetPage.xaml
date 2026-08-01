@@ -2,11 +2,13 @@
 <!-- Форма добавления питомца. -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:VetAuthMaui"
              x:Class="VetAuthMaui.AddPetPage"
              Title="Добавить питомца"
-             BackgroundColor="#F6FAFF">
-
-    <ScrollView>
+             BackgroundColor="#F6FAFF"
+             Shell.TabBarIsVisible="False">
+    <Grid RowDefinitions="*,Auto">
+        <ScrollView Grid.Row="0">
         <VerticalStackLayout Padding="20" Spacing="12">
             <Entry x:Name="NameEntry"
                    Placeholder="Кличка питомца"
@@ -69,5 +71,10 @@
                     Clicked="Save_Click" />
         </VerticalStackLayout>
     </ScrollView>
+
+        <controls:BottomNavigation Grid.Row="1" />
+    </Grid>
 </ContentPage>
+
+
 

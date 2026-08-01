@@ -1,4 +1,4 @@
-namespace VetAuthMaui;
+﻿namespace VetAuthMaui;
 
 // переходы между страницами
 public partial class AppShell : Shell
@@ -20,8 +20,10 @@ public partial class AppShell : Shell
 		Routing.RegisterRoute("AdminTimePage", typeof(AdminTimePage));
 		Routing.RegisterRoute("AddPage", typeof(AddPage));
 		Routing.RegisterRoute("EditPage", typeof(EditPage));
+		Routing.RegisterRoute("AdminServicePage", typeof(ServicePage));
 	}
 }
+
 
 
 

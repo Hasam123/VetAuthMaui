@@ -1,4 +1,4 @@
-namespace VetAuthMaui;
+﻿namespace VetAuthMaui;
 
 using System.Collections.ObjectModel;
 using System.Net.Http.Json;
@@ -44,8 +44,10 @@ public partial class ServicePage : ContentPage
 		base.OnAppearing();
 		// кнопка только для админа
 		AddServiceButton.IsVisible = State.IsAdminMode;
+		BottomNav.IsVisible = !State.IsAdminMode;
 		await LoadServices();
 	}
+
 
 	// Обрабатывает нажатие кнопки.
 	private async void Refresh_Click(object sender, EventArgs e)
@@ -237,6 +239,9 @@ public partial class ServicePage : ContentPage
 		public bool IsAdminMode { get; set; }
 	}
 }
+
+
+
 
 
 
