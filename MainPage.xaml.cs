@@ -41,11 +41,11 @@ public partial class MainPage : ContentPage
 		try
 		{
 			// отправка данных в API
-			var response = await httpClient.PostAsJsonAsync(
-				$"{Api.BaseUrl}clients/login.php",
-				new LoginData(phone, password));
+			var response = await httpClient.PostAsJsonAsync($"{Api.BaseUrl}clients/login.php", new LoginData(phone, password));
 
-			var result = await response.Content.ReadFromJsonAsync<LoginResult>();
+
+
+            var result = await response.Content.ReadFromJsonAsync<LoginResult>();
 
 			if (!response.IsSuccessStatusCode || result?.Success != true || result.Client == null)
 			{
