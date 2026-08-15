@@ -1,5 +1,6 @@
 namespace VetAuthMaui;
 
+using System.Globalization;
 using System.Net.Http.Json;
 
 // Форма изменения питомца.
@@ -63,6 +64,25 @@ public partial class EditPetPage : ContentPage
 		{
 			await DisplayAlertAsync("Ошибка", "Заполните кличку и вид питомца.", "ОК");
 			return;
+		}
+
+		if (age.Length > 15)
+		{
+			await DisplayAlertAsync("Ошибка", "Возраст должен содержать не более 15 символов.", "ОК");
+			return;
+		}
+
+		if (weight != "")
+		{
+			weight = weight.Replace(',', '.');
+			if (!decimal.TryParse(weight, NumberStyles.AllowDecimalPoint, CultureInfo.InvariantCulture, out var weightValue)
+				|| weightValue <= 0 || weightValue > 999.99m)
+			{
+				await DisplayAlertAsync("Ошибка", "Укажите вес от 0,01 до 999,99 кг.", "ОК");
+				return;
+			}
+
+			weight = weightValue.ToString("0.##", CultureInfo.InvariantCulture);
 		}
 
 		try

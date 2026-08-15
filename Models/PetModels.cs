@@ -50,9 +50,9 @@ public class Pet
 			if (!string.IsNullOrWhiteSpace(Weight))
 			{
 				if (string.IsNullOrWhiteSpace(text))
-					text = $"Вес: {Weight}";
+					text = $"Вес: {Weight} кг";
 				else
-					text += $" · Вес: {Weight}";
+					text += $" · Вес: {Weight} кг";
 			}
 
 			if (string.IsNullOrWhiteSpace(text))

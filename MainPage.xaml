@@ -60,6 +60,7 @@
                             x:Name="PhoneEntry"
                             Placeholder="Телефон"
                             Keyboard="Telephone"
+                            MaxLength="15"
                             BackgroundColor="White"
                             TextColor="#222222"
                             PlaceholderColor="#9AA8B8" />

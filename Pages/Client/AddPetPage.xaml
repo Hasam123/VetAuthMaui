@@ -32,12 +32,14 @@
 
             <Entry x:Name="AgeEntry"
                    Placeholder="Возраст"
+                   MaxLength="15"
                    BackgroundColor="White"
                    TextColor="#222222"
                    PlaceholderColor="#9AA8B8" />
 
             <Entry x:Name="WeightEntry"
-                   Placeholder="Вес"
+                   Placeholder="Вес, кг"
+                   MaxLength="6"
                    Keyboard="Numeric"
                    BackgroundColor="White"
                    TextColor="#222222"
