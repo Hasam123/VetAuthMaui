@@ -32,7 +32,7 @@ public partial class EditPetPage : ContentPage
 		SetPetType(pet.Type);
 		AgeEntry.Text = pet.Age;
 		WeightEntry.Text = pet.Weight;
-		if (DateTime.TryParse(pet.LastVaccinationDate, out var date))
+		if (DateTime.TryParse(pet.LastVacData, out var date))
 		{
 			HasVaccinationDateCheckBox.IsChecked = true;
 			VaccinationDatePicker.Date = date;

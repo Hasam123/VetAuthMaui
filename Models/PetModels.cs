@@ -15,7 +15,7 @@ public class Pet
 	[JsonPropertyName("type")] public string Type { get; set; } = "";
 	[JsonPropertyName("age")] public string Age { get; set; } = "";
 	[JsonPropertyName("weight")] public string Weight { get; set; } = "";
-	[JsonPropertyName("last_vaccination_date")] public string LastVaccinationDate { get; set; } = "";
+	[JsonPropertyName("last_vac_data")] public string LastVacData { get; set; } = "";
 
 	public string PickerText
 	{
@@ -66,11 +66,11 @@ public class Pet
 	{
 		get
 		{
-			if (string.IsNullOrWhiteSpace(LastVaccinationDate))
+			if (string.IsNullOrWhiteSpace(LastVacData))
 				return "Прививка не указана";
-			if (DateTime.TryParse(LastVaccinationDate, out var date))
+			if (DateTime.TryParse(LastVacData, out var date))
 				return $"Последняя прививка: {date:dd.MM.yyyy}";
-			return $"Последняя прививка: {LastVaccinationDate}";
+			return $"Последняя прививка: {LastVacData}";
 		}
 	}
 }
@@ -82,16 +82,16 @@ public class AddPetData
 	[JsonPropertyName("type")] public string Type { get; set; }
 	[JsonPropertyName("age")] public string Age { get; set; }
 	[JsonPropertyName("weight")] public string Weight { get; set; }
-	[JsonPropertyName("last_vaccination_date")] public string LastVaccinationDate { get; set; }
+	[JsonPropertyName("last_vac_data")] public string LastVacData { get; set; }
 
-	public AddPetData(string phone, string name, string type, string age, string weight, string lastVaccinationDate)
+	public AddPetData(string phone, string name, string type, string age, string weight, string lastVacData)
 	{
 		Phone = phone;
 		Name = name;
 		Type = type;
 		Age = age;
 		Weight = weight;
-		LastVaccinationDate = lastVaccinationDate;
+		LastVacData = lastVacData;
 	}
 }
 
@@ -103,9 +103,9 @@ public class UpdatePetData
 	[JsonPropertyName("type")] public string Type { get; set; }
 	[JsonPropertyName("age")] public string Age { get; set; }
 	[JsonPropertyName("weight")] public string Weight { get; set; }
-	[JsonPropertyName("last_vaccination_date")] public string LastVaccinationDate { get; set; }
+	[JsonPropertyName("last_vac_data")] public string LastVacData { get; set; }
 
-	public UpdatePetData(int id, string phone, string name, string type, string age, string weight, string lastVaccinationDate)
+	public UpdatePetData(int id, string phone, string name, string type, string age, string weight, string lastVacData)
 	{
 		Id = id;
 		Phone = phone;
@@ -113,7 +113,7 @@ public class UpdatePetData
 		Type = type;
 		Age = age;
 		Weight = weight;
-		LastVaccinationDate = lastVaccinationDate;
+		LastVacData = lastVacData;
 	}
 }
 
