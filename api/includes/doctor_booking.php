@@ -8,6 +8,14 @@ function bookingDoctorExists(mysqli $conn, int $doctorId): bool
     return $stmt->get_result()->num_rows === 1;
 }
 
+function bookingDoctorIsActive(mysqli $conn, int $doctorId): bool
+{
+    $stmt = $conn->prepare("SELECT id FROM admins WHERE id = ? AND is_active = 1");
+    $stmt->bind_param("i", $doctorId);
+    $stmt->execute();
+    return $stmt->get_result()->num_rows === 1;
+}
+
 function bookingTimeIsValid(string $value): bool
 {
     $date = DateTime::createFromFormat("!Y-m-d H:i:s", $value);

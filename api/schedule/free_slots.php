@@ -11,6 +11,7 @@ if (!bookingDoctorExists($conn, $doctorId)) {
     exit;
 }
 
+$doctorIsActive = bookingDoctorIsActive($conn, $doctorId);
 $busy = [];
 $startDate = date("Y-m-d");
 $endDate = date("Y-m-d", strtotime("+4 days"));
@@ -46,7 +47,7 @@ for ($d = 0; $d < 5; $d++) {
             $slots[] = [
                 "time" => date("Y-m-d H:i:s", $slotTime),
                 "label" => date("H:i", $slotTime),
-                "is_available" => $slotTime > $now && !isset($busy[$key])
+                "is_available" => $doctorIsActive && $slotTime > $now && !isset($busy[$key])
             ];
         }
     }

@@ -37,7 +37,7 @@ if ($stmt->get_result()->num_rows !== 1) {
     exit;
 }
 
-if (!bookingDoctorExists($conn, $doctorId)) {
+if (!bookingDoctorIsActive($conn, $doctorId)) {
     echo json_encode(["success" => false, "message" => "Выберите врача"], JSON_UNESCAPED_UNICODE);
     exit;
 }

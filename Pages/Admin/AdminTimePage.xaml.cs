@@ -59,13 +59,11 @@ public partial class AdminTimePage : ContentPage
 		{
 			StatusLabel.Text = "Загрузка расписания...";
 
-			var doctorsResult = await httpClient.GetFromJsonAsync<DoctorResult>($"{Api.BaseUrl}doctors/list.php");
-			if (doctorsResult?.Success != true)
-				throw new InvalidOperationException(doctorsResult?.Message ?? "Не удалось загрузить врачей.");
 			if (!State.IsAdminMode || State.AdminId <= 0)
 				throw new InvalidOperationException("Войдите в учётную запись врача заново.");
 			var previousId = State.AdminId;
-			var doctors = (doctorsResult.Doctors ?? new List<Doctor>()).Where(d => d.Id == State.AdminId).ToList();
+			// The booking list excludes inactive doctors; their existing appointments remain viewable.
+			var doctors = new List<Doctor> { new Doctor { Id = State.AdminId, Name = State.AdminName } };
 			DoctorPicker.ItemDisplayBinding = new Binding(nameof(Doctor.Name));
 			DoctorPicker.ItemsSource = doctors;
 			DoctorPicker.SelectedItem = doctors.FirstOrDefault(d => d.Id == previousId) ?? doctors.FirstOrDefault();
