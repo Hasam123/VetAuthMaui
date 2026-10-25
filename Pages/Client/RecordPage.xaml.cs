@@ -10,6 +10,9 @@ using System.Text.Json.Serialization;
 public partial class RecordPage : ContentPage
 {
 	private HttpClient httpClient = new HttpClient();
+	private int scheduleVersion;
+	private bool loadingDoctors;
+	private bool sending;
 	private List<Service> services = new List<Service>();
 	private List<ScheduleDay> days = new List<ScheduleDay>();
 	private List<Pet> savedPets = new List<Pet>();
@@ -51,6 +54,13 @@ public partial class RecordPage : ContentPage
 	// Загружает услуги и свободные интервалы времени из API.
 	private async Task LoadAppointmentData()
 	{
+		SendButton.IsEnabled = false;
+		DoctorPicker.IsEnabled = false;
+		++scheduleVersion;
+		days.Clear();
+		selectedDay = null;
+		BuildDays();
+		BuildTimes();
 		try
 		{
 			if (!State.IsClientLoggedIn)
@@ -59,23 +69,29 @@ public partial class RecordPage : ContentPage
 				return;
 			}
 
-		var servicesResult =
-			await httpClient.GetFromJsonAsync<ServiceResult>(
-				$"{Api.BaseUrl}services/list.php");
+			var servicesResult =
+				await httpClient.GetFromJsonAsync<ServiceResult>(
+					$"{Api.BaseUrl}services/list.php");
 
-		var scheduleResult =
-			await httpClient.GetFromJsonAsync<TimeResult>(
-				$"{Api.BaseUrl}schedule/free_slots.php");
-
-		await LoadSavedPets();
+			var doctorsResult = await httpClient.GetFromJsonAsync<DoctorResult>($"{Api.BaseUrl}doctors/list.php");
+			if (doctorsResult?.Success != true)
+				throw new InvalidOperationException(doctorsResult?.Message ?? "Не удалось загрузить врачей.");
+			var previousId = (DoctorPicker.SelectedItem as Doctor)?.Id;
+			loadingDoctors = true;
+			try
+			{
+				var doctors = doctorsResult.Doctors ?? new List<Doctor>();
+				DoctorPicker.ItemsSource = doctors;
+				DoctorPicker.ItemDisplayBinding = new Binding(nameof(Doctor.Name));
+				DoctorPicker.SelectedItem = doctors.FirstOrDefault(d => d.Id == previousId) ?? doctors.FirstOrDefault();
+			}
+			finally { loadingDoctors = false; }
+			await LoadSavedPets();
 
 			services.Clear();
 			services.AddRange(servicesResult?.Services ?? new List<Service>());
 			ServicePicker.ItemsSource = services;
 			ServicePicker.ItemDisplayBinding = new Binding("Text");
-
-			days.Clear();
-			days.AddRange(scheduleResult?.Days ?? new List<ScheduleDay>());
 
 			if (ServicePicker.SelectedIndex < 0 && services.Count > 0)
 				ServicePicker.SelectedIndex = 0;
@@ -83,13 +99,51 @@ public partial class RecordPage : ContentPage
 			if (PetTypePicker.SelectedIndex < 0)
 				PetTypePicker.SelectedIndex = 0;
 
-			selectedDay = FindFirstAvailableDay();
-			BuildDays();
-			BuildTimes();
+			await LoadDoctorSchedule();
 		}
 		catch (Exception ex)
 		{
 			await DisplayAlertAsync("Ошибка", $"Не удалось загрузить услуги и расписание: {ex.Message}", "ОК");
+		}
+		finally { DoctorPicker.IsEnabled = !sending; }
+	}
+
+	// Обновляет расписание при выборе врача.
+	private async void Doctor_Changed(object sender, EventArgs e)
+	{
+		if (!loadingDoctors) await LoadDoctorSchedule();
+	}
+
+	private async Task LoadDoctorSchedule()
+	{
+		var version = ++scheduleVersion;
+		days.Clear();
+		selectedDay = null;
+		BuildDays();
+		BuildTimes();
+		SendButton.IsEnabled = false;
+		var doctor = DoctorPicker.SelectedItem as Doctor;
+		ScheduleMessage.Text = doctor == null ? "Нет доступных врачей." : "Загрузка расписания…";
+		if (doctor == null) return;
+		try
+		{
+			var result = await httpClient.GetFromJsonAsync<TimeResult>(
+				$"{Api.BaseUrl}schedule/free_slots.php?doctor_id={doctor.Id}");
+			if (version != scheduleVersion) return;
+			if (result?.Success != true)
+				throw new InvalidOperationException(result?.Message ?? "Не удалось загрузить расписание.");
+			days.AddRange(result.Days ?? new List<ScheduleDay>());
+			selectedDay = FindFirstAvailableDay();
+			BuildDays();
+			BuildTimes();
+			var available = days.Any(d => d.Slots.Any(slot => slot.IsAvailable));
+			ScheduleMessage.Text = available ? "Выберите дату и время приёма." : "У этого врача нет свободного времени.";
+			SendButton.IsEnabled = available && !sending;
+		}
+		catch (Exception ex)
+		{
+			if (version == scheduleVersion)
+				ScheduleMessage.Text = $"Не удалось загрузить расписание: {ex.Message}";
 		}
 	}
 
@@ -201,6 +255,7 @@ public partial class RecordPage : ContentPage
 
 		foreach (var slot in selectedDay?.Slots ?? new List<TimeSlot>())
 		{
+			if (!slot.IsAvailable) continue;
 			var item = new TimeItem(slot, false);
 			showTimes.Add(item);
 		}
@@ -249,6 +304,13 @@ public partial class RecordPage : ContentPage
 	// Проверяет форму и отправляет заявку на прием в базу через API.
 	private async void Send_Click(object sender, EventArgs e)
 	{
+		if (sending) return;
+		var doctor = DoctorPicker.SelectedItem as Doctor;
+		if (doctor == null)
+		{
+			await DisplayAlertAsync("Ошибка", "Выберите врача.", "ОК");
+			return;
+		}
 		var name = NameEntry.Text?.Trim() ?? "";
 		var phone = PhoneEntry.Text?.Trim() ?? "";
 		var petName = PetNameEntry.Text?.Trim() ?? "";
@@ -266,13 +328,17 @@ public partial class RecordPage : ContentPage
 
 		try
 		{
+			sending = true;
+			SendButton.IsEnabled = false;
+			DoctorPicker.IsEnabled = false;
 			var petId = selectedPet?.Id ?? 0;
-			var data = new AppointmentData(name, phone, petName, petType, petAge, petId, service.Id, time.Value, comment);
+			var data = new AppointmentData(name, phone, petName, petType, petAge, petId, service.Id, doctor.Id, time.Value, comment);
 			var response = await httpClient.PostAsJsonAsync($"{Api.BaseUrl}appointments/create.php", data);
 			var result = await response.Content.ReadFromJsonAsync<ApiResult>();
 
 			if (!response.IsSuccessStatusCode || result?.Success != true)
 			{
+				await LoadDoctorSchedule();
 				await DisplayAlertAsync("Ошибка", result?.Message ?? "Заявка не отправлена.", "ОК");
 				return;
 			}
@@ -285,6 +351,13 @@ public partial class RecordPage : ContentPage
 		{
 			await DisplayAlertAsync("Ошибка", $"Не удалось отправить заявку: {ex.Message}", "ОК");
 		}
+		finally
+		{
+			sending = false;
+			DoctorPicker.IsEnabled = true;
+			SendButton.IsEnabled = days.Any(d => d.Slots.Any(slot => slot.IsAvailable));
+		}
+
 	}
 
 	// Очищает поля формы.
@@ -427,10 +500,11 @@ public partial class RecordPage : ContentPage
 		[JsonPropertyName("pet_age")] public string PetAge { get; set; }
 		[JsonPropertyName("pet_id")] public int PetId { get; set; }
 		[JsonPropertyName("service_id")] public int ServiceId { get; set; }
+		[JsonPropertyName("doctor_id")] public int DoctorId { get; set; }
 		[JsonPropertyName("appointment_at")] public string AppointmentAt { get; set; }
 		[JsonPropertyName("comment")] public string Comment { get; set; }
 
-		public AppointmentData(string name, string phone, string petName, string petType, string petAge, int petId, int serviceId, string appointmentAt, string comment)
+		public AppointmentData(string name, string phone, string petName, string petType, string petAge, int petId, int serviceId, int doctorId, string appointmentAt, string comment)
 		{
 			Name = name;
 			Phone = phone;
@@ -439,6 +513,7 @@ public partial class RecordPage : ContentPage
 			PetAge = petAge;
 			PetId = petId;
 			ServiceId = serviceId;
+			DoctorId = doctorId;
 			AppointmentAt = appointmentAt;
 			Comment = comment;
 		}
@@ -467,6 +542,8 @@ public partial class RecordPage : ContentPage
 
 	private class TimeResult
 	{
+		[JsonPropertyName("success")] public bool Success { get; set; }
+		[JsonPropertyName("message")] public string Message { get; set; }
 		[JsonPropertyName("days")]
 		public List<ScheduleDay> Days { get; set; } = new List<ScheduleDay>();
 	}

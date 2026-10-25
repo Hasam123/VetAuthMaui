@@ -1,4 +1,4 @@
-namespace VetAuthMaui;
+﻿namespace VetAuthMaui;
 
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -8,6 +8,7 @@ using System.Text.Json.Serialization;
 // расписание
 public partial class AdminTimePage : ContentPage
 {
+	private bool loadingSchedule;
 	private HttpClient httpClient = new HttpClient();
 	private List<ScheduleDay> days = new List<ScheduleDay>();
 	private List<Appointment> appointments = new List<Appointment>();
@@ -40,27 +41,55 @@ public partial class AdminTimePage : ContentPage
 		ShowDay();
 	}
 
+	private async void Doctor_Changed(object sender, EventArgs e)
+	{
+		if (!loadingSchedule) await LoadSchedule();
+	}
+
 	// Загружает интервалы времени и заявки, чтобы собрать расписание администратора.
 	private async Task LoadSchedule()
 	{
+		if (loadingSchedule) return;
+		loadingSchedule = true;
+		DoctorPicker.IsEnabled = false;
+		slots.Clear();
+		days.Clear();
+		DatePicker.ItemsSource = null;
 		try
 		{
 			StatusLabel.Text = "Загрузка расписания...";
 
+			var doctorsResult = await httpClient.GetFromJsonAsync<DoctorResult>($"{Api.BaseUrl}doctors/list.php");
+			if (doctorsResult?.Success != true)
+				throw new InvalidOperationException(doctorsResult?.Message ?? "Не удалось загрузить врачей.");
+			if (!State.IsAdminMode || State.AdminId <= 0)
+				throw new InvalidOperationException("Войдите в учётную запись врача заново.");
+			var previousId = State.AdminId;
+			var doctors = (doctorsResult.Doctors ?? new List<Doctor>()).Where(d => d.Id == State.AdminId).ToList();
+			DoctorPicker.ItemDisplayBinding = new Binding(nameof(Doctor.Name));
+			DoctorPicker.ItemsSource = doctors;
+			DoctorPicker.SelectedItem = doctors.FirstOrDefault(d => d.Id == previousId) ?? doctors.FirstOrDefault();
+			if (DoctorPicker.SelectedItem is not Doctor doctor)
+			{
+				StatusLabel.Text = "Нет доступных врачей.";
+				return;
+			}
 			var scheduleResult =
 				await httpClient.GetFromJsonAsync<TimeResult>(
-					$"{Api.BaseUrl}schedule/free_slots.php");
+					$"{Api.BaseUrl}schedule/free_slots.php?doctor_id={doctor.Id}");
 
-			var appointmentsResult =
-				await httpClient.GetFromJsonAsync<AppointmentResult>(
-					$"{Api.BaseUrl}schedule/get_zapis_admin.php");
+			var doctorAppointments = await DoctorAppointments.LoadAsync(httpClient);
 
+			if (scheduleResult?.Success != true)
+				throw new InvalidOperationException(scheduleResult?.Message ?? "Не удалось загрузить расписание.");
 			days.Clear();
 			days.AddRange(scheduleResult?.Days ?? new List<ScheduleDay>());
 
 			appointments.Clear();
-			appointments.AddRange((appointmentsResult?.Appointments ?? new List<Appointment>())
-				.Where(appointment => !string.IsNullOrWhiteSpace(appointment.AppointmentAt)));
+			appointments.AddRange(doctorAppointments
+				.Where(appointment => !string.IsNullOrWhiteSpace(appointment.AppointmentAt)
+					&& appointment.DoctorId == doctor.Id
+					&& appointment.Status != "cancelled"));
 
 			DatePicker.ItemsSource = days;
 			DatePicker.ItemDisplayBinding = new Binding("Label");
@@ -75,6 +104,12 @@ public partial class AdminTimePage : ContentPage
 			StatusLabel.Text = "";
 			await DisplayAlertAsync("Ошибка", $"Не удалось загрузить расписание: {ex.Message}", "ОК");
 		}
+		finally
+		{
+			loadingSchedule = false;
+			DoctorPicker.IsEnabled = false;
+		}
+
 	}
 
 	// Показывает выбранный день и сопоставляет каждый временной слот с заявкой.
@@ -106,6 +141,8 @@ public partial class AdminTimePage : ContentPage
 	// время
 	private class TimeResult
 	{
+		[JsonPropertyName("success")] public bool Success { get; set; }
+		[JsonPropertyName("message")] public string Message { get; set; }
 		[JsonPropertyName("days")]
 		public List<ScheduleDay> Days { get; set; } = new List<ScheduleDay>();
 	}

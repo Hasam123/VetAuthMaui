@@ -53,6 +53,7 @@
                                 <Label Text="{Binding Phone}" TextColor="#12A7A7" FontSize="15" />
                                 <Label Text="{Binding PetInfo}" TextColor="#17213A" FontSize="15" FontAttributes="Bold" />
                                 <Label Text="{Binding ServiceInfo}" TextColor="#17213A" FontSize="15" />
+                                <Label Text="{Binding DoctorInfo}" TextColor="#17213A" FontSize="15" />
                                 <Label Text="{Binding TimeText}" TextColor="#FF8A5B" FontSize="15" FontAttributes="Bold" />
                                 <Label Text="{Binding Comment}" TextColor="#657084" FontSize="14" />
                                 <Label Text="{Binding AdminText}" TextColor="#12A7A7" FontSize="14" FontAttributes="Bold" />

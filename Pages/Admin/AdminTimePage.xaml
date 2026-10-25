@@ -16,6 +16,9 @@
                     HeightRequest="48"
                     Clicked="Refresh_Click" />
 
+            <Picker x:Name="DoctorPicker" Title="Врач" TextColor="#222222"
+                    SelectedIndexChanged="Doctor_Changed" />
+
             <Picker
                 x:Name="DatePicker"
                 Title="День"

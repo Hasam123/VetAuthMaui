@@ -4,7 +4,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
-require "../../db.php";
+require __DIR__ . "/../db.php";
 
 $data = json_decode(file_get_contents("php://input"), true);
 $id = (int)($data["id"] ?? 0);
@@ -18,6 +18,11 @@ $sql = "DELETE FROM zapic_na_priem WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id);
 $stmt->execute();
+
+if ($stmt->affected_rows !== 1) {
+    echo json_encode(["success" => false, "message" => "Заявка не найдена"], JSON_UNESCAPED_UNICODE);
+    exit;
+}
 
 echo json_encode(["success" => true, "message" => "Заявка удалена"], JSON_UNESCAPED_UNICODE);
 

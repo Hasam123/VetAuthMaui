@@ -3,7 +3,13 @@ header("Content-Type: application/json; charset=utf-8");
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET");
 
-require "../../db.php";
+require __DIR__ . "/../db.php";
+require __DIR__ . "/../includes/doctor_booking.php";
+$doctorId = (int)($_GET["doctor_id"] ?? 0);
+if (!bookingDoctorExists($conn, $doctorId)) {
+    echo json_encode(["success" => false, "message" => "Выберите врача", "days" => []], JSON_UNESCAPED_UNICODE);
+    exit;
+}
 
 $busy = [];
 $startDate = date("Y-m-d");
@@ -11,10 +17,10 @@ $endDate = date("Y-m-d", strtotime("+4 days"));
 
 $sql = "SELECT data, time
         FROM zapic_na_priem
-        WHERE data BETWEEN ? AND ?
+        WHERE data BETWEEN ? AND ? AND (doctor_id = ? OR doctor_id IS NULL)
           AND status IN ('new', 'accepted', 'done')";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ss", $startDate, $endDate);
+$stmt->bind_param("ssi", $startDate, $endDate, $doctorId);
 $stmt->execute();
 $result = $stmt->get_result();
 

@@ -23,6 +23,10 @@ public class Appointment
 	[JsonPropertyName("created")] public string Created { get; set; } = "";
 	[JsonPropertyName("status")] public string Status { get; set; } = "";
 
+	[JsonPropertyName("doctor_id")] public int? DoctorId { get; set; }
+	[JsonPropertyName("doctor_name")] public string DoctorName { get; set; } = "";
+	public string DoctorInfo => string.IsNullOrWhiteSpace(DoctorName) ? "Врач не указан" : $"Врач: {DoctorName}";
+
 	public DateTime AppointmentDate
 	{
 		get

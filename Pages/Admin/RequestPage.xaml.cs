@@ -1,4 +1,4 @@
-namespace VetAuthMaui;
+﻿namespace VetAuthMaui;
 
 using System.Collections.ObjectModel;
 using System.Net.Http.Json;
@@ -95,6 +95,12 @@ public partial class RequestPage : ContentPage
 		var button = (Button)sender;
 		var appointment = (Appointment)button.BindingContext;
 
+		if (appointment.Status == "done")
+		{
+			await DisplayAlertAsync("Приём завершён", "Изменить данные можно в медицинской карте.", "ОК");
+			return;
+		}
+
 		var selected = await DisplayActionSheetAsync(
 			"Изменить статус",
 			"Отмена",
@@ -110,7 +116,15 @@ public partial class RequestPage : ContentPage
 		if (selected == "Принята")
 			status = "accepted";
 		if (selected == "Выполнена")
-			status = "done";
+		{
+			if (appointment.Status == "cancelled")
+			{
+				await DisplayAlertAsync("Ошибка", "Отменённую запись нельзя завершить.", "ОК");
+				return;
+			}
+			Med_Click(sender, e);
+			return;
+		}
 		if (selected == "Отменена")
 			status = "cancelled";
 
@@ -256,14 +270,16 @@ public partial class RequestPage : ContentPage
 	// Загружает данные для страницы.
 	private async Task LoadAppointments()
 	{
+		allAppointments.Clear();
+		appointments.Clear();
 		try
 		{
 			StatusLabel.Text = "Загрузка заявок...";
 
-			var response = await httpClient.GetFromJsonAsync<AppointmentResult>($"{Api.BaseUrl}appointments/list.php");
+			var doctorAppointments = await DoctorAppointments.LoadAsync(httpClient);
 			allAppointments.Clear();
 
-			foreach (var item in response?.Appointments ?? new List<Appointment>())
+			foreach (var item in doctorAppointments)
 				allAppointments.Add(item);
 
 			Filter();

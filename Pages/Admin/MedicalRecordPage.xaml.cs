@@ -1,4 +1,4 @@
-namespace VetAuthMaui;
+﻿namespace VetAuthMaui;
 
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
@@ -7,7 +7,9 @@ using System.Text.Json.Serialization;
 public partial class MedicalRecordPage : ContentPage
 {
 	private HttpClient httpClient = new HttpClient();
-	private bool initialized;
+	private int loadedAppointmentId;
+	private int loadedDoctorId;
+	private bool saving;
 
 	public MedicalRecordPage()
 	{
@@ -23,11 +25,11 @@ public partial class MedicalRecordPage : ContentPage
 		base.OnAppearing();
 
 		// чтобы не заполнять второй раз
-		if (initialized)
-			return;
-
-		initialized = true;
 		var draft = State.CurrentMedicalRecord;
+		if (draft != null && draft.AppointmentId == loadedAppointmentId && loadedDoctorId == State.AdminId)
+			return;
+		appointmentId = 0;
+		loadedAppointmentId = 0;
 
 		// если заявка не выбрана
 		if (draft == null)
@@ -39,6 +41,8 @@ public partial class MedicalRecordPage : ContentPage
 
 		// заполнение формы
 		appointmentId = draft.AppointmentId;
+		loadedAppointmentId = appointmentId;
+		loadedDoctorId = State.AdminId;
 		PatientLabel.Text = $"{draft.ClientName} - {draft.PetName}";
 		AppointmentLabel.Text = draft.AppointmentText;
 		JalobaEditor.Text = draft.Jaloba;
@@ -52,6 +56,19 @@ public partial class MedicalRecordPage : ContentPage
 	// Сохраняет измененные данные.
 	private async void Save_Click(object sender, EventArgs e)
 	{
+		if (saving) return;
+		if (!State.IsAdminMode || State.AdminId <= 0 || State.AdminId != loadedDoctorId)
+		{
+			await DisplayAlertAsync("Ошибка", "Войдите в учётную запись врача заново.", "ОК");
+			return;
+		}
+		if (new[] { JalobaEditor.Text, DiagnozEditor.Text, ObsledResultEditor.Text,
+			NazLechEditor.Text, ProcedureDoneEditor.Text, TreatmentNotesEditor.Text }
+			.All(string.IsNullOrWhiteSpace))
+		{
+			await DisplayAlertAsync("Ошибка", "Заполните медицинскую запись.", "ОК");
+			return;
+		}
 		// проверка заявки
 		if (appointmentId <= 0)
 		{
@@ -61,6 +78,7 @@ public partial class MedicalRecordPage : ContentPage
 
 		try
 		{
+			saving = true;
 			// отправка медкарты
 			var response = await httpClient.PostAsJsonAsync(
 				$"{Api.BaseUrl}appointments/update_medical_record.php",
@@ -88,6 +106,8 @@ public partial class MedicalRecordPage : ContentPage
 		{
 			await DisplayAlertAsync("Ошибка", $"Ошибка сохранения медицинской записи: {ex.Message}", "ОК");
 		}
+		finally { saving = false; }
+
 	}
 
 	// данные медкарты

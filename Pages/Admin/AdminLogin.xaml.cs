@@ -1,4 +1,4 @@
-namespace VetAuthMaui;
+﻿namespace VetAuthMaui;
 
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
@@ -48,10 +48,10 @@ public partial class AdminLogin : ContentPage
 			var response = await httpClient.PostAsJsonAsync($"{Api.BaseUrl}admin/login.php", data);
 			var result = await response.Content.ReadFromJsonAsync<LoginResult>();
 
-			if (response.IsSuccessStatusCode && result?.Success == true)
+			if (response.IsSuccessStatusCode && result?.Success == true && result.User?.Id > 0)
 			{
 				MessageLabel.Text = result.Message;
-				State.IsAdminMode = true;
+				State.SetAdmin(result.User.Id, result.User.Name);
 				await Shell.Current.GoToAsync("AdminPage");
 				return;
 			}
@@ -82,9 +82,16 @@ public partial class AdminLogin : ContentPage
 		}
 	}
 
+	private class AdminUser
+	{
+		[JsonPropertyName("id")] public int Id { get; set; }
+		[JsonPropertyName("name")] public string Name { get; set; } = "";
+	}
+
 	// ответ входа
 	private class LoginResult
 	{
+		[JsonPropertyName("user")] public AdminUser User { get; set; }
 		[JsonPropertyName("success")] public bool Success { get; set; }
 		[JsonPropertyName("message")] public string Message { get; set; } = "";
 	}

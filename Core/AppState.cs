@@ -4,6 +4,24 @@ namespace VetAuthMaui;
 public static class State
 {
 	public static bool IsAdminMode { get; set; }
+	public static int AdminId { get; private set; }
+	public static string AdminName { get; private set; } = "";
+
+	public static void SetAdmin(int id, string name)
+	{
+		AdminId = id;
+		AdminName = name;
+		CurrentMedicalRecord = null;
+		IsAdminMode = true;
+	}
+
+	public static void LogoutAdmin()
+	{
+		AdminId = 0;
+		AdminName = "";
+		IsAdminMode = false;
+		CurrentMedicalRecord = null;
+	}
 	public static int ClientId { get; set; }
 	public static string ClientName { get; set; } = "";
 	public static string ClientPhone { get; set; } = "";
@@ -32,7 +50,7 @@ public static class State
 	// Очищает данные текущего клиента после выхода из приложения.
 	public static void LogoutClient()
 	{
-		IsAdminMode = false;
+		LogoutAdmin();
 		ClientId = 0;
 		ClientName = "";
 		ClientPhone = "";

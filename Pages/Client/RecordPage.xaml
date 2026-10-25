@@ -45,6 +45,16 @@
                 </Grid>
             </Border>
 
+            <Border BackgroundColor="White" Stroke="#DDEBF3" Padding="16">
+                <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
+                <VerticalStackLayout Spacing="6">
+                    <Label Text="Врач" TextColor="#657084" FontSize="13" />
+                    <Picker x:Name="DoctorPicker" Title="Выберите врача" TextColor="#17213A"
+                            SelectedIndexChanged="Doctor_Changed" />
+                    <Label x:Name="ScheduleMessage" TextColor="#657084" FontSize="13" />
+                </VerticalStackLayout>
+            </Border>
+
             <Label Text="Выберите дату"
                    TextColor="#17213A"
                    FontSize="18"
@@ -223,7 +233,7 @@
                 </VerticalStackLayout>
             </Border>
 
-            <Button Text="Записаться"
+            <Button x:Name="SendButton" Text="Записаться"
                     BackgroundColor="#12A7A7"
                     TextColor="White"
                     FontAttributes="Bold"

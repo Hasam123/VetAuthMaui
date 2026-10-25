@@ -4,7 +4,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
-require "../../db.php";
+require __DIR__ . "/../db.php";
 
 $data = json_decode(file_get_contents("php://input"), true);
 $id = (int)($data["id"] ?? 0);
@@ -37,10 +37,15 @@ if ($row["status"] != "new" && $row["status"] != "accepted") {
 }
 
 $status = "cancelled";
-$sql = "UPDATE zapic_na_priem SET status = ? WHERE id = ?";
+$sql = "UPDATE zapic_na_priem SET status = ? WHERE id = ? AND status IN ('new', 'accepted')";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("si", $status, $id);
 $stmt->execute();
+
+if ($stmt->affected_rows !== 1) {
+    echo json_encode(["success" => false, "message" => "Статус записи уже изменился. Обновите список."], JSON_UNESCAPED_UNICODE);
+    exit;
+}
 
 echo json_encode(["success" => true, "message" => "Запись отменена"], JSON_UNESCAPED_UNICODE);
 

@@ -30,6 +30,8 @@ public partial class AdminPage : ContentPage
 	// Загружает данные для страницы.
 	private async Task LoadStatistics()
 	{
+		TotalRequestsLabel.Text = NewRequestsLabel.Text = AcceptedRequestsLabel.Text =
+			DoneRequestsLabel.Text = CancelledRequestsLabel.Text = "0";
 		try
 		{
 			// загрузка статистики
@@ -39,6 +41,12 @@ public partial class AdminPage : ContentPage
 			// запрос статистики
 		var response = await httpClient.GetFromJsonAsync<StatisticResult>($"{Api.BaseUrl}admin/stats.php");
 			var statistic = response?.Statistic ?? new Statistic();
+			var doctorAppointments = await DoctorAppointments.LoadAsync(httpClient);
+			statistic.RequestsTotal = doctorAppointments.Count;
+			statistic.RequestsNew = doctorAppointments.Count(a => a.Status == "new");
+			statistic.RequestsAccepted = doctorAppointments.Count(a => a.Status == "accepted");
+			statistic.RequestsDone = doctorAppointments.Count(a => a.Status == "done");
+			statistic.RequestsCancelled = doctorAppointments.Count(a => a.Status == "cancelled");
 
 			// вывод статистики
 		TotalRequestsLabel.Text = statistic.RequestsTotal.ToString();
@@ -115,7 +123,7 @@ private async void Schedule_Click(object sender, EventArgs e)
 	// Обрабатывает нажатие кнопки.
 	private async void Logout_Click(object sender, EventArgs e)
 	{
-		State.IsAdminMode = false;
+		State.LogoutAdmin();
 		await Shell.Current.GoToAsync("//MainPage");
 	}
 
