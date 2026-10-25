@@ -51,9 +51,13 @@
                     <Label Text="Врач" TextColor="#657084" FontSize="13" />
                     <Picker x:Name="DoctorPicker" Title="Выберите врача" TextColor="#17213A"
                             SelectedIndexChanged="Doctor_Changed" />
-                    <Label x:Name="ScheduleMessage" TextColor="#657084" FontSize="13" />
                 </VerticalStackLayout>
             </Border>
+
+            <Label x:Name="ScheduleMessage"
+                   TextColor="#657084"
+                   FontSize="13"
+                   LineBreakMode="WordWrap" />
 
             <Label Text="Выберите дату"
                    TextColor="#17213A"
