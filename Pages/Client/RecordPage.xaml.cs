@@ -1,4 +1,4 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -316,7 +316,7 @@ public partial class RecordPage : ContentPage
 		var petName = PetNameEntry.Text?.Trim() ?? "";
 		var petType = PetTypePicker.SelectedItem?.ToString() ?? "";
 		var petAge = PetAgeEntry.Text?.Trim() ?? "";
-		var comment = CommentEditor.Text?.Trim() ?? "";
+		var client_comment = CommentEditor.Text?.Trim() ?? "";
 		var service = ServicePicker.SelectedItem as Service;
 		var time = selectedTime?.Slot;
 
@@ -332,7 +332,7 @@ public partial class RecordPage : ContentPage
 			SendButton.IsEnabled = false;
 			DoctorPicker.IsEnabled = false;
 			var petId = selectedPet?.Id ?? 0;
-			var data = new AppointmentData(name, phone, petName, petType, petAge, petId, service.Id, doctor.Id, time.Value, comment);
+			var data = new AppointmentData(name, phone, petName, petType, petAge, petId, service.Id, doctor.Id, time.Value, client_comment);
 			var response = await httpClient.PostAsJsonAsync($"{Api.BaseUrl}appointments/create.php", data);
 			var result = await response.Content.ReadFromJsonAsync<ApiResult>();
 
@@ -502,9 +502,9 @@ public partial class RecordPage : ContentPage
 		[JsonPropertyName("service_id")] public int ServiceId { get; set; }
 		[JsonPropertyName("doctor_id")] public int DoctorId { get; set; }
 		[JsonPropertyName("appointment_at")] public string AppointmentAt { get; set; }
-		[JsonPropertyName("comment")] public string Comment { get; set; }
+		[JsonPropertyName("client_comment")] public string ClientComment { get; set; }
 
-		public AppointmentData(string name, string phone, string petName, string petType, string petAge, int petId, int serviceId, int doctorId, string appointmentAt, string comment)
+		public AppointmentData(string name, string phone, string petName, string petType, string petAge, int petId, int serviceId, int doctorId, string appointmentAt, string client_comment)
 		{
 			Name = name;
 			Phone = phone;
@@ -515,7 +515,7 @@ public partial class RecordPage : ContentPage
 			ServiceId = serviceId;
 			DoctorId = doctorId;
 			AppointmentAt = appointmentAt;
-			Comment = comment;
+			ClientComment = client_comment;
 		}
 	}
 

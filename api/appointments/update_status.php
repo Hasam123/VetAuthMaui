@@ -34,8 +34,8 @@ try {
         exit;
     }
     if ($status === "done") {
-        $stmt = $conn->prepare("SELECT id FROM result_obsled WHERE zapic_id = ? AND (COALESCE(jaloba, '') <> '' OR COALESCE(diagnoz, '') <> '' OR COALESCE(result, '') <> '') UNION ALL SELECT id FROM lechenie WHERE zapic_id = ? AND (COALESCE(naz_lech, '') <> '' OR COALESCE(procedure_done, '') <> '' OR COALESCE(notes, '') <> '')");
-        $stmt->bind_param("ii", $id, $id);
+        $stmt = $conn->prepare("SELECT id FROM medical_records WHERE id = ? AND (COALESCE(jaloba, '') <> '' OR COALESCE(diagnoz, '') <> '' OR COALESCE(naz_lech, '') <> '' OR COALESCE(procedure_done, '') <> '' OR COALESCE(notes, '') <> '')");
+        $stmt->bind_param("i", $id);
         $stmt->execute();
         if ($appointment["status"] === "cancelled" || $stmt->get_result()->num_rows === 0) {
             $conn->rollback();

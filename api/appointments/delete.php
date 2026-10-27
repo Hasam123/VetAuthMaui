@@ -17,7 +17,17 @@ if ($id <= 0) {
 $sql = "DELETE FROM zapic_na_priem WHERE id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $id);
-$stmt->execute();
+try {
+    $stmt->execute();
+} catch (mysqli_sql_exception $e) {
+    if ((int)$e->getCode() === 1451) {
+        echo json_encode(["success" => false, "message" => "Нельзя удалить приём с медицинской картой"], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
+    error_log("Appointment delete failed: " . $e->getMessage());
+    echo json_encode(["success" => false, "message" => "Не удалось удалить заявку"], JSON_UNESCAPED_UNICODE);
+    exit;
+}
 
 if ($stmt->affected_rows !== 1) {
     echo json_encode(["success" => false, "message" => "Заявка не найдена"], JSON_UNESCAPED_UNICODE);

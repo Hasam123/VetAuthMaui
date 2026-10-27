@@ -14,7 +14,7 @@ $phone = trim($data["phone"] ?? "");
 $petName = trim($data["pet_name"] ?? "");
 $petType = trim($data["pet_type"] ?? "");
 $petAge = trim($data["pet_age"] ?? "");
-$comment = trim($data["comment"] ?? "");
+$client_comment = trim($data["client_comment"] ?? "");
 $petId = (int)($data["pet_id"] ?? 0);
 $serviceId = (int)($data["service_id"] ?? 0);
 $doctorId = (int)($data["doctor_id"] ?? 0);
@@ -134,10 +134,10 @@ try {
 
     $status = "new";
 
-    $sql = "INSERT INTO zapic_na_priem (pet_id, service_id, doctor_id, data, time, status, comment)
+    $sql = "INSERT INTO zapic_na_priem (pet_id, service_id, doctor_id, data, time, status, client_comment)
                                    VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($sql);
-    $stmt->bind_param("iiissss", $petId, $serviceId, $doctorId, $date, $clock, $status, $comment);
+    $stmt->bind_param("iiissss", $petId, $serviceId, $doctorId, $date, $clock, $status, $client_comment);
 
     $stmt->execute();
     $conn->commit();

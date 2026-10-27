@@ -7,7 +7,7 @@ public class Appointment
 	[JsonPropertyName("id")] public int Id { get; set; }
 	[JsonPropertyName("name")] public string Name { get; set; } = "";
 	[JsonPropertyName("phone")] public string Phone { get; set; } = "";
-	[JsonPropertyName("comment")] public string Comment { get; set; } = "";
+	[JsonPropertyName("client_comment")] public string ClientComment { get; set; } = "";
 	[JsonPropertyName("admin_comment")] public string AdminComment { get; set; } = "";
 	[JsonPropertyName("pet_name")] public string PetName { get; set; } = "";
 	[JsonPropertyName("pet_type")] public string PetType { get; set; } = "";
@@ -15,12 +15,11 @@ public class Appointment
 	[JsonPropertyName("service_title")] public string ServiceTitle { get; set; } = "";
 	[JsonPropertyName("jaloba")] public string Jaloba { get; set; } = "";
 	[JsonPropertyName("diagnoz")] public string Diagnoz { get; set; } = "";
-	[JsonPropertyName("obsled_result")] public string ObsledResult { get; set; } = "";
 	[JsonPropertyName("naz_lech")] public string NazLech { get; set; } = "";
 	[JsonPropertyName("procedure_done")] public string ProcedureDone { get; set; } = "";
 	[JsonPropertyName("treatment_notes")] public string TreatmentNotes { get; set; } = "";
 	[JsonPropertyName("appointment_at")] public string AppointmentAt { get; set; } = "";
-	[JsonPropertyName("created")] public string Created { get; set; } = "";
+	[JsonPropertyName("data_created")] public string DataCreated { get; set; } = "";
 	[JsonPropertyName("status")] public string Status { get; set; } = "";
 
 	[JsonPropertyName("doctor_id")] public int? DoctorId { get; set; }
@@ -109,10 +108,10 @@ public class Appointment
 	{
 		get
 		{
-			if (string.IsNullOrWhiteSpace(Created))
+			if (string.IsNullOrWhiteSpace(DataCreated))
 				return "";
 
-			return $"Создана: {FormatDate(Created)}";
+			return $"Создана: {FormatDate(DataCreated)}";
 		}
 	}
 	public bool CanCancel
@@ -149,7 +148,6 @@ public class Appointment
 			var text = "";
 			if (!string.IsNullOrWhiteSpace(Jaloba)) text += $"Жалоба: {Jaloba}\n";
 			if (!string.IsNullOrWhiteSpace(Diagnoz)) text += $"Диагноз: {Diagnoz}\n";
-			if (!string.IsNullOrWhiteSpace(ObsledResult)) text += $"Результат: {ObsledResult}\n";
 			if (!string.IsNullOrWhiteSpace(NazLech)) text += $"Лечение: {NazLech}\n";
 			if (!string.IsNullOrWhiteSpace(ProcedureDone)) text += $"Сделано: {ProcedureDone}\n";
 			if (!string.IsNullOrWhiteSpace(TreatmentNotes)) text += $"Заметки: {TreatmentNotes}";

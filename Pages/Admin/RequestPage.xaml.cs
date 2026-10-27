@@ -1,4 +1,4 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 using System.Collections.ObjectModel;
 using System.Net.Http.Json;
@@ -181,13 +181,13 @@ public partial class RequestPage : ContentPage
 	}
 
 	// Сохраняет измененные данные.
-	private async Task SaveCommentData(Appointment appointment, string comment)
+	private async Task SaveCommentData(Appointment appointment, string client_comment)
 	{
 		try
 		{
 			var response = await httpClient.PostAsJsonAsync(
 				$"{Api.BaseUrl}appointments/update_admin_comment.php",
-				new CommentData(appointment.Id, comment));
+				new CommentData(appointment.Id, client_comment));
 
 			var result = await response.Content.ReadFromJsonAsync<ApiResult>();
 
@@ -220,7 +220,6 @@ public partial class RequestPage : ContentPage
 			AppointmentText = appointment.TimeText ?? "",
 			Jaloba = appointment.Jaloba ?? "",
 			Diagnoz = appointment.Diagnoz ?? "",
-			ObsledResult = appointment.ObsledResult ?? "",
 			NazLech = appointment.NazLech ?? "",
 			ProcedureDone = appointment.ProcedureDone ?? "",
 			TreatmentNotes = appointment.TreatmentNotes ?? ""

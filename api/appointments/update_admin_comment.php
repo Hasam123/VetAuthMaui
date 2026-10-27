@@ -8,7 +8,7 @@ require __DIR__ . "/../db.php";
 
 $data = json_decode(file_get_contents("php://input"), true);
 $id = (int)($data["id"] ?? 0);
-$comment = trim($data["admin_comment"] ?? "");
+$client_comment = trim($data["admin_comment"] ?? "");
 
 if ($id <= 0) {
     echo json_encode(["success" => false, "message" => "Неверный ID заявки"], JSON_UNESCAPED_UNICODE);
@@ -25,7 +25,7 @@ if ($stmt->get_result()->num_rows !== 1) {
 
 $sql = "UPDATE zapic_na_priem SET admin_comment = ? WHERE id = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("si", $comment, $id);
+$stmt->bind_param("si", $client_comment, $id);
 $stmt->execute();
 
 echo json_encode(["success" => true, "message" => "Комментарий сохранен"], JSON_UNESCAPED_UNICODE);

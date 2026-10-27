@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!-- Личный кабинет клиента: карточка клиента и список записей. -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -59,7 +59,7 @@
                             </Border.StrokeShape>
 
                             <VerticalStackLayout Spacing="5">
-                                <Label Text="{Binding Comment}" TextColor="#17213A" FontSize="16" FontAttributes="Bold" />
+                                <Label Text="{Binding ClientComment}" TextColor="#17213A" FontSize="16" FontAttributes="Bold" />
                                 <Label Text="{Binding PetInfo}" TextColor="#17213A" FontSize="15" />
                                 <Label Text="{Binding ServiceInfo}" TextColor="#17213A" FontSize="15" />
                                 <Label Text="{Binding DoctorInfo}" TextColor="#17213A" FontSize="15" />

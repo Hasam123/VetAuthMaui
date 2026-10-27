@@ -11,16 +11,15 @@ $doctorId = (int)($_GET["doctor_id"] ?? 0);
 $sql = "SELECT z.id, z.doctor_id, doctor.name AS doctor_name, v.name, v.phone, p.name AS pet_name, p.type AS pet_type,
                p.age AS pet_age, s.name AS service_title,
                TIMESTAMP(z.data, z.time) AS appointment_at,
-               z.comment, z.admin_comment, z.created_at AS created, z.status,
-               r.jaloba, r.diagnoz, r.result AS obsled_result,
-               l.naz_lech, l.procedure_done, l.notes AS treatment_notes
+               z.client_comment, z.admin_comment, z.data_created AS data_created, z.status,
+               m.jaloba, m.diagnoz,
+               m.naz_lech, m.procedure_done, m.notes AS treatment_notes
         FROM zapic_na_priem z
         JOIN pets p ON p.id = z.pet_id
         LEFT JOIN admins doctor ON doctor.id = z.doctor_id
         JOIN vladelci v ON v.id = p.client_id
         LEFT JOIN services s ON s.id = z.service_id
-        LEFT JOIN result_obsled r ON r.zapic_id = z.id
-        LEFT JOIN lechenie l ON l.zapic_id = z.id
+        LEFT JOIN medical_records m ON m.id = z.id
         WHERE z.data IS NOT NULL
           AND z.time IS NOT NULL
           AND z.status IN ('new', 'accepted', 'done', 'cancelled')

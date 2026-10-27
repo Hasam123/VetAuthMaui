@@ -1,0 +1,386 @@
+{
+    "passed": 95,
+    "failed": 0,
+    "checks": [
+        {
+            "check": "Testing existing migrated database schema",
+            "passed": true
+        },
+        {
+            "check": "History no longer contains removed IDs",
+            "passed": true
+        },
+        {
+            "check": "Exact agreed seven-column schema",
+            "passed": true
+        },
+        {
+            "check": "Medical record ID is appointment ID, no auto increment",
+            "passed": true
+        },
+        {
+            "check": "Foreign key blocks missing appointment",
+            "passed": true
+        },
+        {
+            "check": "Register client",
+            "passed": true
+        },
+        {
+            "check": "Client login",
+            "passed": true
+        },
+        {
+            "check": "Wrong password rejected",
+            "passed": true
+        },
+        {
+            "check": "Create test pet",
+            "passed": true
+        },
+        {
+            "check": "Available schedule returned",
+            "passed": true
+        },
+        {
+            "check": "Create appointment through API",
+            "passed": true
+        },
+        {
+            "check": "Duplicate slot rejected",
+            "passed": true
+        },
+        {
+            "check": "Cannot complete without medical record",
+            "passed": true
+        },
+        {
+            "check": "Empty record rejected",
+            "passed": true
+        },
+        {
+            "check": "Whitespace-only record rejected",
+            "passed": true
+        },
+        {
+            "check": "Missing appointment rejected",
+            "passed": true
+        },
+        {
+            "check": "Invalid appointment ID rejected",
+            "passed": true
+        },
+        {
+            "check": "Accept appointment",
+            "passed": true
+        },
+        {
+            "check": "Save full medical record",
+            "passed": true
+        },
+        {
+            "check": "Saving completes appointment",
+            "passed": true
+        },
+        {
+            "check": "Unicode, apostrophes and newlines round trip",
+            "passed": true
+        },
+        {
+            "check": "New record has creation timestamp",
+            "passed": true
+        },
+        {
+            "check": "History includes doctor snapshot",
+            "passed": true
+        },
+        {
+            "check": "Read unified card: appointments\/list.php?doctor_id=19",
+            "passed": true
+        },
+        {
+            "check": "Read unified card: clients\/profile.php?phone=Tc6f4c50604df",
+            "passed": true
+        },
+        {
+            "check": "Read unified card: schedule\/get_zapis_admin.php?doctor_id=19",
+            "passed": true
+        },
+        {
+            "check": "Repeated save updates same card",
+            "passed": true
+        },
+        {
+            "check": "Repeated save does not append duplicate history",
+            "passed": true
+        },
+        {
+            "check": "Database blocks reopening completed appointment",
+            "passed": true
+        },
+        {
+            "check": "No duplicate medical records",
+            "passed": true
+        },
+        {
+            "check": "Update preserves creation timestamp",
+            "passed": true
+        },
+        {
+            "check": "Repeated save leaves service history unchanged",
+            "passed": true
+        },
+        {
+            "check": "API prevents deleting appointment with card",
+            "passed": true
+        },
+        {
+            "check": "Rejected deletion preserves medical card",
+            "passed": true
+        },
+        {
+            "check": "Completed appointment cannot be cancelled",
+            "passed": true
+        },
+        {
+            "check": "Completed appointment cannot be reopened",
+            "passed": true
+        },
+        {
+            "check": "Cancel new appointment",
+            "passed": true
+        },
+        {
+            "check": "Cancelled appointment rejects medical save",
+            "passed": true
+        },
+        {
+            "check": "Cancelled appointment has no partial card",
+            "passed": true
+        },
+        {
+            "check": "Cancelled slot can be booked again",
+            "passed": true
+        },
+        {
+            "check": "Delete appointment without card",
+            "passed": true
+        },
+        {
+            "check": "Repeated deletion returns error",
+            "passed": true
+        },
+        {
+            "check": "Injected status failure reported",
+            "passed": true
+        },
+        {
+            "check": "New medical insert rolled back",
+            "passed": true
+        },
+        {
+            "check": "Failed save preserves appointment status",
+            "passed": true
+        },
+        {
+            "check": "Failed save does not append history",
+            "passed": true
+        },
+        {
+            "check": "Save works after fault removed",
+            "passed": true
+        },
+        {
+            "check": "Injected failure during existing card update reported",
+            "passed": true
+        },
+        {
+            "check": "Existing medical card fully rolled back",
+            "passed": true
+        },
+        {
+            "check": "History trigger failure reported",
+            "passed": true
+        },
+        {
+            "check": "History failure rolls back card and status",
+            "passed": true
+        },
+        {
+            "check": "Single populated field accepted: jaloba",
+            "passed": true
+        },
+        {
+            "check": "Single populated field accepted: diagnoz",
+            "passed": true
+        },
+        {
+            "check": "Single populated field accepted: naz_lech",
+            "passed": true
+        },
+        {
+            "check": "Single populated field accepted: procedure_done",
+            "passed": true
+        },
+        {
+            "check": "Single populated field accepted: treatment_notes",
+            "passed": true
+        },
+        {
+            "check": "Service history immutable",
+            "passed": true
+        },
+        {
+            "check": "Service history immutable",
+            "passed": true
+        },
+        {
+            "check": "Two doctors can receive appointments at same time",
+            "passed": true
+        },
+        {
+            "check": "Doctor filter excludes other doctors appointments",
+            "passed": true
+        },
+        {
+            "check": "First doctor card absent from second doctor list",
+            "passed": true
+        },
+        {
+            "check": "Inactive doctor hidden in booking list",
+            "passed": true
+        },
+        {
+            "check": "Direct booking of inactive doctor rejected",
+            "passed": true
+        },
+        {
+            "check": "Inactive doctor has no available slots",
+            "passed": true
+        },
+        {
+            "check": "Deactivating doctor preserves existing appointments",
+            "passed": true
+        },
+        {
+            "check": "Changing service price and name leaves history unchanged",
+            "passed": true
+        },
+        {
+            "check": "Register second client",
+            "passed": true
+        },
+        {
+            "check": "Second client profile excludes first client appointments",
+            "passed": true
+        },
+        {
+            "check": "Cannot book another client pet",
+            "passed": true
+        },
+        {
+            "check": "Cannot cancel another client appointment",
+            "passed": true
+        },
+        {
+            "check": "Web doctor login and listing work after migration",
+            "passed": true
+        },
+        {
+            "check": "Removed examination result field absent from web form",
+            "passed": true
+        },
+        {
+            "check": "Web panel saves unified medical card",
+            "passed": true
+        },
+        {
+            "check": "Web-created card visible through client API",
+            "passed": true
+        },
+        {
+            "check": "Web completion records service history",
+            "passed": true
+        },
+        {
+            "check": "Web deletion protects medical card",
+            "passed": true
+        },
+        {
+            "check": "Web rejects empty medical card",
+            "passed": true
+        },
+        {
+            "check": "Web rejects cancelled appointment card",
+            "passed": true
+        },
+        {
+            "check": "Web rejects reopening completed appointment",
+            "passed": true
+        },
+        {
+            "check": "Web rejects completion without card",
+            "passed": true
+        },
+        {
+            "check": "Cloned admin data restored after web test",
+            "passed": true
+        },
+        {
+            "check": "Production admins untouched",
+            "passed": true
+        },
+        {
+            "check": "Exact current history schema including kol and data_created",
+            "passed": true
+        },
+        {
+            "check": "History trigger populates kol=1 and timestamp",
+            "passed": true
+        },
+        {
+            "check": "Zero quantity rejected",
+            "passed": true
+        },
+        {
+            "check": "Negative quantity rejected",
+            "passed": true
+        },
+        {
+            "check": "Negative total price rejected",
+            "passed": true
+        },
+        {
+            "check": "Quantity defaults to one when omitted",
+            "passed": true
+        },
+        {
+            "check": "Production data unchanged: admins",
+            "passed": true
+        },
+        {
+            "check": "Production data unchanged: vladelci",
+            "passed": true
+        },
+        {
+            "check": "Production data unchanged: pets",
+            "passed": true
+        },
+        {
+            "check": "Production data unchanged: services",
+            "passed": true
+        },
+        {
+            "check": "Production data unchanged: zapic_na_priem",
+            "passed": true
+        },
+        {
+            "check": "Production data unchanged: medical_records",
+            "passed": true
+        },
+        {
+            "check": "Production data unchanged: service_history",
+            "passed": true
+        }
+    ]
+}

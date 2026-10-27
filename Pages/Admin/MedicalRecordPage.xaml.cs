@@ -1,4 +1,4 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
@@ -47,7 +47,6 @@ public partial class MedicalRecordPage : ContentPage
 		AppointmentLabel.Text = draft.AppointmentText;
 		JalobaEditor.Text = draft.Jaloba;
 		DiagnozEditor.Text = draft.Diagnoz;
-		ObsledResultEditor.Text = draft.ObsledResult;
 		NazLechEditor.Text = draft.NazLech;
 		ProcedureDoneEditor.Text = draft.ProcedureDone;
 		TreatmentNotesEditor.Text = draft.TreatmentNotes;
@@ -62,7 +61,7 @@ public partial class MedicalRecordPage : ContentPage
 			await DisplayAlertAsync("Ошибка", "Войдите в учётную запись врача заново.", "ОК");
 			return;
 		}
-		if (new[] { JalobaEditor.Text, DiagnozEditor.Text, ObsledResultEditor.Text,
+		if (new[] { JalobaEditor.Text, DiagnozEditor.Text,
 			NazLechEditor.Text, ProcedureDoneEditor.Text, TreatmentNotesEditor.Text }
 			.All(string.IsNullOrWhiteSpace))
 		{
@@ -86,7 +85,6 @@ public partial class MedicalRecordPage : ContentPage
 					appointmentId,
 					JalobaEditor.Text?.Trim() ?? "",
 					DiagnozEditor.Text?.Trim() ?? "",
-					ObsledResultEditor.Text?.Trim() ?? "",
 					NazLechEditor.Text?.Trim() ?? "",
 					ProcedureDoneEditor.Text?.Trim() ?? "",
 					TreatmentNotesEditor.Text?.Trim() ?? ""));
@@ -116,17 +114,15 @@ public partial class MedicalRecordPage : ContentPage
 		[JsonPropertyName("id")] public int Id { get; set; }
 		[JsonPropertyName("jaloba")] public string Jaloba { get; set; }
 		[JsonPropertyName("diagnoz")] public string Diagnoz { get; set; }
-		[JsonPropertyName("obsled_result")] public string ObsledResult { get; set; }
 		[JsonPropertyName("naz_lech")] public string NazLech { get; set; }
 		[JsonPropertyName("procedure_done")] public string ProcedureDone { get; set; }
 		[JsonPropertyName("treatment_notes")] public string TreatmentNotes { get; set; }
 
-		public RecordData(int id, string jaloba, string diagnoz, string obsledResult, string nazLech, string procedureDone, string treatmentNotes)
+		public RecordData(int id, string jaloba, string diagnoz, string nazLech, string procedureDone, string treatmentNotes)
 		{
 			Id = id;
 			Jaloba = jaloba;
 			Diagnoz = diagnoz;
-			ObsledResult = obsledResult;
 			NazLech = nazLech;
 			ProcedureDone = procedureDone;
 			TreatmentNotes = treatmentNotes;
