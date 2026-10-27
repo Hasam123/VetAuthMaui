@@ -1,4 +1,4 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 using System.Collections.ObjectModel;
 using System.Globalization;
@@ -76,7 +76,7 @@ public partial class AdminTimePage : ContentPage
 				await httpClient.GetFromJsonAsync<TimeResult>(
 					$"{Api.BaseUrl}schedule/free_slots.php?doctor_id={doctor.Id}");
 
-			var doctorAppointments = await DoctorAppointments.LoadAsync(httpClient);
+			var doctorAppointments = await DoctorRecords.LoadAsync(httpClient);
 
 			if (scheduleResult?.Success != true)
 				throw new InvalidOperationException(scheduleResult?.Message ?? "Не удалось загрузить расписание.");

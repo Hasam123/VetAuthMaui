@@ -1,4 +1,4 @@
-﻿namespace VetAuthMaui;
+namespace VetAuthMaui;
 
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
@@ -41,7 +41,7 @@ public partial class AdminPage : ContentPage
 			// запрос статистики
 		var response = await httpClient.GetFromJsonAsync<StatisticResult>($"{Api.BaseUrl}admin/stats.php");
 			var statistic = response?.Statistic ?? new Statistic();
-			var doctorAppointments = await DoctorAppointments.LoadAsync(httpClient);
+			var doctorAppointments = await DoctorRecords.LoadAsync(httpClient);
 			statistic.RequestsTotal = doctorAppointments.Count;
 			statistic.RequestsNew = doctorAppointments.Count(a => a.Status == "new");
 			statistic.RequestsAccepted = doctorAppointments.Count(a => a.Status == "accepted");

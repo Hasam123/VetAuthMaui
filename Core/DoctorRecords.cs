@@ -3,7 +3,7 @@ namespace VetAuthMaui;
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
 
-public static class DoctorAppointments
+public static class DoctorRecords
 {
     public static async Task<List<Appointment>> LoadAsync(HttpClient client)
     {

@@ -275,7 +275,7 @@ public partial class RequestPage : ContentPage
 		{
 			StatusLabel.Text = "Загрузка заявок...";
 
-			var doctorAppointments = await DoctorAppointments.LoadAsync(httpClient);
+			var doctorAppointments = await DoctorRecords.LoadAsync(httpClient);
 			allAppointments.Clear();
 
 			foreach (var item in doctorAppointments)
