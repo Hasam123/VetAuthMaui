@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!-- Стартовый экран: вход клиента по умолчанию. -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -62,16 +62,14 @@
                             Keyboard="Telephone"
                             MaxLength="15"
                             BackgroundColor="White"
-                            TextColor="#222222"
-                            PlaceholderColor="#9AA8B8" />
+                            TextColor="#222222" />
 
                         <Entry
                             x:Name="PasswordEntry"
                             Placeholder="Пароль"
                             IsPassword="True"
                             BackgroundColor="White"
-                            TextColor="#222222"
-                            PlaceholderColor="#9AA8B8" />
+                            TextColor="#222222" />
 
                         <HorizontalStackLayout Spacing="8">
                             <CheckBox

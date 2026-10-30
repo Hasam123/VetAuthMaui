@@ -27,23 +27,42 @@
                 <VerticalStackLayout Spacing="12">
                     <Label Text="Обследование" TextColor="#17213A" FontSize="20" FontAttributes="Bold" />
 
-                    <Label Text="Жалоба клиента" TextColor="#657084" FontSize="14" FontAttributes="Bold" />
+                    <Label Text="Первичный или повторный приём (обязательно)" TextColor="#657084" />
+                    <Picker x:Name="PrimaryPicker" ItemDisplayBinding="{Binding DisplayText}" TextColor="#222222" SelectedIndexChanged="Primary_Changed" />
+                    <Border x:Name="PreviousRecordCard" IsVisible="False" BackgroundColor="#F6FAFF" Stroke="#DDEBF3" Padding="14">
+                        <VerticalStackLayout Spacing="8">
+                            <Label Text="Прошлое посещение" FontAttributes="Bold" TextColor="#17213A" />
+                            <Label x:Name="PreviousVisitLabel" TextColor="#657084" />
+                            <Label x:Name="PreviousRecordLabel" TextColor="#17213A" />
+                        </VerticalStackLayout>
+                    </Border>
+                    <Label Text="Обязательные сведения: причина обращения, один из диагнозов, лечение или процедуры." TextColor="#657084" FontSize="13" />
+                    <Label Text="Дата начала заболевания (необязательно)" TextColor="#657084" />
+                    <HorizontalStackLayout>
+                        <CheckBox x:Name="HasDiseaseDate" CheckedChanged="DiseaseDate_Changed" />
+                        <DatePicker x:Name="DiseaseDatePicker" Format="dd.MM.yyyy" IsEnabled="False" TextColor="#222222" />
+                    </HorizontalStackLayout>
+                    <Label Text="Предварительный диагноз (обязательно один из диагнозов)" TextColor="#657084" />
+                    <Editor x:Name="PredDiagEditor" Placeholder="Предварительный диагноз (или заполните заключительный)" AutoSize="TextChanges" HeightRequest="90" TextColor="#222222" />
+                    <Label Text="Клинические признаки и результаты исследований" TextColor="#657084" />
+                    <Editor x:Name="KlinPriznEditor" Placeholder="Опишите осмотр и исследования (необязательно)" AutoSize="TextChanges" HeightRequest="120" TextColor="#222222" />
+                    <Label Text="Исход заболевания" TextColor="#657084" />
+                    <Entry x:Name="IshodEntry" MaxLength="100" Placeholder="Например: улучшение, выздоровление (необязательно)" TextColor="#222222" />
+                    <Label Text="Жалобы / причина обращения (обязательно)" TextColor="#657084" FontSize="14" FontAttributes="Bold" />
                     <Editor x:Name="JalobaEditor"
-                            Placeholder="Например: питомец плохо ест, болит лапа, рвота"
+                            Placeholder="Опишите жалобы или причину обращения (обязательно)"
                             AutoSize="TextChanges"
                             HeightRequest="90"
                             BackgroundColor="White"
-                            TextColor="#222222"
-                            PlaceholderColor="#9AA8B8" />
+                            TextColor="#222222" />
 
-                    <Label Text="Диагноз" TextColor="#657084" FontSize="14" FontAttributes="Bold" />
+                    <Label Text="Заключительный диагноз (обязательно один из диагнозов)" TextColor="#657084" FontSize="14" FontAttributes="Bold" />
                     <Editor x:Name="DiagnozEditor"
-                            Placeholder="Например: воспаление десны, дерматит, отит"
+                            Placeholder="Заключительный диагноз (или заполните предварительный)"
                             AutoSize="TextChanges"
                             HeightRequest="90"
                             BackgroundColor="White"
-                            TextColor="#222222"
-                            PlaceholderColor="#9AA8B8" />
+                            TextColor="#222222" />
                 </VerticalStackLayout>
             </Border>
 
@@ -54,33 +73,31 @@
 
                 <VerticalStackLayout Spacing="12">
                     <Label Text="Лечение" TextColor="#17213A" FontSize="20" FontAttributes="Bold" />
+                    <Label Text="Назначенное лечение или выполненные процедуры (обязательно хотя бы одно)" TextColor="#657084" FontSize="13" />
 
                     <Label Text="Назначенное лечение" TextColor="#657084" FontSize="14" FontAttributes="Bold" />
                     <Editor x:Name="NazLechEditor"
-                            Placeholder="Например: препарат, дозировка, курс лечения"
+                            Placeholder="Препарат, дозировка, курс (или заполните процедуры)"
                             AutoSize="TextChanges"
                             HeightRequest="100"
                             BackgroundColor="White"
-                            TextColor="#222222"
-                            PlaceholderColor="#9AA8B8" />
+                            TextColor="#222222" />
 
                     <Label Text="Выполненная процедура" TextColor="#657084" FontSize="14" FontAttributes="Bold" />
                     <Editor x:Name="ProcedureDoneEditor"
-                            Placeholder="Например: инъекция, обработка раны, удаление зуба"
+                            Placeholder="Выполненные процедуры (или заполните лечение)"
                             AutoSize="TextChanges"
                             HeightRequest="100"
                             BackgroundColor="White"
-                            TextColor="#222222"
-                            PlaceholderColor="#9AA8B8" />
+                            TextColor="#222222" />
 
                     <Label Text="Заметки врача" TextColor="#657084" FontSize="14" FontAttributes="Bold" />
                     <Editor x:Name="TreatmentNotesEditor"
-                            Placeholder="Дополнительные рекомендации, повторный прием"
+                            Placeholder="Дополнительные рекомендации, повторный приём (необязательно)"
                             AutoSize="TextChanges"
                             HeightRequest="100"
                             BackgroundColor="White"
-                            TextColor="#222222"
-                            PlaceholderColor="#9AA8B8" />
+                            TextColor="#222222" />
                 </VerticalStackLayout>
             </Border>
 

@@ -20,10 +20,11 @@ public partial class ClientRegister : ContentPage
 		var name = NameEntry.Text?.Trim() ?? "";
 		var phone = PhoneEntry.Text?.Trim() ?? "";
 		var password = PasswordEntry.Text?.Trim() ?? "";
+		var address = AddressEntry.Text?.Trim() ?? "";
 
-		if (name == "" || phone == "" || password == "")
+		if (name == "" || phone == "" || password == "" || address == "")
 		{
-			await DisplayAlertAsync("Ошибка", "Заполните имя, телефон и пароль.", "ОК");
+			await DisplayAlertAsync("Ошибка", "Заполните ФИО, телефон, адрес и пароль.", "ОК");
 			return;
 		}
 
@@ -32,7 +33,7 @@ public partial class ClientRegister : ContentPage
 			// отправка данных в API
 			var response = await httpClient.PostAsJsonAsync(
 				$"{Api.BaseUrl}clients/register.php",
-				new RegisterData(name, phone, password));
+				new RegisterData(name, phone, password, address));
 
 			var result = await response.Content.ReadFromJsonAsync<LoginResult>();
 
@@ -58,13 +59,15 @@ public partial class ClientRegister : ContentPage
 	{
 		[JsonPropertyName("name")] public string Name { get; set; }
 		[JsonPropertyName("phone")] public string Phone { get; set; }
+		[JsonPropertyName("address")] public string Address { get; set; }
 		[JsonPropertyName("password")] public string Password { get; set; }
 
-		public RegisterData(string name, string phone, string password)
+		public RegisterData(string name, string phone, string password, string address)
 		{
 			Name = name;
 			Phone = phone;
 			Password = password;
+            Address = address;
 		}
 	}
 }

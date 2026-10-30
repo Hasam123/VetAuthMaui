@@ -25,6 +25,9 @@ if (mb_strlen($phone) > 15 || mb_strlen($age) > 15) {
     exit;
 }
 
+$hasPol=array_key_exists('pol',$data)?1:0;
+$pol=trim($data['pol']??'');
+if(!in_array($pol,['','Самец','Самка'],true)) { echo json_encode(['success'=>false,'message'=>'Выберите пол: Самец или Самка'],JSON_UNESCAPED_UNICODE);exit; }
 if ($weight !== "") {
     $weight = str_replace(",", ".", $weight);
     if (!is_numeric($weight) || (float)$weight <= 0 || (float)$weight > 999.99) {
@@ -40,10 +43,10 @@ if ($lastVacData == "") {
 
 $sql = "UPDATE pets p
         INNER JOIN vladelci v ON v.id = p.client_id
-        SET p.name = ?, p.type = ?, p.age = ?, p.weight = NULLIF(?, ''), p.last_vac_data = ?
+        SET p.name = ?, p.type = ?, p.age = ?, p.weight = NULLIF(?, ''), p.last_vac_data = ?, p.pol = IF(?, NULLIF(?, ''), p.pol)
         WHERE p.id = ? AND v.phone = ?";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("sssssis", $name, $type, $age, $weight, $lastVacData, $id, $phone);
+$stmt->bind_param("sssssisis", $name, $type, $age, $weight, $lastVacData, $hasPol, $pol, $id, $phone);
 $stmt->execute();
 
 if ($stmt->affected_rows === 0) {

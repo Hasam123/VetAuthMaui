@@ -5,6 +5,8 @@ using System.ComponentModel;
 using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
 using System.Text.Json.Serialization;
+using System.Diagnostics;
+using System.Globalization;
 
 // запись на прием
 public partial class RecordPage : ContentPage
@@ -22,10 +24,16 @@ public partial class RecordPage : ContentPage
 	private ObservableCollection<TimeItem> showTimes = new ObservableCollection<TimeItem>();
 	private ScheduleDay selectedDay;
 	private TimeItem selectedTime;
+    private readonly IDispatcherTimer expiryTimer;
+    private readonly Stopwatch scheduleAge = new();
+    private long scheduleServerTime;
 
 	public RecordPage()
 	{
 		InitializeComponent();
+        expiryTimer = Dispatcher.CreateTimer();
+        expiryTimer.Interval = TimeSpan.FromSeconds(5);
+        expiryTimer.Tick += (_, _) => RemoveExpiredTimes();
 		httpClient.Timeout = TimeSpan.FromSeconds(10);
 		DateCollectionView.ItemsSource = showDays;
 		TimeCollectionView.ItemsSource = showTimes;
@@ -37,9 +45,51 @@ public partial class RecordPage : ContentPage
 	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
+        expiryTimer.Start();
 		FillClient();
 		await LoadAppointmentData();
 	}
+
+    protected override void OnDisappearing()
+    {
+        expiryTimer.Stop();
+        base.OnDisappearing();
+    }
+
+    private bool CanBook(TimeSlot slot)
+    {
+        if (!slot.IsAvailable) return false;
+        var startsAt = slot.StartsAt;
+        if (startsAt <= 0)
+        {
+            // Compatibility with API responses without epoch timestamps.
+            if (!DateTime.TryParseExact(slot.Value, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture,
+                DateTimeStyles.None, out var local)) return false;
+            TimeZoneInfo zone;
+            try { zone = TimeZoneInfo.FindSystemTimeZoneById("Europe/Chisinau"); }
+            catch (TimeZoneNotFoundException) { zone = TimeZoneInfo.FindSystemTimeZoneById("E. Europe Standard Time"); }
+            startsAt = new DateTimeOffset(TimeZoneInfo.ConvertTimeToUtc(local, zone)).ToUnixTimeSeconds();
+        }
+        var now = scheduleServerTime > 0
+            ? scheduleServerTime + (long)scheduleAge.Elapsed.TotalSeconds
+            : DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        return startsAt > now;
+    }
+
+    private void RemoveExpiredTimes()
+    {
+        if (sending || !DoctorPicker.IsEnabled) return;
+        foreach (var item in showTimes.Where(item => !CanBook(item.Slot)).ToList())
+        {
+            if (selectedTime == item)
+            {
+                selectedTime = null;
+                ScheduleMessage.Text = "Выбранное время уже прошло. Выберите другое.";
+            }
+            showTimes.Remove(item);
+        }
+        SendButton.IsEnabled = !sending && days.Any(day => day.Slots.Any(CanBook));
+    }
 
 	// Подставляет имя и телефон авторизованного клиента в форму записи.
 	private void FillClient()
@@ -127,16 +177,19 @@ public partial class RecordPage : ContentPage
 		if (doctor == null) return;
 		try
 		{
+			var requestAge = Stopwatch.StartNew();
 			var result = await httpClient.GetFromJsonAsync<TimeResult>(
 				$"{Api.BaseUrl}schedule/free_slots.php?doctor_id={doctor.Id}");
 			if (version != scheduleVersion) return;
 			if (result?.Success != true)
 				throw new InvalidOperationException(result?.Message ?? "Не удалось загрузить расписание.");
+            scheduleServerTime = result.ServerNow > 0 ? result.ServerNow + (long)Math.Ceiling(requestAge.Elapsed.TotalSeconds) : 0;
+            scheduleAge.Restart();
 			days.AddRange(result.Days ?? new List<ScheduleDay>());
 			selectedDay = FindFirstAvailableDay();
 			BuildDays();
 			BuildTimes();
-			var available = days.Any(d => d.Slots.Any(slot => slot.IsAvailable));
+			var available = days.Any(d => d.Slots.Any(CanBook));
 			ScheduleMessage.Text = available ? "Выберите дату и время приёма." : "У этого врача нет свободного времени.";
 			SendButton.IsEnabled = available && !sending;
 		}
@@ -183,6 +236,7 @@ public partial class RecordPage : ContentPage
 			PetNameEntry.Text = "";
 			PetAgeEntry.Text = "";
 			PetTypePicker.SelectedItem = null;
+            PetPolPicker.SelectedIndex = 0;
 			SetPetFieldsEditable(true);
 			return;
 		}
@@ -190,6 +244,7 @@ public partial class RecordPage : ContentPage
 		PetNameEntry.Text = selectedPet.Name;
 		PetAgeEntry.Text = selectedPet.Age;
 		SetPetType(selectedPet.Type);
+        PetPolPicker.SelectedIndex = selectedPet.Pol == "Самец" ? 1 : selectedPet.Pol == "Самка" ? 2 : 0;
 		SetPetFieldsEditable(false);
 	}
 
@@ -199,6 +254,7 @@ public partial class RecordPage : ContentPage
 		PetNameEntry.IsReadOnly = !isEditable;
 		PetAgeEntry.IsReadOnly = !isEditable;
 		PetTypePicker.IsEnabled = isEditable;
+        PetPolPicker.IsEnabled = isEditable;
 	}
 
 	// Устанавливает значение или состояние.
@@ -227,7 +283,7 @@ public partial class RecordPage : ContentPage
 		{
 			foreach (var slot in day.Slots)
 			{
-				if (slot.IsAvailable)
+				if (CanBook(slot))
 					return day;
 			}
 		}
@@ -255,7 +311,7 @@ public partial class RecordPage : ContentPage
 
 		foreach (var slot in selectedDay?.Slots ?? new List<TimeSlot>())
 		{
-			if (!slot.IsAvailable) continue;
+			if (!CanBook(slot)) continue;
 			var item = new TimeItem(slot, false);
 			showTimes.Add(item);
 		}
@@ -287,7 +343,7 @@ public partial class RecordPage : ContentPage
 		var view = (BindableObject)sender;
 		var item = view.BindingContext as TimeItem;
 
-		if (item == null || !item.Slot.IsAvailable)
+		if (item == null || !CanBook(item.Slot))
 			return;
 
 		foreach (var time in showTimes)
@@ -319,6 +375,12 @@ public partial class RecordPage : ContentPage
 		var client_comment = CommentEditor.Text?.Trim() ?? "";
 		var service = ServicePicker.SelectedItem as Service;
 		var time = selectedTime?.Slot;
+        if (time != null && !CanBook(time))
+        {
+            await LoadDoctorSchedule();
+            await DisplayAlertAsync("Время недоступно", "Выбранное время уже прошло. Выберите другое.", "ОК");
+            return;
+        }
 
 		if (name == "" || phone == "" || petName == "" || petType == "" || service == null || time == null)
 		{
@@ -332,7 +394,7 @@ public partial class RecordPage : ContentPage
 			SendButton.IsEnabled = false;
 			DoctorPicker.IsEnabled = false;
 			var petId = selectedPet?.Id ?? 0;
-			var data = new AppointmentData(name, phone, petName, petType, petAge, petId, service.Id, doctor.Id, time.Value, client_comment);
+			var data = new AppointmentData(name, phone, petName, petType, petAge, petId, service.Id, doctor.Id, time.Value, client_comment) { PetPol = PetPolPicker.SelectedIndex > 0 ? PetPolPicker.SelectedItem.ToString() : "" };
 			var response = await httpClient.PostAsJsonAsync($"{Api.BaseUrl}appointments/create.php", data);
 			var result = await response.Content.ReadFromJsonAsync<ApiResult>();
 
@@ -355,7 +417,7 @@ public partial class RecordPage : ContentPage
 		{
 			sending = false;
 			DoctorPicker.IsEnabled = true;
-			SendButton.IsEnabled = days.Any(d => d.Slots.Any(slot => slot.IsAvailable));
+			SendButton.IsEnabled = days.Any(d => d.Slots.Any(CanBook));
 		}
 
 	}
@@ -497,6 +559,7 @@ public partial class RecordPage : ContentPage
 		[JsonPropertyName("phone")] public string Phone { get; set; }
 		[JsonPropertyName("pet_name")] public string PetName { get; set; }
 		[JsonPropertyName("pet_type")] public string PetType { get; set; }
+		[JsonPropertyName("pet_pol")] public string PetPol { get; set; } = "";
 		[JsonPropertyName("pet_age")] public string PetAge { get; set; }
 		[JsonPropertyName("pet_id")] public int PetId { get; set; }
 		[JsonPropertyName("service_id")] public int ServiceId { get; set; }
@@ -542,6 +605,7 @@ public partial class RecordPage : ContentPage
 
 	private class TimeResult
 	{
+        [JsonPropertyName("server_now")] public long ServerNow { get; set; }
 		[JsonPropertyName("success")] public bool Success { get; set; }
 		[JsonPropertyName("message")] public string Message { get; set; }
 		[JsonPropertyName("days")]
@@ -557,6 +621,7 @@ public partial class RecordPage : ContentPage
 
 	private class TimeSlot
 	{
+        [JsonPropertyName("starts_at")] public long StartsAt { get; set; }
 		[JsonPropertyName("time")] public string Value { get; set; } = "";
 		[JsonPropertyName("label")] public string Label { get; set; } = "";
 		[JsonPropertyName("is_available")] public bool IsAvailable { get; set; }

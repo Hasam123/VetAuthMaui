@@ -13,6 +13,7 @@ public class Pet
 	[JsonPropertyName("id")] public int Id { get; set; }
 	[JsonPropertyName("name")] public string Name { get; set; } = "";
 	[JsonPropertyName("type")] public string Type { get; set; } = "";
+	[JsonPropertyName("pol")] public string Pol { get; set; } = "";
 	[JsonPropertyName("age")] public string Age { get; set; } = "";
 	[JsonPropertyName("weight")] public string Weight { get; set; } = "";
 	[JsonPropertyName("last_vac_data")] public string LastVacData { get; set; } = "";
@@ -36,7 +37,7 @@ public class Pet
 			if (string.IsNullOrWhiteSpace(Type))
 				return "Вид не указан";
 
-			return Type;
+			return string.IsNullOrWhiteSpace(Pol) ? Type : $"{Type} · {Pol}";
 		}
 	}
 
@@ -80,6 +81,7 @@ public class AddPetData
 	[JsonPropertyName("phone")] public string Phone { get; set; }
 	[JsonPropertyName("name")] public string Name { get; set; }
 	[JsonPropertyName("type")] public string Type { get; set; }
+	[JsonPropertyName("pol")] public string Pol { get; set; } = "";
 	[JsonPropertyName("age")] public string Age { get; set; }
 	[JsonPropertyName("weight")] public string Weight { get; set; }
 	[JsonPropertyName("last_vac_data")] public string LastVacData { get; set; }
@@ -101,6 +103,7 @@ public class UpdatePetData
 	[JsonPropertyName("phone")] public string Phone { get; set; }
 	[JsonPropertyName("name")] public string Name { get; set; }
 	[JsonPropertyName("type")] public string Type { get; set; }
+	[JsonPropertyName("pol")] public string Pol { get; set; } = "";
 	[JsonPropertyName("age")] public string Age { get; set; }
 	[JsonPropertyName("weight")] public string Weight { get; set; }
 	[JsonPropertyName("last_vac_data")] public string LastVacData { get; set; }

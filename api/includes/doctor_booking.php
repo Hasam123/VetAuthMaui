@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/clinic_time.php';
 // Shared validation for website and mobile API bookings.
 function bookingDoctorExists(mysqli $conn, int $doctorId): bool
 {
@@ -16,15 +17,17 @@ function bookingDoctorIsActive(mysqli $conn, int $doctorId): bool
     return $stmt->get_result()->num_rows === 1;
 }
 
-function bookingTimeIsValid(string $value): bool
+function bookingTimeIsValid(string $value, ?DateTimeImmutable $now = null): bool
 {
-    $date = DateTime::createFromFormat("!Y-m-d H:i:s", $value);
+    $zone = new DateTimeZone('Europe/Chisinau');
+    $now = ($now ?? new DateTimeImmutable('now', $zone))->setTimezone($zone);
+    $date = DateTimeImmutable::createFromFormat("!Y-m-d H:i:s", $value, $zone);
     if (!$date || $date->format("Y-m-d H:i:s") !== $value) {
         return false;
     }
     $clock = $date->format("H:i:s");
-    return $date->getTimestamp() > time()
-        && $date->format("Y-m-d") <= date("Y-m-d", strtotime("+4 days"))
+    return $date > $now
+        && $date->format("Y-m-d") <= $now->modify('+4 days')->format('Y-m-d')
         && $clock >= "08:00:00" && $clock <= "18:00:00"
         && in_array($date->format("i:s"), ["00:00", "30:00"], true);
 }

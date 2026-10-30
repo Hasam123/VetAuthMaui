@@ -215,6 +215,14 @@ public partial class RequestPage : ContentPage
 		State.CurrentMedicalRecord = new MedicalRecord
 		{
 			AppointmentId = appointment.Id,
+			DataZabol = appointment.DataZabol,
+			PredDiag = appointment.PredDiag,
+			KlinPrizn = appointment.KlinPrizn,
+			Ishod = appointment.Ishod,
+			Address = appointment.Address,
+			PetPol = appointment.PetPol,
+			PervPriemId = appointment.PervPriemId,
+
 			ClientName = appointment.Name ?? "",
 			PetName = appointment.PetName ?? "",
 			AppointmentText = appointment.TimeText ?? "",

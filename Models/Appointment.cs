@@ -4,6 +4,14 @@ using System.Text.Json.Serialization;
 
 public class Appointment
 {
+	[JsonPropertyName("data_zabol")] public string DataZabol { get; set; } = "";
+	[JsonPropertyName("pred_diag")] public string PredDiag { get; set; } = "";
+	[JsonPropertyName("klin_prizn")] public string KlinPrizn { get; set; } = "";
+	[JsonPropertyName("ishod")] public string Ishod { get; set; } = "";
+	[JsonPropertyName("address")] public string Address { get; set; } = "";
+	[JsonPropertyName("pet_pol")] public string PetPol { get; set; } = "";
+	[JsonPropertyName("perv_priem_id")] public int? PervPriemId { get; set; }
+
 	[JsonPropertyName("id")] public int Id { get; set; }
 	[JsonPropertyName("name")] public string Name { get; set; } = "";
 	[JsonPropertyName("phone")] public string Phone { get; set; } = "";
@@ -146,10 +154,15 @@ public class Appointment
 		get
 		{
 			var text = "";
+            if (PervPriemId.HasValue) text += $"Повторный приём, первичный №{PervPriemId}\n";
+            if (!string.IsNullOrWhiteSpace(DataZabol)) text += $"Дата заболевания: {FormatDate(DataZabol, false)}\n";
+            if (!string.IsNullOrWhiteSpace(PredDiag)) text += $"Предварительный диагноз: {PredDiag}\n";
+            if (!string.IsNullOrWhiteSpace(KlinPrizn)) text += $"Осмотр и исследования: {KlinPrizn}\n";
+            if (!string.IsNullOrWhiteSpace(Ishod)) text += $"Исход заболевания: {Ishod}\n";
 			if (!string.IsNullOrWhiteSpace(Jaloba)) text += $"Жалоба: {Jaloba}\n";
 			if (!string.IsNullOrWhiteSpace(Diagnoz)) text += $"Диагноз: {Diagnoz}\n";
 			if (!string.IsNullOrWhiteSpace(NazLech)) text += $"Лечение: {NazLech}\n";
-			if (!string.IsNullOrWhiteSpace(ProcedureDone)) text += $"Сделано: {ProcedureDone}\n";
+			if (!string.IsNullOrWhiteSpace(ProcedureDone)) text += $"Выполненные процедуры: {ProcedureDone}\n";
 			if (!string.IsNullOrWhiteSpace(TreatmentNotes)) text += $"Заметки: {TreatmentNotes}";
 			if (string.IsNullOrWhiteSpace(text))
 				return "Медицинская запись: нет";
@@ -159,13 +172,13 @@ public class Appointment
 	}
 
 	// Преобразует дату в текст для интерфейса.
-	private static string FormatDate(string value)
+	private static string FormatDate(string value, bool includeTime = true)
 	{
 		DateTime date;
 		bool converted = DateTime.TryParse(value, out date);
 
 		if (converted)
-			return date.ToString("dd.MM.yyyy, HH:mm");
+			return date.ToString(includeTime ? "dd.MM.yyyy, HH:mm" : "dd.MM.yyyy");
 
 		return value;
 	}

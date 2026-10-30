@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!-- Форма администратора для добавления новой услуги. -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -25,7 +25,6 @@
                         Placeholder="Название услуги"
                         BackgroundColor="White"
                         TextColor="#222222"
-                        PlaceholderColor="#9AA8B8"
                         ClearButtonVisibility="WhileEditing" />
 
                     <Editor
@@ -33,7 +32,6 @@
                         Placeholder="Описание"
                         BackgroundColor="White"
                         TextColor="#222222"
-                        PlaceholderColor="#9AA8B8"
                         HeightRequest="110" />
 
                     <Entry
@@ -42,15 +40,13 @@
                         Keyboard="Numeric"
                         BackgroundColor="White"
                         TextColor="#222222"
-                        PlaceholderColor="#9AA8B8"
                         ClearButtonVisibility="WhileEditing" />
 
                     <Picker
                         x:Name="CategoryPicker"
                         Title="Категория"
                         BackgroundColor="White"
-                        TextColor="#222222"
-                        TitleColor="#9AA8B8" />
+                        TextColor="#222222" />
 
                     <Button
                         Text="Сохранить"

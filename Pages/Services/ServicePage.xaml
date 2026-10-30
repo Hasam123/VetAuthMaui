@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!-- Экран услуг: список из базы, поиск, категории и кнопки админа. -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -42,7 +42,6 @@
                            Placeholder="Поиск услуги"
                            BackgroundColor="White"
                            TextColor="#222222"
-                           PlaceholderColor="#9AA8B8"
                            ClearButtonVisibility="WhileEditing"
                            TextChanged="Search_Changed" />
 
@@ -50,7 +49,6 @@
                             Title="Все категории"
                             BackgroundColor="White"
                             TextColor="#222222"
-                            TitleColor="#9AA8B8"
                             SelectedIndexChanged="Category_Changed" />
                 </VerticalStackLayout>
             </Border>

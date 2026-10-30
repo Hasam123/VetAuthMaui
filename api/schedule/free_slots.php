@@ -13,8 +13,9 @@ if (!bookingDoctorExists($conn, $doctorId)) {
 
 $doctorIsActive = bookingDoctorIsActive($conn, $doctorId);
 $busy = [];
-$startDate = date("Y-m-d");
-$endDate = date("Y-m-d", strtotime("+4 days"));
+$now = time();
+$startDate = date("Y-m-d", $now);
+$endDate = date("Y-m-d", strtotime("+4 days", $now));
 
 $sql = "SELECT data, time
         FROM zapic_na_priem
@@ -30,10 +31,9 @@ while ($row = mysqli_fetch_assoc($result)) {
 }
 
 $days = [];
-$now = time();
 
 for ($d = 0; $d < 5; $d++) {
-    $date = date("Y-m-d", strtotime("+$d days"));
+    $date = date("Y-m-d", strtotime("+$d days", $now));
     $slots = [];
 
     for ($hour = 8; $hour <= 18; $hour++) {
@@ -46,6 +46,7 @@ for ($d = 0; $d < 5; $d++) {
 
             $slots[] = [
                 "time" => date("Y-m-d H:i:s", $slotTime),
+                "starts_at" => $slotTime,
                 "label" => date("H:i", $slotTime),
                 "is_available" => $doctorIsActive && $slotTime > $now && !isset($busy[$key])
             ];
@@ -59,6 +60,7 @@ for ($d = 0; $d < 5; $d++) {
     ];
 }
 
-echo json_encode(["success" => true, "days" => $days], JSON_UNESCAPED_UNICODE);
+echo json_encode(["success" => true, "days" => $days, "server_now" => $now,
+    "timezone" => date_default_timezone_get()], JSON_UNESCAPED_UNICODE);
 
 

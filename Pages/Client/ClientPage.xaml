@@ -19,6 +19,7 @@
                     <Label Text="Карточка клиента" TextColor="#17213A" FontSize="18" FontAttributes="Bold" />
                     <Label x:Name="ClientNameLabel" TextColor="#17213A" FontSize="16" />
                     <Label x:Name="ClientPhoneLabel" TextColor="#12A7A7" FontSize="15" />
+                    <Label x:Name="ClientAddressLabel" TextColor="#17213A" FontSize="15" />
                     <Label x:Name="LastStatusLabel" TextColor="#FF8A5B" FontSize="15" FontAttributes="Bold" />
                 </VerticalStackLayout>
             </Border>

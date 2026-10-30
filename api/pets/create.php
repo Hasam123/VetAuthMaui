@@ -25,6 +25,9 @@ if (mb_strlen($phone) > 15 || mb_strlen($age) > 15) {
     exit;
 }
 
+$hasPol=array_key_exists('pol',$data)?1:0;
+$pol=trim($data['pol']??'');
+if(!in_array($pol,['','Самец','Самка'],true)) { echo json_encode(['success'=>false,'message'=>'Выберите пол: Самец или Самка'],JSON_UNESCAPED_UNICODE);exit; }
 if ($weight !== "") {
     $weight = str_replace(",", ".", $weight);
     if (!is_numeric($weight) || (float)$weight <= 0 || (float)$weight > 999.99) {
@@ -51,10 +54,10 @@ if (!$client) {
 }
 
 $clientId = (int)$client["id"];
-$sql = "INSERT INTO pets (client_id, name, type, age, weight, last_vac_data)
-        VALUES (?, ?, ?, ?, NULLIF(?, ''), ?)";
+$sql = "INSERT INTO pets (client_id, name, type, age, weight, last_vac_data, pol)
+        VALUES (?, ?, ?, ?, NULLIF(?, ''), ?, NULLIF(?, ''))";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("isssss", $clientId, $name, $type, $age, $weight, $lastVacData);
+$stmt->bind_param("issssss", $clientId, $name, $type, $age, $weight, $lastVacData, $pol);
 $stmt->execute();
 
 echo json_encode(["success" => true, "message" => "Питомец добавлен"], JSON_UNESCAPED_UNICODE);

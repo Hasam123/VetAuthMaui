@@ -1,0 +1,978 @@
+{
+    "passed": 236,
+    "failed": 7,
+    "checks": [
+        {
+            "check": "Schema vladelci.address",
+            "passed": true
+        },
+        {
+            "check": "Schema pets.pol",
+            "passed": true
+        },
+        {
+            "check": "Schema zapic_na_priem.perv_priem_id",
+            "passed": true
+        },
+        {
+            "check": "Schema medical_records.data_zabol",
+            "passed": true
+        },
+        {
+            "check": "Schema medical_records.pred_diag",
+            "passed": true
+        },
+        {
+            "check": "Schema medical_records.klin_prizn",
+            "passed": true
+        },
+        {
+            "check": "Schema medical_records.ishod",
+            "passed": true
+        },
+        {
+            "check": "Registration rejects missing, empty or whitespace address",
+            "passed": true
+        },
+        {
+            "check": "Registration rejects missing, empty or whitespace address",
+            "passed": true
+        },
+        {
+            "check": "Registration rejects missing, empty or whitespace address",
+            "passed": true
+        },
+        {
+            "check": "Invalid registration does not create client",
+            "passed": true
+        },
+        {
+            "check": "Register with address",
+            "passed": true
+        },
+        {
+            "check": "Client login",
+            "passed": true
+        },
+        {
+            "check": "Address round trip",
+            "passed": true
+        },
+        {
+            "check": "Long address rejected",
+            "passed": true
+        },
+        {
+            "check": "Update address",
+            "passed": true
+        },
+        {
+            "check": "Updated address read",
+            "passed": true
+        },
+        {
+            "check": "Clear optional address",
+            "passed": true
+        },
+        {
+            "check": "Missing client address update rejected",
+            "passed": true
+        },
+        {
+            "check": "Create male pet",
+            "passed": true
+        },
+        {
+            "check": "Pet sex round trip",
+            "passed": true
+        },
+        {
+            "check": "Invalid sex rejected",
+            "passed": true
+        },
+        {
+            "check": "Update pet sex",
+            "passed": true
+        },
+        {
+            "check": "Omitted sex preserves existing value",
+            "passed": true
+        },
+        {
+            "check": "Clear sex to NULL",
+            "passed": true
+        },
+        {
+            "check": "Invalid sex update rejected",
+            "passed": true
+        },
+        {
+            "check": "Create pet without sex",
+            "passed": true
+        },
+        {
+            "check": "Save primary card with all journal fields",
+            "passed": true
+        },
+        {
+            "check": "Medical field round trip: data_zabol",
+            "passed": true
+        },
+        {
+            "check": "Medical field round trip: pred_diag",
+            "passed": true
+        },
+        {
+            "check": "Medical field round trip: klin_prizn",
+            "passed": true
+        },
+        {
+            "check": "Medical field round trip: ishod",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: client_id",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: client_name",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: pet_id",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: pet_name",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: service_name",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: doctor_name",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: address",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: pet_type",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: pol",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: pet_age",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: service_category",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: vid_priema",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: kol",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: total_price",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: phone",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: weight",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: data_zabol",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: jaloba",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: pred_diag",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: diagnoz",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: klin_prizn",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: naz_lech",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: procedure_done",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: ishod",
+            "passed": true
+        },
+        {
+            "check": "Copied history field: notes",
+            "passed": true
+        },
+        {
+            "check": "History generates own ID and creation timestamp",
+            "passed": true
+        },
+        {
+            "check": "History still includes doctor and quantity",
+            "passed": true
+        },
+        {
+            "check": "Repeated save does not duplicate history",
+            "passed": true
+        },
+        {
+            "check": "Old request format still accepted",
+            "passed": true
+        },
+        {
+            "check": "Old request preserves journal fields",
+            "passed": true
+        },
+        {
+            "check": "Primary selection lists previous visit",
+            "passed": true
+        },
+        {
+            "check": "Previous card matches client view: jaloba",
+            "passed": true
+        },
+        {
+            "check": "Previous card matches client view: diagnoz",
+            "passed": true
+        },
+        {
+            "check": "Previous card matches client view: naz_lech",
+            "passed": true
+        },
+        {
+            "check": "Previous card matches client view: procedure_done",
+            "passed": true
+        },
+        {
+            "check": "Previous card matches client view: treatment_notes",
+            "passed": true
+        },
+        {
+            "check": "Previous card matches client view: data_zabol",
+            "passed": true
+        },
+        {
+            "check": "Previous card matches client view: pred_diag",
+            "passed": true
+        },
+        {
+            "check": "Previous card matches client view: klin_prizn",
+            "passed": true
+        },
+        {
+            "check": "Previous card matches client view: ishod",
+            "passed": true
+        },
+        {
+            "check": "First repeat displays primary visit",
+            "passed": true
+        },
+        {
+            "check": "Save repeat linked to primary",
+            "passed": true
+        },
+        {
+            "check": "Primary relation stored",
+            "passed": true
+        },
+        {
+            "check": "Repeat visit kind copied into history",
+            "passed": true
+        },
+        {
+            "check": "Read journal and primary link: appointments\/list.php?doctor_id=21",
+            "passed": true
+        },
+        {
+            "check": "Read journal and primary link: clients\/profile.php?phone=Je96946f66037",
+            "passed": true
+        },
+        {
+            "check": "Read journal and primary link: schedule\/get_zapis_admin.php?doctor_id=21",
+            "passed": true
+        },
+        {
+            "check": "Prepare other pet primary",
+            "passed": true
+        },
+        {
+            "check": "Prepare later primary",
+            "passed": true
+        },
+        {
+            "check": "Reject primary: self",
+            "passed": true
+        },
+        {
+            "check": "Reject primary: different pet",
+            "passed": true
+        },
+        {
+            "check": "Reject primary: later visit",
+            "passed": true
+        },
+        {
+            "check": "Reject primary: unfinished visit",
+            "passed": true
+        },
+        {
+            "check": "Reject primary: cancelled visit",
+            "passed": true
+        },
+        {
+            "check": "Reject primary: missing visit",
+            "passed": true
+        },
+        {
+            "check": "Reject primary: negative ID",
+            "passed": true
+        },
+        {
+            "check": "Reject primary: invalid ID",
+            "passed": true
+        },
+        {
+            "check": "Further repeat displays latest visit of same illness",
+            "passed": true
+        },
+        {
+            "check": "Reject chain of repeat visits",
+            "passed": true
+        },
+        {
+            "check": "Prepare earlier root",
+            "passed": true
+        },
+        {
+            "check": "Root with repeat visits cannot become repeat",
+            "passed": true
+        },
+        {
+            "check": "Invalid or inconsistent disease date rejected: 2026-02-30",
+            "passed": true
+        },
+        {
+            "check": "Invalid or inconsistent disease date rejected: 2026-10-31",
+            "passed": true
+        },
+        {
+            "check": "Invalid or inconsistent disease date rejected: 2026-10-30",
+            "passed": true
+        },
+        {
+            "check": "Long outcome rejected",
+            "passed": true
+        },
+        {
+            "check": "Empty medical card rejected",
+            "passed": true
+        },
+        {
+            "check": "Cancelled visit rejects save",
+            "passed": true
+        },
+        {
+            "check": "Injected failure reported",
+            "passed": true
+        },
+        {
+            "check": "Medical fields rolled back",
+            "passed": true
+        },
+        {
+            "check": "Primary relation rolled back",
+            "passed": true
+        },
+        {
+            "check": "Clear optional disease date and primary relation",
+            "passed": true
+        },
+        {
+            "check": "Cleared fields stored as NULL",
+            "passed": true
+        },
+        {
+            "check": "Primary FK rejects missing visit",
+            "passed": true
+        },
+        {
+            "check": "Medical history protected from deletion",
+            "passed": true
+        },
+        {
+            "check": "Schedule supplies clinic clock",
+            "passed": true
+        },
+        {
+            "check": "All slot timestamps match local clinic time",
+            "passed": true
+        },
+        {
+            "check": "Schedule never marks past slots available",
+            "passed": true
+        },
+        {
+            "check": "Direct API rejects elapsed local interval",
+            "passed": true
+        },
+        {
+            "check": "Past booking leaves no appointment or pet",
+            "passed": true
+        },
+        {
+            "check": "Booking still works after schema extension",
+            "passed": true
+        },
+        {
+            "check": "Duplicate slot rejected",
+            "passed": true
+        },
+        {
+            "check": "Cancel test booking",
+            "passed": true
+        },
+        {
+            "check": "Rebook released slot",
+            "passed": true
+        },
+        {
+            "check": "Create new pet through booking",
+            "passed": true
+        },
+        {
+            "check": "Booking stores new pet sex",
+            "passed": true
+        },
+        {
+            "check": "Incomplete card with only one field rejected: pred_diag",
+            "passed": true
+        },
+        {
+            "check": "Incomplete card with only one field rejected: klin_prizn",
+            "passed": true
+        },
+        {
+            "check": "Incomplete card with only one field rejected: ishod",
+            "passed": true
+        },
+        {
+            "check": "Date alone cannot complete a medical record",
+            "passed": true
+        },
+        {
+            "check": "Failure after new card insert reported",
+            "passed": true
+        },
+        {
+            "check": "New card insert rolled back",
+            "passed": true
+        },
+        {
+            "check": "New card failure preserves status and history",
+            "passed": true
+        },
+        {
+            "check": "Original history snapshot unchanged",
+            "passed": true
+        },
+        {
+            "check": "Required medical groups rejected: 0",
+            "passed": true
+        },
+        {
+            "check": "Validation failure leaves no partial changes: 0",
+            "passed": true
+        },
+        {
+            "check": "Required medical groups rejected: 1",
+            "passed": true
+        },
+        {
+            "check": "Validation failure leaves no partial changes: 1",
+            "passed": true
+        },
+        {
+            "check": "Required medical groups rejected: 2",
+            "passed": true
+        },
+        {
+            "check": "Validation failure leaves no partial changes: 2",
+            "passed": true
+        },
+        {
+            "check": "Required medical groups rejected: 3",
+            "passed": true
+        },
+        {
+            "check": "Validation failure leaves no partial changes: 3",
+            "passed": true
+        },
+        {
+            "check": "Required medical groups rejected: 4",
+            "passed": true
+        },
+        {
+            "check": "Validation failure leaves no partial changes: 4",
+            "passed": true
+        },
+        {
+            "check": "Required medical groups rejected: 5",
+            "passed": true
+        },
+        {
+            "check": "Validation failure leaves no partial changes: 5",
+            "passed": true
+        },
+        {
+            "check": "Required medical groups rejected: 6",
+            "passed": true
+        },
+        {
+            "check": "Validation failure leaves no partial changes: 6",
+            "passed": true
+        },
+        {
+            "check": "Minimum valid medical groups: pred_diag + naz_lech",
+            "passed": true
+        },
+        {
+            "check": "Minimum valid medical groups: pred_diag + procedure_done",
+            "passed": true
+        },
+        {
+            "check": "Minimum valid medical groups: diagnoz + naz_lech",
+            "passed": true
+        },
+        {
+            "check": "Minimum valid medical groups: diagnoz + procedure_done",
+            "passed": true
+        },
+        {
+            "check": "Status API cannot bypass required medical groups",
+            "passed": true
+        },
+        {
+            "check": "INSERT trigger also copies extended snapshot",
+            "passed": true
+        },
+        {
+            "check": "INSERT trigger copies phone and weight",
+            "passed": true
+        },
+        {
+            "check": "Absent medical record stays NULL: data_zabol",
+            "passed": true
+        },
+        {
+            "check": "Absent medical record stays NULL: jaloba",
+            "passed": true
+        },
+        {
+            "check": "Absent medical record stays NULL: pred_diag",
+            "passed": true
+        },
+        {
+            "check": "Absent medical record stays NULL: diagnoz",
+            "passed": true
+        },
+        {
+            "check": "Absent medical record stays NULL: klin_prizn",
+            "passed": true
+        },
+        {
+            "check": "Absent medical record stays NULL: naz_lech",
+            "passed": true
+        },
+        {
+            "check": "Absent medical record stays NULL: procedure_done",
+            "passed": true
+        },
+        {
+            "check": "Absent medical record stays NULL: ishod",
+            "passed": true
+        },
+        {
+            "check": "Absent medical record stays NULL: notes",
+            "passed": true
+        },
+        {
+            "check": "History has no foreign keys",
+            "passed": true
+        },
+        {
+            "check": "Every snapshot field survives changes to owner, pet, doctor, service and medical record",
+            "passed": true
+        },
+        {
+            "check": "History rejects direct mutation",
+            "passed": true
+        },
+        {
+            "check": "History rejects direct mutation",
+            "passed": true
+        },
+        {
+            "check": "All copied values survive deletion of source visits, pets, owner and service",
+            "passed": true
+        },
+        {
+            "check": "Workflow registration requires name",
+            "passed": true
+        },
+        {
+            "check": "Workflow registration requires phone",
+            "passed": true
+        },
+        {
+            "check": "Workflow registration requires password",
+            "passed": true
+        },
+        {
+            "check": "Workflow registration requires address",
+            "passed": true
+        },
+        {
+            "check": "Workflow rejects short password",
+            "passed": true
+        },
+        {
+            "check": "Workflow rejects long phone",
+            "passed": true
+        },
+        {
+            "check": "Workflow register client",
+            "passed": true
+        },
+        {
+            "check": "Workflow rejects duplicate phone",
+            "passed": true
+        },
+        {
+            "check": "Workflow password stored as hash",
+            "passed": true
+        },
+        {
+            "check": "Workflow rejects wrong client password",
+            "passed": true
+        },
+        {
+            "check": "Workflow login injection rejected",
+            "passed": true
+        },
+        {
+            "check": "Workflow client login returns identity",
+            "passed": true
+        },
+        {
+            "check": "Workflow login does not expose password",
+            "passed": true
+        },
+        {
+            "check": "Workflow rejects wrong veterinarian password",
+            "passed": true
+        },
+        {
+            "check": "Workflow veterinarian login",
+            "passed": true
+        },
+        {
+            "check": "Workflow veterinarian hash is not returned",
+            "passed": true
+        },
+        {
+            "check": "Workflow active veterinarian listed",
+            "passed": true
+        },
+        {
+            "check": "Workflow inactive veterinarian hidden",
+            "passed": true
+        },
+        {
+            "check": "Workflow inactive veterinarian has no available slots",
+            "passed": true
+        },
+        {
+            "check": "Workflow rejects zero service price",
+            "passed": true
+        },
+        {
+            "check": "Workflow service category required",
+            "passed": true
+        },
+        {
+            "check": "Workflow create service",
+            "passed": true
+        },
+        {
+            "check": "Workflow edit service",
+            "passed": true
+        },
+        {
+            "check": "Workflow service list reflects edit",
+            "passed": true
+        },
+        {
+            "check": "Workflow rejects negative pet weight",
+            "passed": true
+        },
+        {
+            "check": "Workflow rejects excessive pet weight",
+            "passed": true
+        },
+        {
+            "check": "Workflow add pet",
+            "passed": true
+        },
+        {
+            "check": "Workflow pet decimal comma and vaccination round trip",
+            "passed": true
+        },
+        {
+            "check": "Workflow rejects editing pet of another owner",
+            "passed": true
+        },
+        {
+            "check": "Workflow rejects deleting pet of another owner",
+            "passed": true
+        },
+        {
+            "check": "Workflow edit pet",
+            "passed": true
+        },
+        {
+            "check": "Workflow veterinarian has available slots",
+            "passed": true
+        },
+        {
+            "check": "Workflow booking rejects invalid doctor_id",
+            "passed": true
+        },
+        {
+            "check": "Workflow booking rejects invalid service_id",
+            "passed": true
+        },
+        {
+            "check": "Workflow booking rejects invalid pet_id",
+            "passed": true
+        },
+        {
+            "check": "Workflow book appointment",
+            "passed": true
+        },
+        {
+            "check": "Workflow booking starts new",
+            "passed": true
+        },
+        {
+            "check": "Workflow another owner cannot cancel",
+            "passed": true
+        },
+        {
+            "check": "Workflow pet with appointments protected",
+            "passed": true
+        },
+        {
+            "check": "Workflow veterinarian accepts appointment",
+            "passed": true
+        },
+        {
+            "check": "Workflow veterinarian saves comment",
+            "passed": true
+        },
+        {
+            "check": "Workflow rejects invalid status",
+            "passed": true
+        },
+        {
+            "check": "Workflow cannot complete without medical card",
+            "passed": true
+        },
+        {
+            "check": "Workflow save medical card and complete",
+            "passed": true
+        },
+        {
+            "check": "Workflow medical card completes appointment",
+            "passed": true
+        },
+        {
+            "check": "Workflow completion adds one history row",
+            "passed": true
+        },
+        {
+            "check": "Workflow snapshot contains copied owner, card and price",
+            "passed": true
+        },
+        {
+            "check": "Workflow completed procedures visible to client",
+            "passed": true
+        },
+        {
+            "check": "Workflow client cannot cancel completed visit",
+            "passed": true
+        },
+        {
+            "check": "Workflow cannot reopen completed visit",
+            "passed": true
+        },
+        {
+            "check": "Workflow completed medical record protected from deletion",
+            "passed": true
+        },
+        {
+            "check": "Workflow veterinarian sees filtered appointments",
+            "passed": true
+        },
+        {
+            "check": "Workflow create appointment for cancellation",
+            "passed": true
+        },
+        {
+            "check": "Workflow client cancels active appointment",
+            "passed": true
+        },
+        {
+            "check": "Workflow repeated cancellation rejected",
+            "passed": true
+        },
+        {
+            "check": "Workflow delete cancelled appointment without card",
+            "passed": true
+        },
+        {
+            "check": "Workflow statistics match database: new",
+            "passed": true
+        },
+        {
+            "check": "Workflow statistics match database: accepted",
+            "passed": true
+        },
+        {
+            "check": "Workflow statistics match database: done",
+            "passed": true
+        },
+        {
+            "check": "Workflow statistics match database: cancelled",
+            "passed": true
+        },
+        {
+            "check": "Workflow statistics total matches database",
+            "passed": true
+        },
+        {
+            "check": "Workflow service statistics match database",
+            "passed": true
+        },
+        {
+            "check": "Workflow add pet for deletion",
+            "passed": true
+        },
+        {
+            "check": "Workflow delete pet without appointments",
+            "passed": true
+        },
+        {
+            "check": "Workflow delete unused service",
+            "passed": true
+        },
+        {
+            "check": "Workflow missing appointment comment rejected",
+            "passed": true
+        },
+        {
+            "check": "Workflow missing appointment deletion rejected",
+            "passed": true
+        },
+        {
+            "check": "Workflow API returns JSON: services\/delete.php",
+            "passed": false
+        },
+        {
+            "check": "Workflow referenced service deletion rejected",
+            "passed": true
+        },
+        {
+            "check": "Workflow missing service update rejected",
+            "passed": false
+        },
+        {
+            "check": "Workflow invalid vaccination date rejected",
+            "passed": false
+        },
+        {
+            "check": "Workflow API returns JSON: pets\/update.php",
+            "passed": false
+        },
+        {
+            "check": "Workflow invalid vaccination date update rejected",
+            "passed": true
+        },
+        {
+            "check": "Security anonymous veterinarian statistics denied",
+            "passed": false
+        },
+        {
+            "check": "Security anonymous client medical profile denied",
+            "passed": false
+        },
+        {
+            "check": "Security anonymous appointment modification denied",
+            "passed": false
+        },
+        {
+            "check": "Production data unchanged: admins",
+            "passed": true
+        },
+        {
+            "check": "Production data unchanged: medical_records",
+            "passed": true
+        },
+        {
+            "check": "Production data unchanged: pets",
+            "passed": true
+        },
+        {
+            "check": "Production data unchanged: service_history",
+            "passed": true
+        },
+        {
+            "check": "Production data unchanged: services",
+            "passed": true
+        },
+        {
+            "check": "Production data unchanged: vladelci",
+            "passed": true
+        },
+        {
+            "check": "Production data unchanged: zapic_na_priem",
+            "passed": true
+        }
+    ]
+}

@@ -30,6 +30,7 @@ public partial class EditPetPage : ContentPage
 
 		NameEntry.Text = pet.Name;
 		SetPetType(pet.Type);
+		PolPicker.SelectedIndex = pet.Pol == "Самец" ? 1 : pet.Pol == "Самка" ? 2 : 0;
 		AgeEntry.Text = pet.Age;
 		WeightEntry.Text = pet.Weight;
 		if (DateTime.TryParse(pet.LastVacData, out var date))
@@ -87,7 +88,7 @@ public partial class EditPetPage : ContentPage
 
 		try
 		{
-			var data = new UpdatePetData(pet.Id, State.ClientPhone, name, type, age, weight, vaccinationDate);
+			var data = new UpdatePetData(pet.Id, State.ClientPhone, name, type, age, weight, vaccinationDate) { Pol = PolPicker.SelectedIndex > 0 ? PolPicker.SelectedItem.ToString() : "" };
 			var response = await httpClient.PostAsJsonAsync($"{Api.BaseUrl}pets/update.php", data);
 			var result = await response.Content.ReadFromJsonAsync<ApiResult>();
 

@@ -44,6 +44,7 @@ public partial class ClientPage : ContentPage
 			foreach (var appointment in response?.Appointments ?? new List<Appointment>())
 				appointments.Add(appointment);
 
+			ClientAddressLabel.Text = $"Адрес: {response?.Client.Address}";
 			ClientCard.IsVisible = true;
 			PetsCard.IsVisible = true;
 			ClientNameLabel.Text = $"Имя: {response?.Client.Name}";
@@ -72,7 +73,6 @@ public partial class ClientPage : ContentPage
 		await Shell.Current.GoToAsync("PetsPage");
 	}
 
-	// Обрабатывает нажатие кнопки.
 	private async void Cancel_Click(object sender, EventArgs e)
 	{
 		var button = (Button)sender;

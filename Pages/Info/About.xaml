@@ -15,7 +15,7 @@
 
                 <VerticalStackLayout Spacing="8">
                     <Label Text="VetClinic" TextColor="#17213A" FontSize="21" FontAttributes="Bold" />
-                    <Label Text="Мобильный кабинет ветеринарной клиники для клиентов и администратора." TextColor="#657084" FontSize="15" LineBreakMode="WordWrap" />
+                    <Label Text="Приложение ветеринарной клиники для записи на приём и ведения медицинских карт питомцев." TextColor="#657084" FontSize="15" LineBreakMode="WordWrap" />
                 </VerticalStackLayout>
             </Border>
 
@@ -26,7 +26,7 @@
 
                 <VerticalStackLayout Spacing="8">
                     <Label Text="Для клиента" TextColor="#12A7A7" FontSize="18" FontAttributes="Bold" />
-                    <Label Text="Можно посмотреть услуги, оставить заявку на прием, указать данные питомца и проверить статус заявки по номеру телефона." TextColor="#657084" FontSize="15" LineBreakMode="WordWrap" />
+                    <Label Text="Добавление питомцев, просмотр услуг и цен, выбор ветеринара и времени приёма. Просмотр статуса записи, истории посещений и назначений." TextColor="#657084" FontSize="15" LineBreakMode="WordWrap" />
                 </VerticalStackLayout>
             </Border>
 
@@ -36,8 +36,8 @@
                 </Border.StrokeShape>
 
                 <VerticalStackLayout Spacing="8">
-                    <Label Text="Для администратора" TextColor="#FF8A5B" FontSize="18" FontAttributes="Bold" />
-                    <Label Text="Администратор может просматривать заявки, менять статусы, удалять заявки, а также добавлять, редактировать и удалять услуги." TextColor="#657084" FontSize="15" LineBreakMode="WordWrap" />
+                    <Label Text="Для ветеринара" TextColor="#FF8A5B" FontSize="18" FontAttributes="Bold" />
+                    <Label Text="Управление записями, расписанием и услугами. Заполнение медицинских карт и просмотр предыдущих посещений питомца." TextColor="#657084" FontSize="15" LineBreakMode="WordWrap" />
                 </VerticalStackLayout>
             </Border>
 

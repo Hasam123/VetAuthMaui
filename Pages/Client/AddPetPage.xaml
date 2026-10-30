@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!-- Форма добавления питомца. -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -13,14 +13,12 @@
             <Entry x:Name="NameEntry"
                    Placeholder="Кличка питомца"
                    BackgroundColor="White"
-                   TextColor="#222222"
-                   PlaceholderColor="#9AA8B8" />
+                   TextColor="#222222" />
 
             <Picker x:Name="TypePicker"
                     Title="Вид животного"
                     BackgroundColor="White"
-                    TextColor="#222222"
-                    TitleColor="#9AA8B8">
+                    TextColor="#222222">
                 <Picker.Items>
                     <x:String>Собака</x:String>
                     <x:String>Кошка</x:String>
@@ -30,20 +28,21 @@
                 </Picker.Items>
             </Picker>
 
+            <Picker x:Name="PolPicker" Title="Пол питомца" SelectedIndex="0" TextColor="#222222">
+                <Picker.Items><x:String>Не указан</x:String><x:String>Самец</x:String><x:String>Самка</x:String></Picker.Items>
+            </Picker>
             <Entry x:Name="AgeEntry"
                    Placeholder="Возраст"
                    MaxLength="15"
                    BackgroundColor="White"
-                   TextColor="#222222"
-                   PlaceholderColor="#9AA8B8" />
+                   TextColor="#222222" />
 
             <Entry x:Name="WeightEntry"
                    Placeholder="Вес, кг"
                    MaxLength="6"
                    Keyboard="Numeric"
                    BackgroundColor="White"
-                   TextColor="#222222"
-                   PlaceholderColor="#9AA8B8" />
+                   TextColor="#222222" />
 
             <HorizontalStackLayout Spacing="8">
                 <CheckBox x:Name="HasVaccinationDateCheckBox"

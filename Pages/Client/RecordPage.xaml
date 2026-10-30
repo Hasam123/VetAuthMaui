@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:VetAuthMaui"
@@ -39,8 +39,7 @@
                         <Picker x:Name="ServicePicker"
                                 Title="Выберите услугу"
                                 BackgroundColor="White"
-                                TextColor="#17213A"
-                                TitleColor="#9AA8B8" />
+                                TextColor="#17213A" />
                     </VerticalStackLayout>
                 </Grid>
             </Border>
@@ -154,7 +153,6 @@
                            Placeholder="Имя"
                            BackgroundColor="White"
                            TextColor="#222222"
-                           PlaceholderColor="#9AA8B8"
                            ClearButtonVisibility="WhileEditing" />
 
                     <Entry x:Name="PhoneEntry"
@@ -163,7 +161,6 @@
                            MaxLength="15"
                            BackgroundColor="White"
                            TextColor="#222222"
-                           PlaceholderColor="#9AA8B8"
                            ClearButtonVisibility="WhileEditing" />
 
                     <Grid x:Name="SavedPetsBlock"
@@ -195,7 +192,6 @@
                                     Title="Выберите из профиля"
                                     BackgroundColor="White"
                                     TextColor="#17213A"
-                                    TitleColor="#9AA8B8"
                                     SelectedIndexChanged="SavedPet_Changed" />
                         </VerticalStackLayout>
                     </Grid>
@@ -204,14 +200,12 @@
                            Placeholder="Кличка питомца"
                            BackgroundColor="White"
                            TextColor="#222222"
-                           PlaceholderColor="#9AA8B8"
                            ClearButtonVisibility="WhileEditing" />
 
                     <Picker x:Name="PetTypePicker"
                             Title="Вид питомца"
                             BackgroundColor="White"
-                            TextColor="#222222"
-                            TitleColor="#9AA8B8">
+                            TextColor="#222222">
                         <Picker.Items>
                             <x:String>Собака</x:String>
                             <x:String>Кошка</x:String>
@@ -220,19 +214,18 @@
                         </Picker.Items>
                     </Picker>
 
+                    <Picker x:Name="PetPolPicker" Title="Пол питомца" SelectedIndex="0" TextColor="#222222"><Picker.Items><x:String>Не указан</x:String><x:String>Самец</x:String><x:String>Самка</x:String></Picker.Items></Picker>
                     <Entry x:Name="PetAgeEntry"
                            Placeholder="Возраст питомца"
                            MaxLength="15"
                            BackgroundColor="White"
                            TextColor="#222222"
-                           PlaceholderColor="#9AA8B8"
                            ClearButtonVisibility="WhileEditing" />
 
                     <Editor x:Name="CommentEditor"
                             Placeholder="Комментарий"
                             BackgroundColor="White"
                             TextColor="#222222"
-                            PlaceholderColor="#9AA8B8"
                             HeightRequest="100" />
                 </VerticalStackLayout>
             </Border>

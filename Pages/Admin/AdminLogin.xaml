@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8" ?>
 <!-- Экран входа администратора: логин, пароль и кнопка входа. -->
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
@@ -39,8 +39,7 @@
                         Placeholder="admin"
                         Keyboard="Email"
                         ClearButtonVisibility="WhileEditing"
-                        TextColor="#222222"
-                        PlaceholderColor="#9AA8B8" />
+                        TextColor="#222222" />
 
                     <Label Text="Пароль" TextColor="#17213A" FontAttributes="Bold" />
 
@@ -49,8 +48,7 @@
                         Placeholder="Введите пароль"
                         IsPassword="True"
                         ClearButtonVisibility="WhileEditing"
-                        TextColor="#222222"
-                        PlaceholderColor="#9AA8B8" />
+                        TextColor="#222222" />
 
                     <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10">
                         <CheckBox

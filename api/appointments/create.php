@@ -15,6 +15,8 @@ $petName = trim($data["pet_name"] ?? "");
 $petType = trim($data["pet_type"] ?? "");
 $petAge = trim($data["pet_age"] ?? "");
 $client_comment = trim($data["client_comment"] ?? "");
+$petPol=trim($data["pet_pol"]??"");
+if(!in_array($petPol,["","Самец","Самка"],true)){ echo json_encode(["success"=>false,"message"=>"Неверный пол питомца"],JSON_UNESCAPED_UNICODE);exit; }
 $petId = (int)($data["pet_id"] ?? 0);
 $serviceId = (int)($data["service_id"] ?? 0);
 $doctorId = (int)($data["doctor_id"] ?? 0);
@@ -123,16 +125,20 @@ try {
             $stmt->bind_param("si", $petAge, $petId);
             $stmt->execute();
         } else {
-            $sql = "INSERT INTO pets (client_id, type, name, age)
-                    VALUES (?, ?, ?, ?)";
+            $sql = "INSERT INTO pets (client_id, type, name, age, pol)
+                    VALUES (?, ?, ?, ?, NULLIF(?, ''))";
             $stmt = $conn->prepare($sql);
-            $stmt->bind_param("isss", $ownerId, $petType, $petName, $petAge);
+            $stmt->bind_param("issss", $ownerId, $petType, $petName, $petAge, $petPol);
             $stmt->execute();
             $petId = mysqli_insert_id($conn);
         }
     }
 
     $status = "new";
+
+    if (!bookingTimeIsValid($appointmentAt)) {
+        throw new InvalidArgumentException('Выбранное время уже прошло. Обновите расписание');
+    }
 
     $sql = "INSERT INTO zapic_na_priem (pet_id, service_id, doctor_id, data, time, status, client_comment)
                                    VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -141,8 +147,12 @@ try {
 
     $stmt->execute();
     $conn->commit();
-} catch (mysqli_sql_exception $e) {
+} catch (Throwable $e) {
     $conn->rollback();
+    if ($e instanceof InvalidArgumentException) {
+        echo json_encode(['success'=>false,'message'=>$e->getMessage()], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
     if ((int)$e->getCode() === 1062) {
         echo json_encode(["success" => false, "message" => "Это время уже занято"], JSON_UNESCAPED_UNICODE);
         exit;

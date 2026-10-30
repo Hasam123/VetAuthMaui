@@ -25,7 +25,7 @@ if (!$client) {
 }
 
 $clientId = (int)$client["id"];
-$sql = "SELECT id, name, type, age, weight, last_vac_data
+$sql = "SELECT id, name, type, age, weight, last_vac_data, pol
         FROM pets
         WHERE client_id = ?
         ORDER BY id DESC";

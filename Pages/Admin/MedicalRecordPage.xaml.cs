@@ -10,6 +10,7 @@ public partial class MedicalRecordPage : ContentPage
 	private int loadedAppointmentId;
 	private int loadedDoctorId;
 	private bool saving;
+    private bool primaryLoaded;
 
 	public MedicalRecordPage()
 	{
@@ -20,7 +21,7 @@ public partial class MedicalRecordPage : ContentPage
 	private int appointmentId;
 
 	// Загружает данные при открытии страницы.
-	protected override void OnAppearing()
+	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
 
@@ -30,6 +31,9 @@ public partial class MedicalRecordPage : ContentPage
 			return;
 		appointmentId = 0;
 		loadedAppointmentId = 0;
+        PreviousRecordCard.IsVisible = false;
+        PreviousVisitLabel.Text = "";
+        PreviousRecordLabel.Text = "";
 
 		// если заявка не выбрана
 		if (draft == null)
@@ -44,30 +48,66 @@ public partial class MedicalRecordPage : ContentPage
 		loadedAppointmentId = appointmentId;
 		loadedDoctorId = State.AdminId;
 		PatientLabel.Text = $"{draft.ClientName} - {draft.PetName}";
-		AppointmentLabel.Text = draft.AppointmentText;
+		AppointmentLabel.Text = draft.AppointmentText + (string.IsNullOrWhiteSpace(draft.Address) ? "" : $"\nАдрес: {draft.Address}") + (string.IsNullOrWhiteSpace(draft.PetPol) ? "" : $"\nПол: {draft.PetPol}");
 		JalobaEditor.Text = draft.Jaloba;
 		DiagnozEditor.Text = draft.Diagnoz;
 		NazLechEditor.Text = draft.NazLech;
 		ProcedureDoneEditor.Text = draft.ProcedureDone;
 		TreatmentNotesEditor.Text = draft.TreatmentNotes;
+        PredDiagEditor.Text = draft.PredDiag;
+        KlinPriznEditor.Text = draft.KlinPrizn;
+        IshodEntry.Text = draft.Ishod;
+        DiseaseDatePicker.MaximumDate = DateTime.Today;
+        HasDiseaseDate.IsChecked = DateTime.TryParse(draft.DataZabol, out var illnessDate);
+        DiseaseDatePicker.Date = HasDiseaseDate.IsChecked ? illnessDate : DateTime.Today;
+        primaryLoaded = false;
+        try {
+            var response = await httpClient.GetFromJsonAsync<PreviousVisits>($"{Api.BaseUrl}appointments/previous.php?id={appointmentId}");
+            if (response?.Success != true) throw new InvalidOperationException("Не удалось загрузить первичные приёмы");
+            var visits = new List<PrimaryVisit> { new PrimaryVisit() };
+            visits.AddRange(response.Visits ?? new List<PrimaryVisit>());
+            PrimaryPicker.ItemsSource = visits;
+            PrimaryPicker.SelectedItem = visits.FirstOrDefault(v => v.Id == (draft.PervPriemId ?? 0));
+            primaryLoaded = true;
+        } catch (Exception ex) {
+            loadedAppointmentId = 0;
+            await DisplayAlertAsync("Ошибка", ex.Message, "ОК");
+        }
 	}
+
+    private void Primary_Changed(object sender, EventArgs e)
+    {
+        var visit = PrimaryPicker.SelectedItem as PrimaryVisit;
+        PreviousRecordCard.IsVisible = visit?.Id > 0;
+        PreviousVisitLabel.Text = visit?.Id > 0 ? $"Приём №{visit.LastVisitId}\n{visit.TimeText}\n{visit.DoctorInfo}\n{visit.ServiceInfo}" : "";
+        PreviousRecordLabel.Text = visit?.Id > 0 ? visit.MedText : "";
+    }
 
 	// Сохраняет измененные данные.
 	private async void Save_Click(object sender, EventArgs e)
 	{
 		if (saving) return;
+        if (!primaryLoaded || PrimaryPicker.SelectedItem is not PrimaryVisit) { await DisplayAlertAsync("Ошибка", "Дождитесь загрузки и выберите тип приёма", "ОК"); return; }
 		if (!State.IsAdminMode || State.AdminId <= 0 || State.AdminId != loadedDoctorId)
 		{
 			await DisplayAlertAsync("Ошибка", "Войдите в учётную запись врача заново.", "ОК");
 			return;
 		}
-		if (new[] { JalobaEditor.Text, DiagnozEditor.Text,
-			NazLechEditor.Text, ProcedureDoneEditor.Text, TreatmentNotesEditor.Text }
-			.All(string.IsNullOrWhiteSpace))
+		if (string.IsNullOrWhiteSpace(JalobaEditor.Text))
 		{
-			await DisplayAlertAsync("Ошибка", "Заполните медицинскую запись.", "ОК");
+			await DisplayAlertAsync("Ошибка", "Заполните жалобы / причину обращения.", "ОК");
 			return;
 		}
+        if (string.IsNullOrWhiteSpace(PredDiagEditor.Text) && string.IsNullOrWhiteSpace(DiagnozEditor.Text))
+        {
+            await DisplayAlertAsync("Ошибка", "Заполните предварительный или заключительный диагноз.", "ОК");
+            return;
+        }
+        if (string.IsNullOrWhiteSpace(NazLechEditor.Text) && string.IsNullOrWhiteSpace(ProcedureDoneEditor.Text))
+        {
+            await DisplayAlertAsync("Ошибка", "Укажите назначенное лечение или выполненные процедуры.", "ОК");
+            return;
+        }
 		// проверка заявки
 		if (appointmentId <= 0)
 		{
@@ -87,7 +127,10 @@ public partial class MedicalRecordPage : ContentPage
 					DiagnozEditor.Text?.Trim() ?? "",
 					NazLechEditor.Text?.Trim() ?? "",
 					ProcedureDoneEditor.Text?.Trim() ?? "",
-					TreatmentNotesEditor.Text?.Trim() ?? ""));
+					TreatmentNotesEditor.Text?.Trim() ?? "",
+                    HasDiseaseDate.IsChecked ? DiseaseDatePicker.Date?.ToString("yyyy-MM-dd") ?? "" : "",
+                    PredDiagEditor.Text?.Trim() ?? "", KlinPriznEditor.Text?.Trim() ?? "", IshodEntry.Text?.Trim() ?? "",
+                    ((PrimaryVisit)PrimaryPicker.SelectedItem).Id == 0 ? null : ((PrimaryVisit)PrimaryPicker.SelectedItem).Id));
 
 			var result = await response.Content.ReadFromJsonAsync<ApiResult>();
 
@@ -111,14 +154,19 @@ public partial class MedicalRecordPage : ContentPage
 	// данные медкарты
 	private class RecordData
 	{
-		[JsonPropertyName("id")] public int Id { get; set; }
+		        [JsonPropertyName("data_zabol")] public string DataZabol { get; set; }
+        [JsonPropertyName("pred_diag")] public string PredDiag { get; set; }
+        [JsonPropertyName("klin_prizn")] public string KlinPrizn { get; set; }
+        [JsonPropertyName("ishod")] public string Ishod { get; set; }
+        [JsonPropertyName("perv_priem_id")] public int? PervPriemId { get; set; }
+        [JsonPropertyName("id")] public int Id { get; set; }
 		[JsonPropertyName("jaloba")] public string Jaloba { get; set; }
 		[JsonPropertyName("diagnoz")] public string Diagnoz { get; set; }
 		[JsonPropertyName("naz_lech")] public string NazLech { get; set; }
 		[JsonPropertyName("procedure_done")] public string ProcedureDone { get; set; }
 		[JsonPropertyName("treatment_notes")] public string TreatmentNotes { get; set; }
 
-		public RecordData(int id, string jaloba, string diagnoz, string nazLech, string procedureDone, string treatmentNotes)
+		public RecordData(int id, string jaloba, string diagnoz, string nazLech, string procedureDone, string treatmentNotes, string dataZabol, string predDiag, string klinPrizn, string ishod, int? primary)
 		{
 			Id = id;
 			Jaloba = jaloba;
@@ -126,10 +174,11 @@ public partial class MedicalRecordPage : ContentPage
 			NazLech = nazLech;
 			ProcedureDone = procedureDone;
 			TreatmentNotes = treatmentNotes;
+            DataZabol = dataZabol; PredDiag = predDiag; KlinPrizn = klinPrizn; Ishod = ishod; PervPriemId = primary;
 		}
 	}
 
-	// ответ API
+	private void DiseaseDate_Changed(object sender, CheckedChangedEventArgs e) => DiseaseDatePicker.IsEnabled = e.Value;
 }
 
 

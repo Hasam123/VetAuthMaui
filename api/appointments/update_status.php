@@ -34,7 +34,7 @@ try {
         exit;
     }
     if ($status === "done") {
-        $stmt = $conn->prepare("SELECT id FROM medical_records WHERE id = ? AND (COALESCE(jaloba, '') <> '' OR COALESCE(diagnoz, '') <> '' OR COALESCE(naz_lech, '') <> '' OR COALESCE(procedure_done, '') <> '' OR COALESCE(notes, '') <> '')");
+        $stmt = $conn->prepare("SELECT id FROM medical_records WHERE id = ? AND TRIM(COALESCE(jaloba, '')) <> '' AND (TRIM(COALESCE(diagnoz, '')) <> '' OR TRIM(COALESCE(pred_diag, '')) <> '') AND (TRIM(COALESCE(naz_lech, '')) <> '' OR TRIM(COALESCE(procedure_done, '')) <> '')");
         $stmt->bind_param("i", $id);
         $stmt->execute();
         if ($appointment["status"] === "cancelled" || $stmt->get_result()->num_rows === 0) {

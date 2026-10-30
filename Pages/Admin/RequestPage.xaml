@@ -22,7 +22,6 @@
                     Title="Дата"
                     BackgroundColor="White"
                     TextColor="#222222"
-                    TitleColor="#9AA8B8"
                     SelectedIndexChanged="Filter_Changed" />
 
                 <Picker
@@ -31,7 +30,6 @@
                     Title="Статус"
                     BackgroundColor="White"
                     TextColor="#222222"
-                    TitleColor="#9AA8B8"
                     SelectedIndexChanged="Filter_Changed" />
             </Grid>
 

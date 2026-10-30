@@ -13,6 +13,7 @@ public class ClientResult
 
 public class ClientInfo
 {
+    [JsonPropertyName("address")] public string Address { get; set; } = "";
 	[JsonPropertyName("name")]
 	public string Name { get; set; } = "";
 

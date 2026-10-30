@@ -59,7 +59,7 @@ public partial class AddPetPage : ContentPage
 
 		try
 		{
-			var data = new AddPetData(State.ClientPhone, name, type, age, weight, vaccinationDate);
+			var data = new AddPetData(State.ClientPhone, name, type, age, weight, vaccinationDate) { Pol = PolPicker.SelectedIndex > 0 ? PolPicker.SelectedItem.ToString() : "" };
 			var response = await httpClient.PostAsJsonAsync($"{Api.BaseUrl}pets/create.php", data);
 			var result = await response.Content.ReadFromJsonAsync<ApiResult>();
 
