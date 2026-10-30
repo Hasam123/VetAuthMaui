@@ -4,8 +4,8 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: POST");
 header("Access-Control-Allow-Headers: Content-Type");
 
-require __DIR__ . "/../db.php";
-require __DIR__ . "/../includes/doctor_booking.php";
+require __DIR__ . "/../../db.php";
+require __DIR__ . "/../../includes/doctor_booking.php";
 
 $data = json_decode(file_get_contents("php://input"), true);
 

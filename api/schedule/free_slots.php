@@ -3,8 +3,8 @@ header("Content-Type: application/json; charset=utf-8");
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET");
 
-require __DIR__ . "/../db.php";
-require __DIR__ . "/../includes/doctor_booking.php";
+require __DIR__ . "/../../db.php";
+require __DIR__ . "/../../includes/doctor_booking.php";
 $doctorId = (int)($_GET["doctor_id"] ?? 0);
 if (!bookingDoctorExists($conn, $doctorId)) {
     echo json_encode(["success" => false, "message" => "Выберите врача", "days" => []], JSON_UNESCAPED_UNICODE);

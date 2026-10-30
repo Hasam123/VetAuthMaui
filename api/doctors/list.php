@@ -1,7 +1,7 @@
 <?php
 header("Content-Type: application/json; charset=utf-8");
 header("Access-Control-Allow-Origin: *");
-require __DIR__ . "/../db.php";
+require __DIR__ . "/../../db.php";
 
 $result = $conn->query("SELECT id, name FROM admins WHERE is_active = 1 ORDER BY name, id");
 $doctors = [];

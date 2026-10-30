@@ -1,6 +1,6 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
-require __DIR__ . '/../db.php';
+require __DIR__ . '/../../db.php';
 $id=(int)($_GET['id']??0);
 $stmt=$conn->prepare("SELECT p.id, TIMESTAMP(p.data,p.time) AS primary_at,
         last_visit.id AS last_visit_id, TIMESTAMP(last_visit.data,last_visit.time) AS appointment_at, d.name AS doctor_name,
