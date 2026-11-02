@@ -137,6 +137,14 @@
                     </Grid>
                 </Border>
 
+                <Border BackgroundColor="White" Stroke="#DDEBF3" Padding="18">
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="Оказанные услуги по вашим приёмам" TextColor="#17213A" FontAttributes="Bold" />
+                        <Label x:Name="PerformedServicesLabel" Text="Количество: 0" TextColor="#657084" />
+                        <Label x:Name="PerformedCostLabel" Text="Стоимость: 0" TextColor="#657084" />
+                        <Label Text="По сохранённым спискам услуг; старые записи без списка не учитываются." FontSize="12" TextColor="#657084" />
+                    </VerticalStackLayout>
+                </Border>
                 <Button Text="Выйти" BackgroundColor="Transparent" BorderColor="#FF8A5B" BorderWidth="1" TextColor="#FF8A5B" FontAttributes="Bold" CornerRadius="26" HeightRequest="52" Clicked="Logout_Click" />
             </VerticalStackLayout>
         </ScrollView>

@@ -97,7 +97,7 @@ public partial class RequestPage : ContentPage
 
 		if (appointment.Status == "done")
 		{
-			await DisplayAlertAsync("Приём завершён", "Изменить данные можно в медицинской карте.", "ОК");
+			await DisplayAlertAsync("Приём завершён", "Медкарта и оказанные услуги доступны для просмотра.", "ОК");
 			return;
 		}
 
@@ -215,6 +215,7 @@ public partial class RequestPage : ContentPage
 		State.CurrentMedicalRecord = new MedicalRecord
 		{
 			AppointmentId = appointment.Id,
+			Status = appointment.Status,
 			DataZabol = appointment.DataZabol,
 			PredDiag = appointment.PredDiag,
 			KlinPrizn = appointment.KlinPrizn,

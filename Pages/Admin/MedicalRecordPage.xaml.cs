@@ -2,6 +2,7 @@ namespace VetAuthMaui;
 
 using System.Net.Http.Json;
 using System.Text.Json.Serialization;
+using System.Collections.ObjectModel;
 
 // медицинская карта
 public partial class MedicalRecordPage : ContentPage
@@ -11,10 +12,15 @@ public partial class MedicalRecordPage : ContentPage
 	private int loadedDoctorId;
 	private bool saving;
     private bool primaryLoaded;
+    private bool servicesLoaded;
+    private bool completed;
+    private readonly ObservableCollection<PerformedService> performedServices = new();
+    private List<CatalogService> catalog = new();
 
 	public MedicalRecordPage()
 	{
 		InitializeComponent();
+		BindableLayout.SetItemsSource(ServiceRows, performedServices);
 		httpClient.Timeout = TimeSpan.FromSeconds(10);
 	}
 
@@ -31,6 +37,9 @@ public partial class MedicalRecordPage : ContentPage
 			return;
 		appointmentId = 0;
 		loadedAppointmentId = 0;
+        MedicalForm.IsEnabled = false;
+        servicesLoaded = false;
+        performedServices.Clear();
         PreviousRecordCard.IsVisible = false;
         PreviousVisitLabel.Text = "";
         PreviousRecordLabel.Text = "";
@@ -69,6 +78,40 @@ public partial class MedicalRecordPage : ContentPage
             PrimaryPicker.ItemsSource = visits;
             PrimaryPicker.SelectedItem = visits.FirstOrDefault(v => v.Id == (draft.PervPriemId ?? 0));
             primaryLoaded = true;
+            var visit = await httpClient.GetFromJsonAsync<VisitServicesResult>($"{Api.BaseUrl}appointments/services.php?id={appointmentId}&doctor_id={loadedDoctorId}");
+            if (visit?.Success != true) throw new InvalidOperationException(visit?.Message ?? "Не удалось загрузить услуги приёма");
+            completed = visit.Status == "done";
+            ServiceSelection.IsVisible = !completed;
+            SaveButton.IsVisible = !completed && visit.Status != "cancelled";
+            if (completed)
+            {
+                foreach (var service in visit.Services) performedServices.Add(service);
+                CompletedMessageLabel.Text = performedServices.Count > 0
+                    ? "Приём завершён. Медкарта и оказанные услуги доступны только для просмотра."
+                    : "Приём завершён. Для старой записи отдельный список оказанных услуг отсутствует.";
+                CompletedMessageLabel.IsVisible = true;
+            }
+            else
+            {
+                var result = await httpClient.GetFromJsonAsync<CatalogResult>($"{Api.BaseUrl}services/list.php");
+                if (result?.Success != true) throw new InvalidOperationException("Не удалось загрузить каталог услуг");
+                catalog = result.Services ?? new();
+                ServicePicker.ItemsSource = catalog;
+                var main = catalog.FirstOrDefault(s => s.Id == visit.PrimaryServiceId);
+                if (main != null) performedServices.Add(ToPerformed(main, 1));
+                ServicePicker.SelectedItem = main;
+                CompletedMessageLabel.IsVisible = false;
+            }
+            if (State.CurrentMedicalRecord?.AppointmentId != appointmentId || State.AdminId != loadedDoctorId)
+                throw new InvalidOperationException("Выбранный приём или учётная запись изменились. Откройте медкарту заново.");
+            servicesLoaded = true;
+            if (visit.Status == "cancelled")
+            {
+                CompletedMessageLabel.Text = "Запись отменена. Завершить приём нельзя.";
+                CompletedMessageLabel.IsVisible = true;
+            }
+            UpdateServiceTotal();
+            MedicalForm.IsEnabled = !completed && visit.Status != "cancelled";
         } catch (Exception ex) {
             loadedAppointmentId = 0;
             await DisplayAlertAsync("Ошибка", ex.Message, "ОК");
@@ -87,6 +130,11 @@ public partial class MedicalRecordPage : ContentPage
 	private async void Save_Click(object sender, EventArgs e)
 	{
 		if (saving) return;
+        if (completed || !servicesLoaded || performedServices.Count == 0)
+        {
+            await DisplayAlertAsync("Ошибка", "Дождитесь загрузки и добавьте оказанные услуги.", "ОК");
+            return;
+        }
         if (!primaryLoaded || PrimaryPicker.SelectedItem is not PrimaryVisit) { await DisplayAlertAsync("Ошибка", "Дождитесь загрузки и выберите тип приёма", "ОК"); return; }
 		if (!State.IsAdminMode || State.AdminId <= 0 || State.AdminId != loadedDoctorId)
 		{
@@ -115,9 +163,14 @@ public partial class MedicalRecordPage : ContentPage
 			return;
 		}
 
+        var confirmed = await DisplayAlertAsync("Завершить приём?",
+            $"Услуг: {performedServices.Sum(s => s.Quantity)}. Предварительная стоимость: {performedServices.Sum(s => (long)s.TotalPrice):N0} руб. После завершения изменить данные нельзя.",
+            "Завершить", "Назад");
+        if (!confirmed || saving || State.AdminId != loadedDoctorId) return;
 		try
 		{
 			saving = true;
+			MedicalForm.IsEnabled = false;
 			// отправка медкарты
 			var response = await httpClient.PostAsJsonAsync(
 				$"{Api.BaseUrl}appointments/update_medical_record.php",
@@ -130,7 +183,11 @@ public partial class MedicalRecordPage : ContentPage
 					TreatmentNotesEditor.Text?.Trim() ?? "",
                     HasDiseaseDate.IsChecked ? DiseaseDatePicker.Date?.ToString("yyyy-MM-dd") ?? "" : "",
                     PredDiagEditor.Text?.Trim() ?? "", KlinPriznEditor.Text?.Trim() ?? "", IshodEntry.Text?.Trim() ?? "",
-                    ((PrimaryVisit)PrimaryPicker.SelectedItem).Id == 0 ? null : ((PrimaryVisit)PrimaryPicker.SelectedItem).Id));
+                    ((PrimaryVisit)PrimaryPicker.SelectedItem).Id == 0 ? null : ((PrimaryVisit)PrimaryPicker.SelectedItem).Id)
+                    {
+                        DoctorId = loadedDoctorId,
+                        Services = performedServices.Select(s => new ServiceLine { ServiceId = s.ServiceId, Quantity = s.Quantity }).ToList()
+                    });
 
 			var result = await response.Content.ReadFromJsonAsync<ApiResult>();
 
@@ -141,19 +198,22 @@ public partial class MedicalRecordPage : ContentPage
 			}
 
 			await DisplayAlertAsync("Готово", result.Message, "ОК");
+			State.CurrentMedicalRecord = null;
 			await Shell.Current.GoToAsync("..");
 		}
 		catch (Exception ex)
 		{
 			await DisplayAlertAsync("Ошибка", $"Ошибка сохранения медицинской записи: {ex.Message}", "ОК");
 		}
-		finally { saving = false; }
+		finally { saving = false; MedicalForm.IsEnabled = !completed; }
 
 	}
 
 	// данные медкарты
 	private class RecordData
 	{
+		[JsonPropertyName("doctor_id")] public int DoctorId { get; set; }
+		[JsonPropertyName("services")] public List<ServiceLine> Services { get; set; } = new();
 		        [JsonPropertyName("data_zabol")] public string DataZabol { get; set; }
         [JsonPropertyName("pred_diag")] public string PredDiag { get; set; }
         [JsonPropertyName("klin_prizn")] public string KlinPrizn { get; set; }
@@ -179,6 +239,69 @@ public partial class MedicalRecordPage : ContentPage
 	}
 
 	private void DiseaseDate_Changed(object sender, CheckedChangedEventArgs e) => DiseaseDatePicker.IsEnabled = e.Value;
+
+    private static PerformedService ToPerformed(CatalogService service, int quantity) => new()
+    {
+        ServiceId = service.Id, Name = service.Title, Category = service.Category,
+        Quantity = quantity, TotalPrice = checked(service.Price * quantity)
+    };
+
+    private void UpdateServiceTotal() => ServicesTotalLabel.Text = $"Итого: {performedServices.Sum(s => (long)s.TotalPrice):N0} руб.";
+
+    private async void AddService_Click(object sender, EventArgs e)
+    {
+        if (completed || saving || ServicePicker.SelectedItem is not CatalogService service) return;
+        if (!int.TryParse(QuantityEntry.Text, out var quantity) || quantity < 1 || quantity > 1000)
+        { await DisplayAlertAsync("Ошибка", "Укажите количество от 1 до 1000", "ОК"); return; }
+        var old = performedServices.FirstOrDefault(s => s.ServiceId == service.Id);
+        var combined = quantity + (old?.Quantity ?? 0);
+        if (combined > 1000 || (old == null && performedServices.Count >= 50)
+            || performedServices.Sum(s => (long)s.TotalPrice) + (long)service.Price * quantity > int.MaxValue)
+        { await DisplayAlertAsync("Ошибка", "Превышено допустимое количество или стоимость услуг", "ОК"); return; }
+        if (old != null) performedServices.Remove(old);
+        performedServices.Add(ToPerformed(service, combined));
+        QuantityEntry.Text = "1"; UpdateServiceTotal();
+    }
+
+    private void RemoveService_Click(object sender, EventArgs e)
+    {
+        if (completed || saving) return;
+        if ((sender as Button)?.BindingContext is PerformedService row) performedServices.Remove(row);
+        UpdateServiceTotal();
+    }
+
+    private async void ServiceQuantity_Click(object sender, EventArgs e)
+    {
+        if (completed || saving || (sender as Button)?.BindingContext is not PerformedService row) return;
+        var input = await DisplayPromptAsync("Количество", row.Name, "Сохранить", "Отмена",
+            initialValue: row.Quantity.ToString(), keyboard: Keyboard.Numeric);
+        if (input == null || completed || saving || !performedServices.Contains(row)) return;
+        var service = catalog.FirstOrDefault(s => s.Id == row.ServiceId);
+        if (service == null || !int.TryParse(input, out var quantity) || quantity < 1 || quantity > 1000
+            || performedServices.Sum(s => (long)s.TotalPrice) - row.TotalPrice + (long)service.Price * quantity > int.MaxValue)
+        { await DisplayAlertAsync("Ошибка", "Укажите допустимое количество от 1 до 1000", "ОК"); return; }
+        var index = performedServices.IndexOf(row);
+        performedServices[index] = ToPerformed(service, quantity); UpdateServiceTotal();
+    }
+
+    private class ServiceLine
+    {
+        [JsonPropertyName("service_id")] public int ServiceId { get; set; }
+        [JsonPropertyName("kol")] public int Quantity { get; set; }
+    }
+    private class CatalogResult
+    {
+        [JsonPropertyName("success")] public bool Success { get; set; }
+        [JsonPropertyName("services")] public List<CatalogService> Services { get; set; } = new();
+    }
+    private class CatalogService
+    {
+        [JsonPropertyName("id")] public int Id { get; set; }
+        [JsonPropertyName("title")] public string Title { get; set; } = "";
+        [JsonPropertyName("category")] public string Category { get; set; } = "";
+        [JsonPropertyName("price")] public int Price { get; set; }
+        public string DisplayText => $"{Title} - {Price:N0} руб.";
+    }
 }
 
 

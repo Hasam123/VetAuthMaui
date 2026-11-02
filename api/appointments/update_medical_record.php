@@ -6,6 +6,7 @@ header("Access-Control-Allow-Headers: Content-Type");
 
 require __DIR__ . "/../../db.php";
 require __DIR__ . "/../../includes/journal.php";
+require __DIR__ . "/../../includes/visit_services.php";
 
 $data = json_decode(file_get_contents("php://input"), true);
 
@@ -26,7 +27,8 @@ if ($zapicId <= 0) {
 
 $conn->begin_transaction();
 try {
-    $sql = "SELECT pet_id, status, perv_priem_id, data FROM zapic_na_priem WHERE id = ? FOR UPDATE";
+    if (!visitServicesReady($conn)) throw new InvalidArgumentException('Сервер обновляется. Повторите завершение приёма после обновления');
+    $sql = "SELECT pet_id, doctor_id, status, perv_priem_id, data FROM zapic_na_priem WHERE id = ? FOR UPDATE";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $zapicId);
     $stmt->execute();
@@ -38,6 +40,17 @@ try {
         echo json_encode(["success" => false, "message" => "Запись не найдена"], JSON_UNESCAPED_UNICODE);
         exit;
     }
+
+    if ((int)($data['doctor_id']??0)<=0 || (int)$zapic['doctor_id']!==(int)$data['doctor_id']) {
+        throw new InvalidArgumentException('Приём относится к другому ветеринару');
+    }
+    if ($zapic['status']==='done') {
+        throw new InvalidArgumentException('Приём уже завершён. Медкарта и оказанные услуги доступны для просмотра');
+    }
+    $exists=$conn->prepare('SELECT id FROM service_history WHERE priem_id=? LIMIT 1');
+    $exists->bind_param('i',$zapicId);$exists->execute();
+    if($exists->get_result()->num_rows) throw new InvalidArgumentException('Услуги этого приёма уже сохранены');
+    $performedServices=visitServicesValidate($conn,$data['services']??null);
 
     if ($zapic["status"] === "cancelled") {
         $conn->rollback();
@@ -79,6 +92,7 @@ try {
     $stmt=$conn->prepare($sql);
     $stmt->bind_param('isssssssss',$zapicId,$jaloba,$diagnoz,$nazLech,$procedureDone,$notes,$dataZabol,$predDiag,$klinPrizn,$ishod);
     $stmt->execute();
+    visitServicesSave($conn,$zapicId,$performedServices,$primary===null?null:(int)$primary);
     $stmt=$conn->prepare("UPDATE zapic_na_priem SET status='done',perv_priem_id=? WHERE id=?");
     $stmt->bind_param('ii',$primary,$zapicId);$stmt->execute();
     $conn->commit();

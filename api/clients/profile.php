@@ -4,6 +4,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET");
 
 require __DIR__ . "/../../db.php";
+require __DIR__ . "/../../includes/visit_services.php";
 
 $phone = trim($_GET["phone"] ?? "");
 
@@ -47,6 +48,7 @@ $result = $stmt->get_result();
 while ($row = mysqli_fetch_assoc($result)) {
     $requests[] = $row;
 }
+$requests = visitServicesAttach($conn, $requests);
 
 echo json_encode([
     "success" => true,

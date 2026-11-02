@@ -34,14 +34,9 @@ try {
         exit;
     }
     if ($status === "done") {
-        $stmt = $conn->prepare("SELECT id FROM medical_records WHERE id = ? AND TRIM(COALESCE(jaloba, '')) <> '' AND (TRIM(COALESCE(diagnoz, '')) <> '' OR TRIM(COALESCE(pred_diag, '')) <> '') AND (TRIM(COALESCE(naz_lech, '')) <> '' OR TRIM(COALESCE(procedure_done, '')) <> '')");
-        $stmt->bind_param("i", $id);
-        $stmt->execute();
-        if ($appointment["status"] === "cancelled" || $stmt->get_result()->num_rows === 0) {
-            $conn->rollback();
-            echo json_encode(["success" => false, "message" => "Сначала заполните медицинскую запись действующего приёма"], JSON_UNESCAPED_UNICODE);
-            exit;
-        }
+        $conn->rollback();
+        echo json_encode(['success'=>false,'message'=>'Завершите приём через медкарту со списком оказанных услуг'],JSON_UNESCAPED_UNICODE);
+        exit;
     }
     $stmt = $conn->prepare("UPDATE zapic_na_priem SET status = ? WHERE id = ?");
     $stmt->bind_param("si", $status, $id);

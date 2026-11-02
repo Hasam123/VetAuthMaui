@@ -7,7 +7,8 @@
              BackgroundColor="#F6FAFF">
 
     <ScrollView>
-        <VerticalStackLayout Padding="20" Spacing="14">
+        <VerticalStackLayout x:Name="MedicalForm" Padding="20" Spacing="14">
+            <Label x:Name="CompletedMessageLabel" IsVisible="False" TextColor="#657084" />
             <Border BackgroundColor="White" Stroke="#DDEBF3" StrokeThickness="1" Padding="18">
                 <Border.StrokeShape>
                     <RoundRectangle CornerRadius="22" />
@@ -101,7 +102,35 @@
                 </VerticalStackLayout>
             </Border>
 
-            <Button Text="Сохранить"
+            <Border BackgroundColor="White" Stroke="#DDEBF3" Padding="18">
+                <Border.StrokeShape><RoundRectangle CornerRadius="22" /></Border.StrokeShape>
+                <VerticalStackLayout Spacing="12">
+                    <Label Text="Оказанные услуги" FontSize="20" FontAttributes="Bold" TextColor="#17213A" />
+                    <VerticalStackLayout x:Name="ServiceSelection" Spacing="10">
+                        <Picker x:Name="ServicePicker" Title="Выберите услугу" ItemDisplayBinding="{Binding DisplayText}" TextColor="#222222" />
+                        <Grid ColumnDefinitions="110,*" ColumnSpacing="10">
+                            <Entry x:Name="QuantityEntry" Text="1" Keyboard="Numeric" Placeholder="Количество" TextColor="#222222" />
+                            <Button Grid.Column="1" Text="Добавить услугу" Clicked="AddService_Click" BackgroundColor="#12A7A7" TextColor="White" />
+                        </Grid>
+                    </VerticalStackLayout>
+                    <VerticalStackLayout x:Name="ServiceRows" Spacing="10">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate>
+                                <VerticalStackLayout Spacing="6">
+                                    <Label Text="{Binding DisplayText}" TextColor="#17213A" />
+                                    <HorizontalStackLayout Spacing="8">
+                                        <Button Text="Количество" Clicked="ServiceQuantity_Click" BackgroundColor="#EAF7F8" TextColor="#17213A" />
+                                        <Button Text="Убрать" Clicked="RemoveService_Click" BackgroundColor="#FFF4EC" TextColor="#8A5A44" />
+                                    </HorizontalStackLayout>
+                                </VerticalStackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                    <Label x:Name="ServicesTotalLabel" Text="Итого: 0 руб." TextColor="#17213A" FontAttributes="Bold" />
+                </VerticalStackLayout>
+            </Border>
+
+            <Button x:Name="SaveButton" Text="Завершить приём"
                     BackgroundColor="#8A5A44"
                     TextColor="White"
                     FontAttributes="Bold"

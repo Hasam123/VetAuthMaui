@@ -1,6 +1,7 @@
 <?php
 header('Content-Type: application/json; charset=utf-8');
 require __DIR__ . '/../../db.php';
+require __DIR__ . '/../../includes/visit_services.php';
 $id=(int)($_GET['id']??0);
 $stmt=$conn->prepare("SELECT p.id, TIMESTAMP(p.data,p.time) AS primary_at,
         last_visit.id AS last_visit_id, TIMESTAMP(last_visit.data,last_visit.time) AS appointment_at, d.name AS doctor_name,
@@ -21,4 +22,5 @@ $stmt=$conn->prepare("SELECT p.id, TIMESTAMP(p.data,p.time) AS primary_at,
       AND TIMESTAMP(p.data,p.time)<TIMESTAMP(current_visit.data,current_visit.time)
     ORDER BY p.data DESC,p.time DESC,p.id DESC");
 $stmt->bind_param('i',$id);$stmt->execute();
-echo json_encode(['success'=>true,'visits'=>$stmt->get_result()->fetch_all(MYSQLI_ASSOC)],JSON_UNESCAPED_UNICODE);
+$visits=visitServicesAttach($conn,$stmt->get_result()->fetch_all(MYSQLI_ASSOC),'last_visit_id');
+echo json_encode(['success'=>true,'visits'=>$visits],JSON_UNESCAPED_UNICODE);

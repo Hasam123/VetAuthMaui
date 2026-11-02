@@ -32,6 +32,8 @@ public partial class AdminPage : ContentPage
 	{
 		TotalRequestsLabel.Text = NewRequestsLabel.Text = AcceptedRequestsLabel.Text =
 			DoneRequestsLabel.Text = CancelledRequestsLabel.Text = "0";
+		PerformedServicesLabel.Text = "Количество: 0";
+		PerformedCostLabel.Text = "Стоимость: 0";
 		try
 		{
 			// загрузка статистики
@@ -55,6 +57,8 @@ public partial class AdminPage : ContentPage
 			DoneRequestsLabel.Text = statistic.RequestsDone.ToString();
 			CancelledRequestsLabel.Text = statistic.RequestsCancelled.ToString();
 			ServicesTotalLabel.Text = statistic.ServicesTotal.ToString();
+			PerformedServicesLabel.Text = $"Количество: {doctorAppointments.Sum(a => a.PerformedServices?.Sum(s => (long)s.Quantity) ?? 0):N0}";
+			PerformedCostLabel.Text = $"Стоимость: {doctorAppointments.Sum(a => a.ServicesTotalPrice):N0}";
 
 			StatsStatusLabel.Text = "Статистика обновлена";
 		}

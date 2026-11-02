@@ -4,6 +4,8 @@ using System.Text.Json.Serialization;
 
 public class Appointment
 {
+	[JsonPropertyName("performed_services")] public List<PerformedService> PerformedServices { get; set; } = new();
+	public long ServicesTotalPrice => PerformedServices?.Sum(s => (long)s.TotalPrice) ?? 0;
 	[JsonPropertyName("data_zabol")] public string DataZabol { get; set; } = "";
 	[JsonPropertyName("pred_diag")] public string PredDiag { get; set; } = "";
 	[JsonPropertyName("klin_prizn")] public string KlinPrizn { get; set; } = "";
@@ -80,6 +82,9 @@ public class Appointment
 	{
 		get
 		{
+			if (PerformedServices?.Count > 0)
+				return "Оказанные услуги:\n" + string.Join("\n", PerformedServices.Select(s => s.DisplayText))
+					+ $"\nИтого: {ServicesTotalPrice:N0} руб.";
 			if (string.IsNullOrWhiteSpace(ServiceTitle))
 				return "Услуга не выбрана";
 
